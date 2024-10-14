@@ -19,7 +19,8 @@ import java.util.List;
 @Table(name = "users")
 public class User extends Timestamped {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String email;
@@ -48,8 +49,7 @@ public class User extends Timestamped {
 
     public static User fromAuthUser(AuthUser authUser) {
         String roleName = authUser.getAuthorities().iterator().next().getAuthority();
-        long userId = Long.parseLong(authUser.getUserId());
-        return new User(userId, authUser.getEmail(), UserRole.of(roleName));
+        return new User(authUser.getUserId(), authUser.getEmail(), UserRole.of(roleName));
     }
 
     public void changePassword(String password) {

@@ -21,11 +21,11 @@ public class CardController {
         cardService.createCard(card);
     }
 
-    @GetMapping("/{cardId}")
-    private CardResponseDto getCard(@PathVariable Long cardId)
-    {
-        cardService.getCard();
-    }
+//    @GetMapping("/{cardId}")
+//    private CardResponseDto getCard(@PathVariable Long cardId)
+//    {
+//        cardService.getCard();
+//    }
 
     @PatchMapping
     private void updateCard(@Valid @RequestBody CardRequestDto card)

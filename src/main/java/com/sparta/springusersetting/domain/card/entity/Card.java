@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.card.entity;
 
 
+import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.user.entity.User;
@@ -29,6 +30,9 @@ public class Card extends Timestamped {
 
     @Column(nullable = false)
     private LocalDate deadline;
+
+    @OneToMany(mappedBy = "card")
+    private List<Comment> commentList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

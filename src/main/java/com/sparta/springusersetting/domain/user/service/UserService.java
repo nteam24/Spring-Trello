@@ -23,7 +23,8 @@ public class UserService {
 
     // 유저 조회 ( id )
     public UserResponse getUser(long userId) {
-        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        // 유저 조회
+        User user = findUser(userId);
         return new UserResponse(user.getId(), user.getEmail());
     }
 
@@ -32,8 +33,8 @@ public class UserService {
     public String changePassword(long userId, UserChangePasswordRequest userChangePasswordRequest) {
         validateNewPassword(userChangePasswordRequest);
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(NotFoundUserException::new);
+        // 유저 조회
+        User user = findUser(userId);
 
         if (passwordEncoder.matches(userChangePasswordRequest.getNewPassword(), user.getPassword())) {
             throw new DuplicatePasswordException();
@@ -52,7 +53,7 @@ public class UserService {
     @Transactional
     public String deleteUser(long userId) {
         // 유저 조회
-        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        User user = findUser(userId);
         // UserStatus DELETED 로 수정
         user.delete();
 
@@ -67,6 +68,11 @@ public class UserService {
                 !userChangePasswordRequest.getNewPassword().matches(".*[A-Z].*")) {
             throw new InvalidPasswordFormatException();
         }
+    }
+
+    // 유저 조회 메서드
+    public User findUser (long userId) {
+        return userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
     }
 }
 

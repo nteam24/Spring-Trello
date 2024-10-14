@@ -1,6 +1,5 @@
 package com.sparta.springusersetting.domain.workspace.service;
 
-import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.exception.BadAccessUserException;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
@@ -8,21 +7,17 @@ import com.sparta.springusersetting.domain.user.repository.UserRepository;
 import com.sparta.springusersetting.domain.userWorkspace.entity.UserWorkspace;
 import com.sparta.springusersetting.domain.userWorkspace.repository.UserWorkspaceRepository;
 import com.sparta.springusersetting.domain.userWorkspace.service.UserWorkspaceService;
-import com.sparta.springusersetting.domain.workspace.dto.request.DeleteWorkspaceRequestDto;
 import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
-import com.sparta.springusersetting.domain.workspace.dto.response.DeleteWorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.EmailResponseDto;
-import com.sparta.springusersetting.domain.workspace.dto.response.UpdateWorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import com.sparta.springusersetting.domain.workspace.exception.NotFoundWorkspaceException;
 import com.sparta.springusersetting.domain.workspace.repository.WorkspaceRepository;
-import org.hibernate.jdbc.Work;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.sparta.springusersetting.domain.common.exception.GlobalExceptionConst.NOT_FOUND_WORKSPACE;
 
 @Service
 public class WorkspaceService {
@@ -89,12 +84,20 @@ public class WorkspaceService {
 
         return "초대 거절 완료";
     }
-//
-//    public Page<WorkspaceResponseDto> viewOwnWorkspace(User user, Long workspaceid) {
-//        // 유저가 관리자인지 체크
-//
-//        // 페이징으로 출력
-//    }
+
+    public Page<WorkspaceResponseDto> viewOwnWorkspace(int page, int size, User user) {
+        // 페이징
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<UserWorkspace> workspaces = userWorkspaceRepository.findAllByUserId(pageable, user.getId());
+
+        return workspaces.map(userWorkspace -> new WorkspaceResponseDto(
+                userWorkspace.getWorkspace().getName(),
+                userWorkspace.getWorkspace().getDescription()
+        ));
+    }
+
+
 //
 //    public UpdateWorkspaceResponseDto updateWorkspace(User user, WorkspaceRequestDto workspaceRequestDto) {
 //        // 유저가 관리자인지 체크

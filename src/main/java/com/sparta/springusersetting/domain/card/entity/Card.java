@@ -6,6 +6,7 @@ import com.sparta.springusersetting.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.thymeleaf.expression.Lists;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,8 +34,9 @@ public class Card extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User manager;
 
-    @OneToMany(mappedBy = "list")
-    private List<Card> cards;
+    @ManyToOne(mappedBy = "lists")
+    @JoinColumn(name = "lists_id", nullable = false)
+    private Lists lists;
 
 
     public Card(String title, String contents, LocalDate deadline, User manager)

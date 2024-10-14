@@ -3,6 +3,8 @@ package com.sparta.springusersetting.domain.card.dto;
 import com.sparta.springusersetting.domain.comment.dto.response.CommentResponseDto;
 import com.sparta.springusersetting.domain.comment.entity.Comment;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.thymeleaf.model.IComment;
 
 import java.time.LocalDate;
@@ -27,7 +29,9 @@ public class CardResponseDto {
         this.deadline = deadline;
         this.userEmail = userEmail;
         this.activityLog = activityLog;
-        this.commentList = commentList.stream().map(comment -> new commentResponseDto(comment.getContent(), comment.getEmoji()));
+        this.commentList = commentList.stream()
+                .map(CommentResponseDto::new)
+                .toList();
     }
 
 

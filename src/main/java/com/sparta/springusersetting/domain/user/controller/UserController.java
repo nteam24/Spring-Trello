@@ -25,14 +25,12 @@ public class UserController {
     // 유저 비밀번호 변경
     @PutMapping("/user")
     public ResponseEntity<ApiResponse<String>> changePassword(@AuthenticationPrincipal AuthUser authUser, @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
-        long userId = Long.parseLong(authUser.getUserId());
-        return ResponseEntity.ok(ApiResponse.success(userService.changePassword(userId, userChangePasswordRequest)));
+        return ResponseEntity.ok(ApiResponse.success(userService.changePassword(authUser.getUserId(), userChangePasswordRequest)));
     }
 
     // 유저 회원탈퇴
     @DeleteMapping("/user")
     public ResponseEntity<ApiResponse<String>> deleteUser(@AuthenticationPrincipal AuthUser authUser) {
-        long userId = Long.parseLong(authUser.getUserId());
-        return ResponseEntity.ok(ApiResponse.success(userService.deleteUser(userId)));
+        return ResponseEntity.ok(ApiResponse.success(userService.deleteUser(authUser.getUserId())));
     }
 }

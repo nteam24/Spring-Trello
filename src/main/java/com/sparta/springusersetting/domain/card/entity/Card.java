@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.xml.stream.events.Comment;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,6 +38,13 @@ public class Card extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lists_id", nullable = false)
     private Lists lists;
+
+    @OneToMany(mappedBy = "activityLog")
+    private List<ActivityLog> activityLogs;
+
+    @OneToMany(mappedBy = "comment")
+    private List<> comments;
+
 
 
     public Card(String title, String contents, LocalDate deadline, User manager, Lists lists)

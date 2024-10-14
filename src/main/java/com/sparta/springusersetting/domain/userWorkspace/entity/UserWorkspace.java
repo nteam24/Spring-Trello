@@ -2,6 +2,8 @@ package com.sparta.springusersetting.domain.userWorkspace.entity;
 
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.user.entity.User;
+import com.sparta.springusersetting.domain.user.enums.MemberRole;
+import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,4 +25,7 @@ public class UserWorkspace extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
+
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
 }

@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.card.entity;
 
 
+import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.user.entity.User;
@@ -8,7 +9,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.xml.stream.events.Comment;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class Card extends Timestamped {
     private List<ActivityLog> activityLogs;
 
     @OneToMany(mappedBy = "comment")
-    private List<> comments;
+    private List<Comment> comments;
 
 
 

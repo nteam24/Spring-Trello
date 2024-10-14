@@ -5,9 +5,13 @@ import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.enums.UserStatus;
+import com.sparta.springusersetting.domain.userWorkspace.entity.UserWorkspace;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,9 +27,10 @@ public class User extends Timestamped {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
     @Enumerated(EnumType.STRING)
-    private MemberRole memberRole;
-    @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
+
+    @OneToMany
+    private List<UserWorkspace> userWorkspaceList = new ArrayList<>();
 
 
     public User(String email, String password, UserRole userRole) {

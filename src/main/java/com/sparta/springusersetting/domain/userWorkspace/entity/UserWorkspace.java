@@ -16,11 +16,11 @@ public class UserWorkspace extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "users_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workspace_id")
+    @ManyToOne
+    @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 }

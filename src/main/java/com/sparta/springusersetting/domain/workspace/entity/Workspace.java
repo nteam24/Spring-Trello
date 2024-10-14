@@ -1,15 +1,11 @@
 package com.sparta.springusersetting.domain.workspace.entity;
 
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
-import com.sparta.springusersetting.domain.userWorkspace.entity.UserWorkspace;
+import com.sparta.springusersetting.domain.participation.entity.Participation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,7 +23,7 @@ public class Workspace extends Timestamped {
     private String description;
 
     @OneToMany(mappedBy = "workspace",cascade = CascadeType.REMOVE)
-    private List<UserWorkspace> userWorkspaceList;
+    private List<Participation> participationList;
 
     public Workspace(String name, String description) {
         this.name = name;

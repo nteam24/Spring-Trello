@@ -3,15 +3,17 @@ package com.sparta.springusersetting.domain.workspace.controller;
 import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.user.entity.User;
+import com.sparta.springusersetting.domain.workspace.dto.request.DeleteWorkspaceRequestDto;
 import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
+import com.sparta.springusersetting.domain.workspace.dto.response.DeleteWorkspaceResponseDto;
+import com.sparta.springusersetting.domain.workspace.dto.response.EmailResponseDto;
+import com.sparta.springusersetting.domain.workspace.dto.response.UpdateWorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.service.WorkspaceService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/workspace")
@@ -30,11 +32,44 @@ public class WorkspaceController {
     }
 
     // 초대 하기
+    @PostMapping("/{workspaceId}/{userId}")
+    public ResponseEntity<ApiResponse<EmailResponseDto>> inviteUserToWorkspace(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId, @PathVariable Long userId){
+        User user = User.fromAuthUser(authUser);
+        System.out.println("1");
+        return ResponseEntity.ok(ApiResponse.success(workspaceService.inviteUserToWorkspace(user,workspaceId,userId)));
+    }
 
     // 초대 응답
-
-    // 워크 스페이스 조회
-    // 워크 스페이스 수정 및 삭제
+    @PostMapping("/invite/{workspaceId}/yes")
+    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId){
+        User user = User.fromAuthUser(authUser);
+        return ResponseEntity.ok(ApiResponse.success(workspaceService.callYes(user,workspaceId)));
+    }
+    @PostMapping("/invite/{workspaceId}/no")
+    public ResponseEntity<ApiResponse<String>> callNo(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId){
+        User user = User.fromAuthUser(authUser);
+        return ResponseEntity.ok(ApiResponse.success(workspaceService.callNo(user,workspaceId)));
+    }
+//
+//    // 워크 스페이스 조회
+//    @GetMapping("/{workspaceId}")
+//    public ResponseEntity<ApiResponse<Page<WorkspaceResponseDto>>> viewOwnWorkspace(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceid){
+//        User user = User.fromAuthUser(authUser);
+//        return ResponseEntity.ok(ApiResponse.success(workspaceService.viewOwnWorkspace(user,workspaceId)));
+//    }
+//    // 워크 스페이스 수정
+//    @PutMapping("/{workspaceId}")
+//    public ResponseEntity<ApiResponse<UpdateWorkspaceResponseDto>> updateWorkspace(@AuthenticationPrincipal AuthUser authUser,@RequestBody WorkspaceRequestDto workspaceRequestDto){
+//        User user = User.fromAuthUser(authUser);
+//        return ResponseEntity.ok(ApiResponse.success(workspaceService.updateWorkspace(user,workspaceRequestDto)));
+//    }
+//
+//    // 워크 스페이스 삭제
+//    @DeleteMapping("/workspace/{workspaceId}")
+//    public ResponseEntity<ApiResponse<DeleteWorkspaceResponseDto>> deleteWorkspace(@AuthenticationPrincipal AuthUser authUser,@RequestBody DeleteWorkspaceRequestDto deleteWorkspaceRequestDto){
+//        User user = User.fromAuthUser(authUser);
+//        return ResponseEntity.ok(ApiResponse.success(workspaceService.deleteWorkspace(user,deleteWorkspaceRequestDto)));
+//    }
 
 
 }

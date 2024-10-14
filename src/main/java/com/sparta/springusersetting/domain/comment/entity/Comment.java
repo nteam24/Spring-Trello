@@ -31,6 +31,13 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "card_id")
     private Card card;
 
+    public Comment(User user, Card card, String content, CommentEmoji commentEmoji) {
+        this.user = user;
+        this.card = card;
+        this.content = content;
+        this.commentEmoji = commentEmoji;
+    }
+
     public Comment(User user, Card card, CommentRequestDto requestDto) {
         this.user = user;
         this.card = card;

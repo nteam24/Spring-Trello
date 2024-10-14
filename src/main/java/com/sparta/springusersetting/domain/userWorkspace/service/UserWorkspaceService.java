@@ -58,4 +58,24 @@ public class UserWorkspaceService {
 
         return "관리자 설정 완료";
     }
+
+    // 유저가 해당 워크스페이스에 포함되어 있는지
+    public UserWorkspace isMember(Long userId, Long workspaceId){
+        return userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
+                .orElseThrow(NotFoundUserException::new);
+    }
+
+    // 유저가 해당 워크스페이스의 관리자 인지
+    public boolean isWorkspaceMember(Long userId, Long workspaceId){
+        UserWorkspace userWorkspace = userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
+                .orElseThrow(NotFoundUserException::new);
+
+        return userWorkspace.getMemberRole()==ROLE_WORKSPACE_ADMIN;
+    }
+
+    @Transactional
+    public void inviteToWorkspace(User user, Workspace workspace){
+        UserWorkspace userWorkspace = new UserWorkspace(user, workspace);
+        userWorkspaceRepository.save(userWorkspace);
+    }
 }

@@ -1,16 +1,16 @@
 package com.sparta.springusersetting.domain.board.entity;
 
+import com.sparta.springusersetting.domain.common.entity.Timestamped;
+import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-import javax.smartcardio.Card;
 import java.sql.Timestamp;
-import java.util.List;
+
 
 @Entity
 @Getter
-public class Board extends Timestamp {
+public class Board extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Board extends Timestamp {
     private String backgroundImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wordspace_id", nullable = false)
+    @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -31,6 +31,9 @@ public class Card extends Timestamped {
     @Column(nullable = false)
     private LocalDate deadline;
 
+    @OneToMany(mappedBy = "card")
+    private List<Comment> commentList;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User manager;

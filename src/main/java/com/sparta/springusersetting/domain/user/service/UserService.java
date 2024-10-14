@@ -1,26 +1,17 @@
 package com.sparta.springusersetting.domain.user.service;
 
-import com.sparta.springusersetting.domain.common.exception.InvalidRequestException;
+import com.sparta.springusersetting.domain.auth.exception.InvalidPasswordFormatException;
 import com.sparta.springusersetting.domain.user.dto.request.UserChangePasswordRequest;
 import com.sparta.springusersetting.domain.user.dto.response.UserResponse;
 import com.sparta.springusersetting.domain.user.entity.User;
-import com.sparta.springusersetting.domain.user.enums.UserRole;
+import com.sparta.springusersetting.domain.user.exception.DuplicatePasswordException;
+import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
+import com.sparta.springusersetting.domain.auth.exception.UnauthorizedPasswordException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +23,7 @@ public class UserService {
 
     // 유저 조회 ( id )
     public UserResponse getUser(long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
         return new UserResponse(user.getId(), user.getEmail());
     }
 
@@ -42,14 +33,14 @@ public class UserService {
         validateNewPassword(userChangePasswordRequest);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new InvalidRequestException("User not found"));
+                .orElseThrow(NotFoundUserException::new);
 
         if (passwordEncoder.matches(userChangePasswordRequest.getNewPassword(), user.getPassword())) {
-            throw new InvalidRequestException("새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
+            throw new DuplicatePasswordException();
         }
 
         if (!passwordEncoder.matches(userChangePasswordRequest.getOldPassword(), user.getPassword())) {
-            throw new InvalidRequestException("잘못된 비밀번호입니다.");
+            throw new UnauthorizedPasswordException();
         }
 
         user.changePassword(passwordEncoder.encode(userChangePasswordRequest.getNewPassword()));
@@ -61,8 +52,8 @@ public class UserService {
     @Transactional
     public String deleteUser(long userId) {
         // 유저 조회
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-
+        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        // UserStatus DELETED 로 수정
         user.delete();
 
         return "회원탈퇴가 정상적으로 완료되었습니다.";
@@ -74,7 +65,7 @@ public class UserService {
         if (userChangePasswordRequest.getNewPassword().length() < 8 ||
                 !userChangePasswordRequest.getNewPassword().matches(".*\\d.*") ||
                 !userChangePasswordRequest.getNewPassword().matches(".*[A-Z].*")) {
-            throw new InvalidRequestException("새 비밀번호는 8자 이상이어야 하고, 숫자와 대문자를 포함해야 합니다.");
+            throw new InvalidPasswordFormatException();
         }
     }
 }

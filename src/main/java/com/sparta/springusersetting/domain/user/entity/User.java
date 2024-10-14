@@ -29,8 +29,8 @@ public class User extends Timestamped {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
-    @OneToMany
-    private List<UserWorkspace> userWorkspaceList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<UserWorkspace> userWorkspaceList;
 
 
     public User(String email, String password, UserRole userRole) {

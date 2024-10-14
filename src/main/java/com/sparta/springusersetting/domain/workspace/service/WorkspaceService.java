@@ -15,10 +15,10 @@ public class WorkspaceService {
     }
 
 
-    public WorkspaceRequestDto createWorkspace(User user) {
-        // 사용자가 Admin 인가?
-
-        //
-
-    }
+//    public WorkspaceRequestDto createWorkspace(User user) {
+//        // 사용자가 Admin 인가?
+//
+//        //
+//
+//    }
 }

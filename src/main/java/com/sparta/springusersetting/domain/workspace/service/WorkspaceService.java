@@ -9,6 +9,7 @@ import com.sparta.springusersetting.domain.userWorkspace.repository.UserWorkspac
 import com.sparta.springusersetting.domain.userWorkspace.service.UserWorkspaceService;
 import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.EmailResponseDto;
+import com.sparta.springusersetting.domain.workspace.dto.response.UpdateWorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import com.sparta.springusersetting.domain.workspace.exception.NotFoundWorkspaceException;
@@ -97,14 +98,20 @@ public class WorkspaceService {
         ));
     }
 
+    @Transactional
+    public UpdateWorkspaceResponseDto updateWorkspace(User user, WorkspaceRequestDto workspaceRequestDto,Long workspaceId) {
+        // 유저가 관리자인지 체크
+        if (!userWorkspaceService.isWorkspaceMember(user.getId(), workspaceId)) {
+            throw new BadAccessUserException();
+        }
+        // 수정 하고 저장
+        Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(NotFoundWorkspaceException::new);
+        workspace.updateWorkspace(workspaceRequestDto.getName(),workspaceRequestDto.getDescription());
 
-//
-//    public UpdateWorkspaceResponseDto updateWorkspace(User user, WorkspaceRequestDto workspaceRequestDto) {
-//        // 유저가 관리자인지 체크
-//
-//        // 수정 하고 저장
-//    }
-//
+        return new UpdateWorkspaceResponseDto(workspace.getId(), workspace.getName(), workspace.getDescription());
+
+    }
+
 //    public DeleteWorkspaceResponseDto deleteWorkspace(User user, DeleteWorkspaceRequestDto deleteWorkspaceRequestDto) {
 //        // 유저가 관리자인지 체크
 //

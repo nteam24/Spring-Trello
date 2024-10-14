@@ -23,7 +23,7 @@ public class CardController {
     }
 
     @GetMapping("/{cardId}")
-    private CardResponseDto getCard(AuthUser authUser, @PathVariable Long cardId)
+    private void getCard(AuthUser authUser, @PathVariable Long cardId)
     {
         cardService.getCard(authUser,cardId);
     }
@@ -31,13 +31,13 @@ public class CardController {
     @PatchMapping("/{cardId}")
     private void updateCard(AuthUser authUser, @Valid @RequestBody CardRequestDto card, @PathVariable Long cardId)
     {
-        cardService.updateCard(authUser,cardId,card);
+        cardService.updateCard(authUser,card,cardId);
     }
 
     @DeleteMapping("/{cardId}")
-    private void deleteCard(AuthUser authUser,@PathVariable Long cardId, @Valid @RequestBody CardRequestDto card)
+    private void deleteCard(AuthUser authUser,@PathVariable Long cardId)
     {
-        cardService.deleteCard(authUser,cardId,card);
+        cardService.deleteCard(authUser,cardId);
     }
 
 

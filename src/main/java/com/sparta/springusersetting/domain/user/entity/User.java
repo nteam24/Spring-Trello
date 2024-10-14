@@ -2,6 +2,7 @@ package com.sparta.springusersetting.domain.user.entity;
 
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
+import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.enums.UserStatus;
 import jakarta.persistence.*;
@@ -21,6 +22,8 @@ public class User extends Timestamped {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 

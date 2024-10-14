@@ -5,6 +5,7 @@ import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.EmailResponseDto;
+import com.sparta.springusersetting.domain.workspace.dto.response.UpdateWorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.service.WorkspaceService;
 import org.springframework.data.domain.Page;
@@ -57,12 +58,12 @@ public class WorkspaceController {
         User user = User.fromAuthUser(authUser);
         return ResponseEntity.ok(ApiResponse.success(workspaceService.viewOwnWorkspace(page,size,user)));
     }
-//    // 워크 스페이스 수정
-//    @PutMapping("/{workspaceId}")
-//    public ResponseEntity<ApiResponse<UpdateWorkspaceResponseDto>> updateWorkspace(@AuthenticationPrincipal AuthUser authUser,@RequestBody WorkspaceRequestDto workspaceRequestDto){
-//        User user = User.fromAuthUser(authUser);
-//        return ResponseEntity.ok(ApiResponse.success(workspaceService.updateWorkspace(user,workspaceRequestDto)));
-//    }
+    // 워크 스페이스 수정
+    @PutMapping("/{workspaceId}")
+    public ResponseEntity<ApiResponse<UpdateWorkspaceResponseDto>> updateWorkspace(@AuthenticationPrincipal AuthUser authUser, @RequestBody WorkspaceRequestDto workspaceRequestDto,@PathVariable Long workspaceId){
+        User user = User.fromAuthUser(authUser);
+        return ResponseEntity.ok(ApiResponse.success(workspaceService.updateWorkspace(user,workspaceRequestDto,workspaceId)));
+    }
 //
 //    // 워크 스페이스 삭제
 //    @DeleteMapping("/workspace/{workspaceId}")

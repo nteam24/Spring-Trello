@@ -33,4 +33,9 @@ public class Workspace extends Timestamped {
         this.name = name;
         this.description = description;
     }
+
+    public void updateWorkspace(String name, String description){
+        this.name = name;
+        this.description = description;
+    }
 }

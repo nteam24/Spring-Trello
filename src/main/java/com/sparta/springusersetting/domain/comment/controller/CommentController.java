@@ -29,10 +29,16 @@ public class CommentController {
     @PutMapping("card/{cardId}/comment/{commentId}")
     public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long cardId,
             @PathVariable Long commentId,
             @RequestBody CommentRequestDto requestDto) {
-        return ResponseEntity.ok(ApiResponse.success(commentService.updateComment(authUser.getUserId(), cardId, commentId, requestDto)));
+        return ResponseEntity.ok(ApiResponse.success(commentService.updateComment(authUser.getUserId(), commentId, requestDto)));
     }
 
+    // 댓글 삭제
+    @DeleteMapping("card/{cardId}/comment/{commentId}")
+    public ResponseEntity<ApiResponse<String>> deleteComment(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long commentId) {
+        return ResponseEntity.ok(ApiResponse.success(commentService.deleteComment(authUser.getUserId(), commentId)));
+    }
 }

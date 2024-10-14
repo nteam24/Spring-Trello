@@ -4,8 +4,10 @@ import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
+import com.sparta.springusersetting.domain.workspace.exception.NotFoundWorkspaceException;
 import com.sparta.springusersetting.domain.workspace.repository.WorkspaceRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WorkspaceService {
@@ -16,7 +18,12 @@ public class WorkspaceService {
         this.workspaceRepository = workspaceRepository;
     }
 
+    @Transactional
     public WorkspaceResponseDto createWorkspace(WorkspaceRequestDto workspaceRequestDto) {
+        if(workspaceRepository.findByName(workspaceRequestDto.getName()).isPresent()){
+            throw new NotFoundWorkspaceException();
+        }
+
         Workspace workspace = new Workspace(workspaceRequestDto.getName(), workspaceRequestDto.getDescription());
         workspaceRepository.save(workspace);
 

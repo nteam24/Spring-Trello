@@ -55,6 +55,14 @@ public class Card extends Timestamped {
         this.manager = manager;
         this.lists = lists;
     }
+    public void update(User manager, Lists lists, String title, String contents, LocalDate deadline)
+    {
+        this.manager = manager;
+        this.lists = lists;
+        this.title = title;
+        this.contents = contents;
+        this.deadline = deadline;
+    }
 
 
 

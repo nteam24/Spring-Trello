@@ -1,8 +1,8 @@
 package com.sparta.springusersetting.domain.auth.service;
 
 import com.sparta.springusersetting.config.JwtUtil;
-import com.sparta.springusersetting.domain.auth.dto.request.SigninRequest;
-import com.sparta.springusersetting.domain.auth.dto.request.SignupRequest;
+import com.sparta.springusersetting.domain.auth.dto.request.SigninRequestDto;
+import com.sparta.springusersetting.domain.auth.dto.request.SignupRequestDto;
 import com.sparta.springusersetting.domain.auth.dto.response.SigninResponse;
 import com.sparta.springusersetting.domain.auth.dto.response.SignupResponse;
 import com.sparta.springusersetting.domain.auth.exception.DuplicateEmailException;
@@ -27,18 +27,18 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public SignupResponse signup(SignupRequest signupRequest) {
+    public SignupResponse signup(SignupRequestDto signupRequestDto) {
 
-        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+        if (userRepository.existsByEmail(signupRequestDto.getEmail())) {
             throw new DuplicateEmailException();
         }
 
-        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
+        String encodedPassword = passwordEncoder.encode(signupRequestDto.getPassword());
 
-        UserRole userRole = UserRole.of(signupRequest.getUserRole());
+        UserRole userRole = UserRole.of(signupRequestDto.getUserRole());
 
         User newUser = new User(
-                signupRequest.getEmail(),
+                signupRequestDto.getEmail(),
                 encodedPassword,
                 userRole
         );
@@ -49,12 +49,12 @@ public class AuthService {
         return new SignupResponse(bearerToken);
     }
 
-    public SigninResponse signin(SigninRequest signinRequest) throws AuthException {
-        User user = userRepository.findByEmail(signinRequest.getEmail()).orElseThrow(
+    public SigninResponse signin(SigninRequestDto signinRequestDto) throws AuthException {
+        User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(
                 NotFoundUserException::new);
 
         // 로그인 시 이메일과 비밀번호가 일치하지 않을 경우 401을 반환합니다.
-        if (!passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(signinRequestDto.getPassword(), user.getPassword())) {
             throw new UnauthorizedPasswordException();
         }
 

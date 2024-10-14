@@ -57,6 +57,17 @@ public class UserService {
         return "비밀번호가 정상적으로 변경되었습니다.";
     }
 
+    // 유저 회원탈퇴
+    @Transactional
+    public String deleteUser(long userId) {
+        // 유저 조회
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        user.delete();
+
+        return "회원탈퇴가 정상적으로 완료되었습니다.";
+    }
+
 
     // 패스워드 조건 확인 메서드
     private static void validateNewPassword(UserChangePasswordRequest userChangePasswordRequest) {

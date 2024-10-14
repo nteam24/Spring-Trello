@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: spring-usersetting
+    name: spring-trello
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}

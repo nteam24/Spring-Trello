@@ -18,9 +18,11 @@ public enum GlobalExceptionConst {
     // 상태코드 404
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, " 회원이 존재하지 않습니다."),
     NOT_FOUND_EMAIL(HttpStatus.NOT_FOUND, " 이메일을 확인해주세요."),
+    NOT_FOUND_WORKSPACE(HttpStatus.NOT_FOUND, " 워크스페이스가 존재하지 않습니다."),
 
     // 상태코드 409
-    DUPLICATE_EMAIL(HttpStatus.CONFLICT, " 중복된 이메일입니다.");
+    DUPLICATE_EMAIL(HttpStatus.CONFLICT, " 중복된 이메일입니다."),
+    DUPLICATE_WORKSPACE_NAME(HttpStatus.CONFLICT, " 중복된 워크스페이스명 입니다.");
 
 
 

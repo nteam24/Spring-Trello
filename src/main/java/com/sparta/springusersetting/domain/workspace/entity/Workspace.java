@@ -1,12 +1,13 @@
 package com.sparta.springusersetting.domain.workspace.entity;
 
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -17,6 +18,19 @@ public class Workspace extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private String name;
+    
+    private String description;
 
+    @CreatedDate
+    @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    protected LocalDateTime updatedAt;
 
 }

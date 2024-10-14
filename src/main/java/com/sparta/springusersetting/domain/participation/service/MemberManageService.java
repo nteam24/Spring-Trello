@@ -1,24 +1,17 @@
 package com.sparta.springusersetting.domain.participation.service;
 
+import com.sparta.springusersetting.domain.participation.entity.Participation;
+import com.sparta.springusersetting.domain.participation.exception.BadAccessParticipationException;
+import com.sparta.springusersetting.domain.participation.exception.NotFoundParticipationException;
+import com.sparta.springusersetting.domain.participation.repository.ParticipationRepository;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.exception.BadAccessUserException;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.service.UserService;
-import com.sparta.springusersetting.domain.participation.entity.Participation;
-import com.sparta.springusersetting.domain.participation.exception.BadAccessParticipationException;
-import com.sparta.springusersetting.domain.participation.exception.NotFoundParticipationException;
-import com.sparta.springusersetting.domain.participation.repository.ParticipationRepository;
-import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
-import com.sparta.springusersetting.domain.workspace.dto.response.DeleteWorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.EmailResponseDto;
-import com.sparta.springusersetting.domain.workspace.dto.response.UpdateWorkspaceResponseDto;
-import com.sparta.springusersetting.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import com.sparta.springusersetting.domain.workspace.service.WorkspaceService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,19 +19,20 @@ import static com.sparta.springusersetting.domain.user.enums.MemberRole.ROLE_WOR
 import static com.sparta.springusersetting.domain.user.enums.UserRole.ROLE_ADMIN;
 
 @Service
-public class ParticipationService {
-
+public class MemberManageService {
     private final WorkspaceService workspaceService;
+
     private final UserService userService;
 
     private final ParticipationRepository participationRepository;
 
-    public ParticipationService(ParticipationRepository participationRepository, WorkspaceService workspaceService, UserService userService) {
+    public MemberManageService(ParticipationRepository participationRepository, WorkspaceService workspaceService, UserService userService) {
         this.participationRepository = participationRepository;
         this.workspaceService = workspaceService;
         this.userService = userService;
     }
 
+    // 관리자 등록
     @Transactional
     public String setWorkspaceAdmin(Long userId, Long workspaceId) {
 
@@ -68,30 +62,7 @@ public class ParticipationService {
         return "관리자 설정 완료";
     }
 
-    // 유저가 해당 워크스페이스에 포함되어 있는지
-    public Participation isMember(Long userId, Long workspaceId) {
-        return participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
-                .orElseThrow(NotFoundUserException::new);
-    }
-
-
-    @Transactional
-    public void inviteToWorkspace(User user, Workspace workspace) {
-        Participation participation = new Participation(user, workspace);
-        participationRepository.save(participation);
-    }
-
-    public MemberRole checkMemberRole(Long userId, Long workspaceId) {
-        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId).orElseThrow(NotFoundParticipationException::new);
-        return participation.getMemberRole();
-    }
-
-    @Transactional
-    public void deleteWorkspace(Participation participation) {
-        participationRepository.delete(participation);
-    }
-
-
+    // 초대하기
     public EmailResponseDto inviteUserToWorkspace(User user, Long workspaceId, Long userId) {
         // 유저가 관리자인지 체크
         if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
@@ -102,11 +73,13 @@ public class ParticipationService {
         User newUser = userService.findUser(userId);
 
         // 워크 스페이스에 초대
-        inviteToWorkspace(newUser, workspace);
+        Participation participation = new Participation(user, workspace);
+        participationRepository.save(participation);
 
         return new EmailResponseDto(newUser.getEmail());
     }
 
+    // 수락하기
     @Transactional
     public String callYes(User user, Long workspaceId) {
         // 유저가 중간 테이블에 포함되어 있는지 체크
@@ -118,57 +91,24 @@ public class ParticipationService {
         return "초대 수락 완료";
     }
 
+    // 거절하기
     @Transactional
     public String callNo(User user, Long workspaceId) {
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 
         // 중간 테이블에서 삭제
-        deleteWorkspace(participation);
+        participationRepository.delete(participation);
 
         return "초대 거절 완료";
     }
 
-    public Page<WorkspaceResponseDto> viewOwnWorkspace(int page, int size, User user) {
-        // 페이징
-        Pageable pageable = PageRequest.of(page - 1, size);
-
-        Page<Participation> workspaces = participationRepository.findAllByUserId(pageable, user.getId());
-
-        return workspaces.map(participation -> new WorkspaceResponseDto(
-                participation.getWorkspace().getName(),
-                participation.getWorkspace().getDescription()
-        ));
+    // 권한 확인하기
+    public MemberRole checkMemberRole(Long userId, Long workspaceId) {
+        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId).orElseThrow(NotFoundParticipationException::new);
+        return participation.getMemberRole();
     }
-
-    @Transactional
-    public UpdateWorkspaceResponseDto updateWorkspace(User user, WorkspaceRequestDto workspaceRequestDto, Long workspaceId) {
-        // 유저가 관리자인지 체크
-        if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
-            throw new BadAccessUserException();
-        }
-
-        // 수정 하고 저장
-        Workspace workspace = workspaceService.findWorkspace(workspaceId);
-        workspace.updateWorkspace(workspaceRequestDto.getName(), workspaceRequestDto.getDescription());
-
-        return new UpdateWorkspaceResponseDto(workspace.getId(), workspace.getName(), workspace.getDescription());
-
-    }
-
-    @Transactional
-    public DeleteWorkspaceResponseDto deleteWorkspace(User user, Long workspaceId) {
-        // 유저가 관리자인지 체크
-        if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
-            throw new BadAccessUserException();
-        }
-
-        Workspace workspace = workspaceService.findWorkspace(workspaceId);
-        workspaceService.deleteWorkspace(workspace);
-
-        return new DeleteWorkspaceResponseDto(workspace.getId(), workspace.getName());
-    }
-
+    // 멤버 권한 변경
     public String changeMemberRole(User user, Long workspaceId, Long userId, String memberRole) {
         if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();
@@ -178,5 +118,10 @@ public class ParticipationService {
         participation.changeRole(MemberRole.of(memberRole));
 
         return "권한 변경 완료";
+    }
+    // 유저가 해당 워크스페이스에 포함되어 있는지 확인하기
+    public Participation isMember(Long userId, Long workspaceId) {
+        return participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
+                .orElseThrow(NotFoundUserException::new);
     }
 }

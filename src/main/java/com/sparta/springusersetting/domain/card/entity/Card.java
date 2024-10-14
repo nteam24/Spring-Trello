@@ -39,12 +39,13 @@ public class Card extends Timestamped {
     private Lists lists;
 
 
-    public Card(String title, String contents, LocalDate deadline, User manager)
+    public Card(String title, String contents, LocalDate deadline, User manager, Lists lists)
     {
         this.title = title;
         this.contents = contents;
         this.deadline = deadline;
         this.manager = manager;
+        this.lists = lists;
     }
 
 

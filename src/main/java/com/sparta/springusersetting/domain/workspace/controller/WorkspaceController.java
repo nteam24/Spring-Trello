@@ -22,9 +22,9 @@ public class WorkspaceController {
         this.workspaceService = workspaceService;
     }
 
-    @PostMapping()
-    public ResponseEntity<ApiResponse<WorkspaceRequestDto>> createWorkspace(@AuthenticationPrincipal AuthUser authUser){
-        User user = User.fromAuthUser(authUser);
-        return ResponseEntity.ok(ApiResponse.success(workspaceService.createWorkspace(user)));
-    }
+//    @PostMapping()
+//    public ResponseEntity<ApiResponse<WorkspaceRequestDto>> createWorkspace(@AuthenticationPrincipal AuthUser authUser){
+//        User user = User.fromAuthUser(authUser);
+//        return ResponseEntity.ok(ApiResponse.success(workspaceService.createWorkspace(user)));
+//    }
 }

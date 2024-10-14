@@ -3,11 +3,8 @@ package com.sparta.springusersetting.domain.workspace.controller;
 import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.user.entity.User;
-import com.sparta.springusersetting.domain.workspace.dto.request.DeleteWorkspaceRequestDto;
 import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
-import com.sparta.springusersetting.domain.workspace.dto.response.DeleteWorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.EmailResponseDto;
-import com.sparta.springusersetting.domain.workspace.dto.response.UpdateWorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.service.WorkspaceService;
 import org.springframework.data.domain.Page;
@@ -16,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/workspace")
+@RequestMapping("/workspaces")
 public class WorkspaceController {
 
     private final WorkspaceService workspaceService;
@@ -50,13 +47,16 @@ public class WorkspaceController {
         User user = User.fromAuthUser(authUser);
         return ResponseEntity.ok(ApiResponse.success(workspaceService.callNo(user,workspaceId)));
     }
-//
-//    // 워크 스페이스 조회
-//    @GetMapping("/{workspaceId}")
-//    public ResponseEntity<ApiResponse<Page<WorkspaceResponseDto>>> viewOwnWorkspace(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceid){
-//        User user = User.fromAuthUser(authUser);
-//        return ResponseEntity.ok(ApiResponse.success(workspaceService.viewOwnWorkspace(user,workspaceId)));
-//    }
+
+    // 워크 스페이스 조회
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<Page<WorkspaceResponseDto>>> viewOwnWorkspace(@RequestParam(defaultValue = "1") int page,
+                                                                                    @RequestParam(defaultValue = "10") int size,
+                                                                                    @AuthenticationPrincipal AuthUser authUser
+                                                                                    ){
+        User user = User.fromAuthUser(authUser);
+        return ResponseEntity.ok(ApiResponse.success(workspaceService.viewOwnWorkspace(page,size,user)));
+    }
 //    // 워크 스페이스 수정
 //    @PutMapping("/{workspaceId}")
 //    public ResponseEntity<ApiResponse<UpdateWorkspaceResponseDto>> updateWorkspace(@AuthenticationPrincipal AuthUser authUser,@RequestBody WorkspaceRequestDto workspaceRequestDto){

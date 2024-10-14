@@ -17,7 +17,7 @@ public class UserWorkspaceController {
     }
 
     // 일반 유저를 관리자로 등록하기
-    @PostMapping("/admin/user/{userId}/workspace/{workspaceId}")
+    @PostMapping("/admin/users/{userId}/workspaces/{workspaceId}")
     public ResponseEntity<ApiResponse<String>> setWorkspaceAdmin(@PathVariable Long userId, @PathVariable Long workspaceId){
         return ResponseEntity.ok(ApiResponse.success(userWorkspaceService.setWorkspaceAdmin(userId, workspaceId)));
 

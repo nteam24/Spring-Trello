@@ -73,4 +73,14 @@ public class ParticipationController {
         User user = User.fromAuthUser(authUser);
         return ResponseEntity.ok(ApiResponse.success(participationService.deleteWorkspace(user,workspaceId)));
     }
+
+    // 소속 맴버 권한 교체
+    @PutMapping("/workspaces/{workspaceId}/users/{userId}")
+    public ResponseEntity<ApiResponse<String>> changeMemberRole(@AuthenticationPrincipal AuthUser authUser,
+                                                                @RequestParam String role,
+                                                                @PathVariable Long workspaceId,
+                                                                @PathVariable Long userId){
+        User user = User.fromAuthUser(authUser);
+        return ResponseEntity.ok(ApiResponse.success(participationService.changeMemberRole(user,workspaceId,userId,role)));
+    }
 }

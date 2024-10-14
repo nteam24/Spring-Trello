@@ -43,10 +43,10 @@ public class ParticipationService {
     public String setWorkspaceAdmin(Long userId, Long workspaceId) {
 
         User user = userService.findUser(userId);
-        if(user.getUserRole()==ROLE_ADMIN){
+        if (user.getUserRole() == ROLE_ADMIN) {
             throw new BadAccessUserException();
         }
-        Workspace workspace =  workspaceService.findWorkspace(workspaceId);
+        Workspace workspace = workspaceService.findWorkspace(workspaceId);
 
 
         // 찾고 없으면 생성
@@ -54,13 +54,13 @@ public class ParticipationService {
                 .orElseGet(() -> new Participation(user, workspace));
 
         // 관리자 권한 부여
-        if(participation.getMemberRole()==ROLE_WORKSPACE_ADMIN){
+        if (participation.getMemberRole() == ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessParticipationException();
         }
-        participation.UserBeADMIN();
+        participation.changeRole(ROLE_WORKSPACE_ADMIN);
 
         // 활성화
-        if(!participation.isActivation()){
+        if (!participation.isActivation()) {
             participation.UserBeActive();
         }
         participationRepository.save(participation);
@@ -69,20 +69,19 @@ public class ParticipationService {
     }
 
     // 유저가 해당 워크스페이스에 포함되어 있는지
-    public Participation isMember(Long userId, Long workspaceId){
+    public Participation isMember(Long userId, Long workspaceId) {
         return participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
                 .orElseThrow(NotFoundUserException::new);
     }
 
 
-
     @Transactional
-    public void inviteToWorkspace(User user, Workspace workspace){
+    public void inviteToWorkspace(User user, Workspace workspace) {
         Participation participation = new Participation(user, workspace);
         participationRepository.save(participation);
     }
 
-    public MemberRole checkMemberRole(Long userId, Long workspaceId){
+    public MemberRole checkMemberRole(Long userId, Long workspaceId) {
         Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId).orElseThrow(NotFoundParticipationException::new);
         return participation.getMemberRole();
     }
@@ -93,10 +92,9 @@ public class ParticipationService {
     }
 
 
-
     public EmailResponseDto inviteUserToWorkspace(User user, Long workspaceId, Long userId) {
         // 유저가 관리자인지 체크
-        if (checkMemberRole(user.getId(), workspaceId)!= MemberRole.ROLE_WORKSPACE_ADMIN) {
+        if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();
         }
         // 워크 스페이스와 유저 존재 체크
@@ -110,7 +108,7 @@ public class ParticipationService {
     }
 
     @Transactional
-    public String callYes(User user,Long workspaceId) {
+    public String callYes(User user, Long workspaceId) {
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 
@@ -121,7 +119,7 @@ public class ParticipationService {
     }
 
     @Transactional
-    public String callNo(User user,Long workspaceId) {
+    public String callNo(User user, Long workspaceId) {
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 
@@ -146,12 +144,13 @@ public class ParticipationService {
     @Transactional
     public UpdateWorkspaceResponseDto updateWorkspace(User user, WorkspaceRequestDto workspaceRequestDto, Long workspaceId) {
         // 유저가 관리자인지 체크
-        if (checkMemberRole(user.getId(), workspaceId)!= MemberRole.ROLE_WORKSPACE_ADMIN) {
+        if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();
         }
+
         // 수정 하고 저장
         Workspace workspace = workspaceService.findWorkspace(workspaceId);
-        workspace.updateWorkspace(workspaceRequestDto.getName(),workspaceRequestDto.getDescription());
+        workspace.updateWorkspace(workspaceRequestDto.getName(), workspaceRequestDto.getDescription());
 
         return new UpdateWorkspaceResponseDto(workspace.getId(), workspace.getName(), workspace.getDescription());
 
@@ -160,14 +159,24 @@ public class ParticipationService {
     @Transactional
     public DeleteWorkspaceResponseDto deleteWorkspace(User user, Long workspaceId) {
         // 유저가 관리자인지 체크
-        if (checkMemberRole(user.getId(), workspaceId)!= MemberRole.ROLE_WORKSPACE_ADMIN) {
+        if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();
         }
-        // 날려
+
         Workspace workspace = workspaceService.findWorkspace(workspaceId);
         workspaceService.deleteWorkspace(workspace);
 
         return new DeleteWorkspaceResponseDto(workspace.getId(), workspace.getName());
     }
 
+    public String changeMemberRole(User user, Long workspaceId, Long userId, String memberRole) {
+        if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
+            throw new BadAccessUserException();
+        }
+
+        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId).orElseThrow(NotFoundParticipationException::new);
+        participation.changeRole(MemberRole.of(memberRole));
+
+        return "권한 변경 완료";
+    }
 }

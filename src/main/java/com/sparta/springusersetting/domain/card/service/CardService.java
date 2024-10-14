@@ -9,7 +9,9 @@ import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.lists.repository.ListsRepository;
 import com.sparta.springusersetting.domain.user.entity.User;
+import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
+import com.sparta.springusersetting.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,15 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class CardService {
 
     private final CardRepository cardRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final ListsRepository listsRepository;
 
     public void createCard(AuthUser authUser, CardRequestDto requestDto)
     {
-
-        //User createUser = User.fromAuthUser(authUser);
-        User manager = userRepository.findById(requestDto.getManagerId()).orElse(null);
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
+        User createUser = User.fromAuthUser(authUser);
+
+
+       // if(lists.getBoard().getWorkspace().getMemberRole()==MemberRole.ROLE_READ_USER)
+        User manager = userService.findUser(requestDto.getManagerId());
         Card card = new Card(requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline(),manager,lists);
         cardRepository.save(card);
     }
@@ -49,7 +53,7 @@ public class CardService {
     @Transactional
     public void updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId)
     {
-        User manager = userRepository.findById(requestDto.getManagerId()).orElse(null);
+        User manager = userService.findUser(requestDto.getManagerId());
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         Card card = cardRepository.findById(cardId).orElse(null);
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());

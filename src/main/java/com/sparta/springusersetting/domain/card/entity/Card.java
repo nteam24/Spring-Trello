@@ -42,6 +42,13 @@ public class Card extends Timestamped {
     @JoinColumn(name = "lists_id", nullable = false)
     private Lists lists;
 
+    @OneToMany(mappedBy = "activityLog")
+    private List<ActivityLog> activityLogs;
+
+    @OneToMany(mappedBy = "comment")
+    private List<Comment> comments;
+
+
 
     public Card(String title, String contents, LocalDate deadline, User manager, Lists lists)
     {
@@ -50,6 +57,14 @@ public class Card extends Timestamped {
         this.deadline = deadline;
         this.manager = manager;
         this.lists = lists;
+    }
+    public void update(User manager, Lists lists, String title, String contents, LocalDate deadline)
+    {
+        this.manager = manager;
+        this.lists = lists;
+        this.title = title;
+        this.contents = contents;
+        this.deadline = deadline;
     }
 
 

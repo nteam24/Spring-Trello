@@ -17,7 +17,7 @@ public class UserAdminController {
     private final UserAdminService userAdminService;
 
     // 유저 권한 변경
-    @PatchMapping("/admin/users/{userId}")
+    @PatchMapping("/admin/user/{userId}")
     public ResponseEntity<ApiResponse<String>> changeUserRole(@PathVariable long userId, @RequestBody UserRoleChangeRequest userRoleChangeRequest) {
         return ResponseEntity.ok(ApiResponse.success(userAdminService.changeUserRole(userId, userRoleChangeRequest)));
     }

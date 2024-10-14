@@ -17,15 +17,22 @@ public class UserController {
     private final UserService userService;
     
     // 유저 조회 ( id )
-    @GetMapping("/users/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse<UserResponse>> getUser(@PathVariable long userId) {
         return ResponseEntity.ok(ApiResponse.success(userService.getUser(userId)));
     }
 
     // 유저 비밀번호 변경
-    @PutMapping("/users")
+    @PutMapping("/user")
     public ResponseEntity<ApiResponse<String>> changePassword(@AuthenticationPrincipal AuthUser authUser, @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         long userId = Long.parseLong(authUser.getUserId());
         return ResponseEntity.ok(ApiResponse.success(userService.changePassword(userId, userChangePasswordRequest)));
+    }
+
+    // 유저 회원탈퇴
+    @DeleteMapping("/user")
+    public ResponseEntity<ApiResponse<String>> deleteUser(@AuthenticationPrincipal AuthUser authUser) {
+        long userId = Long.parseLong(authUser.getUserId());
+        return ResponseEntity.ok(ApiResponse.success(userService.deleteUser(userId)));
     }
 }

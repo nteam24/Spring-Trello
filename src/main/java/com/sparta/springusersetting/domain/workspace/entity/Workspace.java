@@ -26,7 +26,7 @@ public class Workspace extends Timestamped {
     
     private String description;
 
-    @OneToMany(mappedBy = "workspace")
+    @OneToMany(mappedBy = "workspace",cascade = CascadeType.REMOVE)
     private List<UserWorkspace> userWorkspaceList;
 
     public Workspace(String name, String description) {

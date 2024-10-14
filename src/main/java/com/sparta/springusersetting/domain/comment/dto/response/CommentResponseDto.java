@@ -1,2 +1,7 @@
-package com.sparta.springusersetting.domain.comment.dto.response;public class CommentResponseDto {
+package com.sparta.springusersetting.domain.comment.dto.response;
+
+import lombok.Getter;
+
+@Getter
+public class CommentResponseDto {
 }

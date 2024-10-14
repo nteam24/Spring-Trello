@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.userWorkspace.service;
 
 import com.sparta.springusersetting.domain.user.entity.User;
+import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.exception.BadAccessUserException;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
@@ -77,5 +78,10 @@ public class UserWorkspaceService {
     public void inviteToWorkspace(User user, Workspace workspace){
         UserWorkspace userWorkspace = new UserWorkspace(user, workspace);
         userWorkspaceRepository.save(userWorkspace);
+    }
+
+    public MemberRole checkMemberRole(Long userId, Long workspaceId){
+        UserWorkspace userWorkspace =userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId).orElseThrow(NotFoundUserWorkspaceException::new);
+        return userWorkspace.getMemberRole();
     }
 }

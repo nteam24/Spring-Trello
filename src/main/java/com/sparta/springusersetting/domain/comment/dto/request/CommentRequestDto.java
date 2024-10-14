@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CommentCreateRequestDto {
+public class CommentRequestDto {
     private String content;
     private CommentEmoji commentEmoji;
 }

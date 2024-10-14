@@ -28,4 +28,14 @@ public class UserWorkspace extends Timestamped {
 
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
+
+    private boolean activation;
+
+
+    public UserWorkspace( User user, Workspace workspace, MemberRole memberRole) {
+        this.user = user;
+        this.workspace = workspace;
+        this.memberRole = memberRole;
+        this.activation = false;
+    }
 }

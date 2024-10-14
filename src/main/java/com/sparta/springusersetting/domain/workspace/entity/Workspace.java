@@ -28,4 +28,9 @@ public class Workspace extends Timestamped {
 
     @OneToMany(mappedBy = "workspace")
     private List<UserWorkspace> userWorkspaceList;
+
+    public Workspace(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

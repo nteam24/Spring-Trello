@@ -18,6 +18,7 @@ import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.exception.BadAccessUserException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
 import com.sparta.springusersetting.domain.user.service.UserService;
+import com.sparta.springusersetting.domain.webhook.service.WebhookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ public class CardService {
     private final UserService userService;
     private final ListsRepository listsRepository;
     private final MemberManageService memberManageService;
+    private final WebhookService webhookService;
 
     public void createCard(AuthUser authUser, CardRequestDto requestDto)
     {
@@ -74,6 +76,7 @@ public class CardService {
         Card card = cardRepository.findById(cardId).orElse(null);
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
+
 
     }
 

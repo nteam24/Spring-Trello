@@ -51,6 +51,7 @@ public class AuthService {
 
         webhookService.sendDiscordNotification("%s 님이 새로운 회원이 되셨어요 !", newUser.getUserName());
 
+
         return new SignupResponse(bearerToken);
     }
 

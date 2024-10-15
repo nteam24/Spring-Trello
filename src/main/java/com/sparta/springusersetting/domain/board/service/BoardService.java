@@ -6,11 +6,13 @@ import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.board.exception.NotFoundBoardException;
 import com.sparta.springusersetting.domain.board.exception.UnauthorizedActionException;
 import com.sparta.springusersetting.domain.board.repository.BoardRepository;
+import com.sparta.springusersetting.domain.participation.entity.Participation;
+import com.sparta.springusersetting.domain.participation.repository.ParticipationRepository;
+import com.sparta.springusersetting.domain.participation.service.WorkspaceManageService;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
-import com.sparta.springusersetting.domain.userWorkspace.entity.UserWorkspace;
-import com.sparta.springusersetting.domain.userWorkspace.repository.UserWorkspaceRepository;
 import com.sparta.springusersetting.domain.workspace.exception.NotFoundWorkspaceException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +24,18 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final UserWorkspaceRepository userWorkspaceRepository;
+    private final ParticipationRepository participationRepository;
 
     // 보드 등록
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long userId, Long workspaceId) {
-        UserWorkspace userWorkspace =  validateCreateBoard(userId, workspaceId);
+        Participation participation=  validateCreateBoard(userId, workspaceId);
 
         Board board = new Board(
                 boardRequestDto.getTitle(),
                 boardRequestDto.getBackgroundColor(),
                 boardRequestDto.getBackgroundImageUrl(),
-                userWorkspace.getWorkspace()
+                participation.getWorkspace()
         );
         boardRepository.save(board);
         return new BoardResponseDto(board);
@@ -79,20 +81,20 @@ public class BoardService {
     }
 
     // 보드 생성 검증 로직
-    private UserWorkspace validateCreateBoard(Long userId, Long workspaceId) {
-        UserWorkspace userWorkspace = userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
+    private Participation validateCreateBoard(Long userId, Long workspaceId) {
+        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
                 .orElseThrow(() -> new NotFoundWorkspaceException());
-        if (userWorkspace.getMemberRole() == MemberRole.ROLE_READ_USER) {
+        if (participation.getMemberRole() == MemberRole.ROLE_READ_USER) {
             throw new UnauthorizedActionException();
         }
-        return userWorkspace;
+        return participation;
     }
 
     // 보드 수정 검증 로직
     private Board validateUpdateBoard(Long boardId, Long userId, Long workspaceId) {
-        UserWorkspace userWorkspace = userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
+        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
                 .orElseThrow(() -> new NotFoundWorkspaceException());
-        if (userWorkspace.getMemberRole() == MemberRole.ROLE_READ_USER) {
+        if (participation.getMemberRole() == MemberRole.ROLE_READ_USER) {
             throw new UnauthorizedActionException();
         }
         Board board = boardRepository.findById(boardId)
@@ -102,9 +104,9 @@ public class BoardService {
 
     // 보드 삭제 검증 로직
     private Board validateDeleteBoard(Long boardId, Long userId, Long workspaceId) {
-        UserWorkspace userWorkspace = userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
+        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
                 .orElseThrow(() -> new NotFoundWorkspaceException());
-        if (userWorkspace.getMemberRole() == MemberRole.ROLE_READ_USER) {
+        if (participation.getMemberRole() == MemberRole.ROLE_READ_USER) {
             throw new UnauthorizedActionException();
         }
         Board board = boardRepository.findById(boardId)

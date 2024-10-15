@@ -3,6 +3,7 @@ package com.sparta.springusersetting.domain.workspace.service;
 import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
 import com.sparta.springusersetting.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
+import com.sparta.springusersetting.domain.workspace.exception.DuplicateWorkspaceException;
 import com.sparta.springusersetting.domain.workspace.exception.NotFoundWorkspaceException;
 import com.sparta.springusersetting.domain.workspace.repository.WorkspaceRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class WorkspaceService {
     @Transactional
     public WorkspaceResponseDto createWorkspace(WorkspaceRequestDto workspaceRequestDto) {
         if(workspaceRepository.findByName(workspaceRequestDto.getName()).isPresent()){
-            throw new NotFoundWorkspaceException();
+            throw new DuplicateWorkspaceException();
         }
 
         Workspace workspace = new Workspace(workspaceRequestDto.getName(), workspaceRequestDto.getDescription());

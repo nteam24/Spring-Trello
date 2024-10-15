@@ -14,6 +14,7 @@ public enum GlobalExceptionConst {
     INVALID_ROLE(HttpStatus.BAD_REQUEST, " 올바른 권한이 아닙니다."),
     ALREADY_ADMIN(HttpStatus.BAD_REQUEST, " 이미 해당 워크스페이스의 관리자 입니다."),
     WORKSPACE_ID_REQUIRED(HttpStatus.BAD_REQUEST, "워크스페이스 ID가 검색에 필요합니다."),
+    INVALID_BACKGROUND_COLOR_OR_IMAGE(HttpStatus.BAD_REQUEST,"배경색 또는 배경이미지 중 하나는 선택해야 합니다."),
 
     // 상태코드 401
     UNAUTHORIZED_PASSWORD(HttpStatus.UNAUTHORIZED, " 비밀번호를 확인해주세요."),
@@ -32,11 +33,7 @@ public enum GlobalExceptionConst {
     NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, " 해당 보드는 존재하지 않습니다."),
     NOT_FOUND_LISTS(HttpStatus.NOT_FOUND, " 해당 리스트는 존재하지 않습니다."),
-
-    NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
-    NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, " 해당 보드는 존재하지 않습니다."),
-    NOT_FOUND_LISTS(HttpStatus.NOT_FOUND, " 해당 리스트는 존재하지 않습니다."),
-    NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "해당 보드를 찾을 수 없습니다."),
+    NOT_FOUND_TITLE(HttpStatus.NOT_FOUND, "제목이 없습니다."),
 
     // 상태코드 409
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, " 중복된 이메일입니다."),

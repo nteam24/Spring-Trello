@@ -9,7 +9,6 @@ import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.exception.BadAccessUserException;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.service.UserService;
-import com.sparta.springusersetting.domain.workspace.dto.response.EmailResponseDto;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import com.sparta.springusersetting.domain.workspace.service.WorkspaceService;
 import org.springframework.stereotype.Service;
@@ -26,10 +25,10 @@ public class MemberManageService {
 
     private final ParticipationRepository participationRepository;
 
-    public MemberManageService(ParticipationRepository participationRepository, WorkspaceService workspaceService, UserService userService) {
-        this.participationRepository = participationRepository;
+    public MemberManageService(WorkspaceService workspaceService, UserService userService, ParticipationRepository participationRepository) {
         this.workspaceService = workspaceService;
         this.userService = userService;
+        this.participationRepository = participationRepository;
     }
 
     // 관리자 등록
@@ -63,7 +62,7 @@ public class MemberManageService {
     }
 
     // 초대하기
-    public EmailResponseDto inviteUserToWorkspace(User user, Long workspaceId, Long userId) {
+    public String inviteUserToWorkspace(User user, Long workspaceId, Long userId) {
         // 유저가 관리자인지 체크
         if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();
@@ -76,7 +75,7 @@ public class MemberManageService {
         Participation participation = new Participation(user, workspace);
         participationRepository.save(participation);
 
-        return new EmailResponseDto(newUser.getEmail());
+        return "초대 성공";
     }
 
     // 수락하기

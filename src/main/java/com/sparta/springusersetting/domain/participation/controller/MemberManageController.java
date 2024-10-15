@@ -4,7 +4,6 @@ import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
-import com.sparta.springusersetting.domain.workspace.dto.response.EmailResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ public class MemberManageController {
 
     // 초대 하기
     @PostMapping("/workspaces/{workspaceId}/users/{userId}/invitations")
-    public ResponseEntity<ApiResponse<EmailResponseDto>> inviteUserToWorkspace(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceId, @PathVariable Long userId){
+    public ResponseEntity<ApiResponse<String>> inviteUserToWorkspace(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceId, @PathVariable Long userId){
         User user = User.fromAuthUser(authUser);
         System.out.println("1");
         return ResponseEntity.ok(ApiResponse.success(memberManageService.inviteUserToWorkspace(user,workspaceId,userId)));

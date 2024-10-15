@@ -35,17 +35,17 @@ public class Card extends Timestamped {
     private List<Comment> commentList;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "users_id", nullable = false)
     private User manager;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lists_id", nullable = false)
     private Lists lists;
 
-    @OneToMany(mappedBy = "activityLog")
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     private List<ActivityLog> activityLogs;
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
 

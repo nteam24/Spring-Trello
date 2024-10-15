@@ -2,15 +2,13 @@ package com.sparta.springusersetting.domain.user.entity;
 
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
-import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.enums.UserStatus;
-import com.sparta.springusersetting.domain.userWorkspace.entity.UserWorkspace;
+import com.sparta.springusersetting.domain.participation.entity.Participation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,7 +29,7 @@ public class User extends Timestamped {
     private UserStatus userStatus;
 
     @OneToMany(mappedBy = "user")
-    private List<UserWorkspace> userWorkspaceList;
+    private List<Participation> participationList;
 
 
     public User(String email, String password, UserRole userRole) {

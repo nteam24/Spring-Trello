@@ -1,4 +1,4 @@
-package com.sparta.springusersetting.domain.userWorkspace.entity;
+package com.sparta.springusersetting.domain.participation.entity;
 
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.user.entity.User;
@@ -13,7 +13,7 @@ import static com.sparta.springusersetting.domain.user.enums.MemberRole.*;
 @Getter
 @Entity
 @NoArgsConstructor
-public class UserWorkspace extends Timestamped {
+public class Participation extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,18 +33,19 @@ public class UserWorkspace extends Timestamped {
     private boolean activation;
 
 
-    public UserWorkspace( User user, Workspace workspace) {
+    public Participation(User user, Workspace workspace) {
         this.user = user;
         this.workspace = workspace;
         this.memberRole = ROLE_READ_USER;
         this.activation = false;
     }
 
-    public void UserBeADMIN(){
-        this.memberRole = ROLE_WORKSPACE_ADMIN;
-    }
 
     public void UserBeActive(){
         this.activation=true;
+    }
+
+    public void changeRole(MemberRole memberRole) {
+        this.memberRole = memberRole;
     }
 }

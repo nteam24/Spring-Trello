@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.card.entity;
 
 
+import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,8 +33,8 @@ public class Card extends Timestamped {
     @Column(nullable = false)
     private LocalDate deadline;
 
-    @OneToMany(mappedBy = "card")
-    private List<Comment> commentList;
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -41,6 +43,14 @@ public class Card extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lists_id", nullable = false)
     private Lists lists;
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActivityLog> activityLogs = new ArrayList<>();
+
+
+    @ManyToOne
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 
 
     public Card(String title, String contents, LocalDate deadline, User manager, Lists lists)

@@ -22,13 +22,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class WorkspaceManageService {
 
     private final WorkspaceService workspaceService;
+    private final MemberManageService memberManageService;
 
     private final ParticipationRepository participationRepository;
 
-    public WorkspaceManageService(WorkspaceService workspaceService, ParticipationRepository participationRepository) {
+    public WorkspaceManageService(WorkspaceService workspaceService, MemberManageService memberManageService, ParticipationRepository participationRepository) {
         this.workspaceService = workspaceService;
+        this.memberManageService = memberManageService;
         this.participationRepository = participationRepository;
     }
+
 
     // 소속 워크 스페이스 조회하기
     public Page<WorkspaceResponseDto> viewOwnWorkspace(int page, int size, User user) {
@@ -47,7 +50,7 @@ public class WorkspaceManageService {
     @Transactional
     public UpdateWorkspaceResponseDto updateWorkspace(User user, WorkspaceRequestDto workspaceRequestDto, Long workspaceId) {
         // 유저가 관리자인지 체크
-        if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
+        if (memberManageService.checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();
         }
 
@@ -63,7 +66,7 @@ public class WorkspaceManageService {
     @Transactional
     public DeleteWorkspaceResponseDto deleteWorkspace(User user, Long workspaceId) {
         // 유저가 관리자인지 체크
-        if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
+        if (memberManageService.checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();
         }
 
@@ -73,11 +76,7 @@ public class WorkspaceManageService {
         return new DeleteWorkspaceResponseDto(workspace.getId(), workspace.getName());
     }
 
-    // 멤버 권한 체크하기
-    public MemberRole checkMemberRole(Long userId, Long workspaceId) {
-        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId).orElseThrow(NotFoundParticipationException::new);
-        return participation.getMemberRole();
-    }
+
 
 
 }

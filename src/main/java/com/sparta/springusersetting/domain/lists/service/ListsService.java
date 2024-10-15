@@ -11,6 +11,7 @@ import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.lists.exception.BadAccessListsException;
 import com.sparta.springusersetting.domain.lists.exception.NotFoundListsException;
 import com.sparta.springusersetting.domain.lists.repository.ListsRepository;
+import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.participation.service.WorkspaceManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
@@ -27,7 +28,7 @@ public class ListsService {
     private final ListsRepository listsRepository;
     private final BoardRepository boardRepository;
     private final UserService userService;
-    private final WorkspaceManageService workspaceManageService;
+    private final MemberManageService memberManageService;
 
     @Transactional
     public ListsCreateResponseDto createLists(Long boardId, ListsRequestDto request, long userId) {
@@ -36,7 +37,7 @@ public class ListsService {
         User user = userService.findUser(userId);
 
         // 사용자 권한 확인
-        MemberRole memberRole = workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+        MemberRole memberRole = memberManageService.checkMemberRole(userId, board.getWorkspace().getId());
 
         if (memberRole == MemberRole.ROLE_READ_USER){
             throw new BadAccessListsException();
@@ -65,7 +66,7 @@ public class ListsService {
         User user = userService.findUser(userId);
 
         // 사용자 권한 확인
-        MemberRole memberRole = workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+        MemberRole memberRole = memberManageService.checkMemberRole(userId, board.getWorkspace().getId());
 
         if (memberRole == MemberRole.ROLE_READ_USER){
             throw new BadAccessListsException();
@@ -89,7 +90,7 @@ public class ListsService {
         User user = userService.findUser(userId);
 
         // 사용자 권한 확인
-        MemberRole memberRole = workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+        MemberRole memberRole = memberManageService.checkMemberRole(userId, board.getWorkspace().getId());
 
         if (memberRole == MemberRole.ROLE_READ_USER){
             throw new BadAccessListsException();
@@ -115,7 +116,7 @@ public class ListsService {
                 .orElseThrow(() -> new NotFoundBoardException());
 
         // 사용자 권한 확인
-        workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+        memberManageService.checkMemberRole(userId, board.getWorkspace().getId());
 
         Lists lists = listsRepository.findByIdAndBoardId(listsId, boardId)
                 .orElseThrow(() -> new NotFoundListsException());
@@ -129,7 +130,7 @@ public class ListsService {
                 .orElseThrow(() -> new NotFoundBoardException());
 
         // 사용자 권한 확인
-        MemberRole memberRole = workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+        MemberRole memberRole = memberManageService.checkMemberRole(userId, board.getWorkspace().getId());
 
         if (memberRole == MemberRole.ROLE_READ_USER){
             throw new BadAccessListsException();

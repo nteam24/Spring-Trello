@@ -47,6 +47,9 @@ public class CardService {
 
     @Transactional(readOnly = true)
     public CardResponseDto getCard(AuthUser authUser, Long cardId) {
+        if(authUser == null)
+            throw new BadAccessUserException();
+
         Card card = cardRepository.findById(cardId).orElse(null);
         CardResponseDto cardResponseDto = new CardResponseDto(
                 card.getId(),

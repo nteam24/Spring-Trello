@@ -28,7 +28,6 @@ public class MemberManageController {
     @PostMapping("/workspaces/{workspaceId}/users/{userId}/invitations")
     public ResponseEntity<ApiResponse<String>> inviteUserToWorkspace(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceId, @PathVariable Long userId){
         User user = User.fromAuthUser(authUser);
-        System.out.println("1");
         return ResponseEntity.ok(ApiResponse.success(memberManageService.inviteUserToWorkspace(user,workspaceId,userId)));
     }
 

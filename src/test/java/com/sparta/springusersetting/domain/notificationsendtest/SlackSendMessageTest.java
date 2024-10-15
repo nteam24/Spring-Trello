@@ -25,9 +25,9 @@ public class SlackSendMessageTest {
     public void sendSlack() throws IOException {
         String urlStr = "https://slack.com/api/chat.postMessage";
         // xoxb- 로 시작하는 API 토큰값 설정
-        String token = "xoxb-7880078409587-7877498475125-iGOu4iBv1hcRWcwilsG8fAv2";
+        String token = "${slack_token}";
         // 채널 ID값 설정
-        String channelId = "D07SK4F2RPA";
+        String channelId = "${slack_channel_id}";
         // 전송하고자 하는 메시지값 설정
         String text = "자바 테스터로 메시지 전송 테스트";
 

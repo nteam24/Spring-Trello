@@ -37,6 +37,6 @@ jwt:
 
 system:
   slackToken: ${slack_token}
-  slackChannelId:  ${slack_channel_id}
+  slackChannelId: ${slack_channel_id}
   errorFlag: false
 

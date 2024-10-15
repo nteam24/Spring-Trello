@@ -1,28 +1,22 @@
 package com.sparta.springusersetting.domain.card.dto;
 
 import com.sparta.springusersetting.domain.card.entity.ActivityLog;
+import com.sparta.springusersetting.domain.card.entity.Card;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
 public class ActivityLogResponseDto {
-
     private Long id;
-    private Long cardId;
-    private String contents;
-    private LocalDateTime updatedAt;
-    private String updatedBy;
+    private String content;
+    private LocalDateTime updateAt;
+    private String updateBy;
 
-
-    public ActivityLogResponseDto(ActivityLog activityLog)
-    {
+    public ActivityLogResponseDto(ActivityLog activityLog){
         this.id = activityLog.getId();
-        this.cardId = activityLog.getCard().getId();
-        this.contents = activityLog.getContents();
-        this.updatedAt = activityLog.getUpdatedAt();
-        this.updatedBy = activityLog.getUpdatedBy();
+        this.content = activityLog.getContents();
+        this.updateAt = activityLog.getUpdatedAt();
+        this.updateBy = activityLog.getUpdatedBy();
     }
-
-
 }

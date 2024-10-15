@@ -40,11 +40,12 @@ public class Participation extends Timestamped {
         this.activation = false;
     }
 
-    public void UserBeADMIN(){
-        this.memberRole = ROLE_WORKSPACE_ADMIN;
-    }
 
     public void UserBeActive(){
         this.activation=true;
+    }
+
+    public void changeRole(MemberRole memberRole) {
+        this.memberRole = memberRole;
     }
 }

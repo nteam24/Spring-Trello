@@ -45,7 +45,7 @@ public class CardService {
                 card.getDeadline(),
                 card.getManager().getEmail(),
                 card.getActivityLogs().toString(),
-                card.getComments());
+                card.getCommentList());
         return cardResponseDto;
     }
 

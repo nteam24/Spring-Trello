@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,8 +32,8 @@ public class Card extends Timestamped {
     @Column(nullable = false)
     private LocalDate deadline;
 
-    @OneToMany(mappedBy = "card")
-    private List<Comment> commentList;
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -42,11 +43,8 @@ public class Card extends Timestamped {
     @JoinColumn(name = "lists_id", nullable = false)
     private Lists lists;
 
-    @OneToMany(mappedBy = "activityLog")
-    private List<ActivityLog> activityLogs;
-
-    @OneToMany(mappedBy = "comment")
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActivityLog> activityLogs = new ArrayList<>();
 
 
 

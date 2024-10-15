@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ActivityLogAspect {
 
-    private ActivityLogRepository activityLogRepository;
+    private final ActivityLogRepository activityLogRepository;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

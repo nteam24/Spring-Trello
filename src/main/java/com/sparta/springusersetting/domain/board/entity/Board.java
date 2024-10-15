@@ -6,8 +6,8 @@ import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -35,8 +35,7 @@ public class Board extends Timestamped {
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cards;
+
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lists> lists;

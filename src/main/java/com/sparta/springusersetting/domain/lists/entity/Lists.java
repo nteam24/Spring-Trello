@@ -1,5 +1,7 @@
 package com.sparta.springusersetting.domain.lists.entity;
 
+import com.sparta.springusersetting.domain.board.entity.Board;
+import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -57,4 +59,5 @@ public class Lists extends Timestamped {
     public void updatePosition(Integer pos) {
         this.pos = pos;
     }
+
 }

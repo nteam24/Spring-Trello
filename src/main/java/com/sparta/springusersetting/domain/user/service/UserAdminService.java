@@ -1,6 +1,6 @@
 package com.sparta.springusersetting.domain.user.service;
 
-import com.sparta.springusersetting.domain.user.dto.request.UserRoleChangeRequest;
+import com.sparta.springusersetting.domain.user.dto.request.UserRoleChangeRequestDto;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
@@ -16,9 +16,9 @@ public class UserAdminService {
     private final UserRepository userRepository;
 
     @Transactional
-    public String changeUserRole(long userId, UserRoleChangeRequest userRoleChangeRequest) {
+    public String changeUserRole(long userId, UserRoleChangeRequestDto userRoleChangeRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
-        user.updateRole(UserRole.of(userRoleChangeRequest.getRole()));
+        user.updateRole(UserRole.of(userRoleChangeRequestDto.getRole()));
         return "유저 권한이 정상적으로 변경되었습니다.";
     }
 }

@@ -33,6 +33,10 @@ file:
 
 jwt:
   secret:
-    key: ${JWT_SECRET_KEY}
+    key: ${jwt.secret.key}
 
+system:
+  slackToken: xoxb-7880078409587-7877498475125-iGOu4iBv1hcRWcwilsG8fAv2
+  slackChannelId: D07SK4F2RPA
+  errorFlag: false
 

@@ -11,6 +11,7 @@ import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.lists.repository.ListsRepository;
+import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.participation.service.WorkspaceManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
@@ -28,19 +29,19 @@ public class CardService {
     private final CardRepository cardRepository;
     private final UserService userService;
     private final ListsRepository listsRepository;
-    private final WorkspaceManageService workspaceManageService;
+    private final MemberManageService memberManageService;
 
     public void createCard(AuthUser authUser, CardRequestDto requestDto)
     {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
-        if(workspaceManageService.checkMemberRole(createUser.getId(),lists.getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
+        if(memberManageService.checkMemberRole(createUser.getId(),lists.getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
         {
             throw new BadAccessUserException();
         }
 
         User manager = userService.findUser(requestDto.getManagerId());
-        Card card = new Card(requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline(),manager,lists);
+        Card card = new Card(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
     }
 
@@ -64,7 +65,7 @@ public class CardService {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
 
-        if(workspaceManageService.checkMemberRole(createUser.getId(),lists.getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
+        if(memberManageService.checkMemberRole(createUser.getId(),lists.getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
         {
             throw new BadAccessUserException();
         }
@@ -79,7 +80,7 @@ public class CardService {
     public void deleteCard(AuthUser authUser, Long cardId) {
         User deletedUser = User.fromAuthUser(authUser);
         Card card = cardRepository.findById(cardId).orElse(null);
-        if(workspaceManageService.checkMemberRole(deletedUser.getId(),card.getLists().getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
+        if(memberManageService.checkMemberRole(deletedUser.getId(),card.getLists().getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
         {
             throw new BadAccessUserException();
         }

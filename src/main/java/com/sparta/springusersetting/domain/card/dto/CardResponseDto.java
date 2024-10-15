@@ -19,17 +19,17 @@ public class CardResponseDto {
     private String contents;
     private LocalDate deadline;
     private String userEmail;
-    private String activityLog;
+    private List<ActivityLogResponseDto> activityLogs;
     private List<CommentResponseDto> commentList;
 
-    public CardResponseDto(Long id, String title, String contents, LocalDate deadline, String userEmail, String activityLog, List<Comment> commentList)
+    public CardResponseDto(Long id, String title, String contents, LocalDate deadline, String userEmail, List<ActivityLogResponseDto> activityLogs, List<Comment> commentList)
     {
         this.id = id;
         this.title = title;
         this.contents = contents;
         this.deadline = deadline;
         this.userEmail = userEmail;
-        this.activityLog = activityLog;
+        this.activityLogs = activityLogs;
         this.commentList = commentList.stream()
                 .map(CommentResponseDto::new)
                 .toList();

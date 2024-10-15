@@ -4,7 +4,9 @@ package com.sparta.springusersetting.domain.card.service;
 import com.sparta.springusersetting.domain.card.dto.ActivityLogResponseDto;
 import com.sparta.springusersetting.domain.card.dto.CardRequestDto;
 import com.sparta.springusersetting.domain.card.dto.CardResponseDto;
+import com.sparta.springusersetting.domain.card.entity.ActivityLog;
 import com.sparta.springusersetting.domain.card.entity.Card;
+import com.sparta.springusersetting.domain.card.repository.ActivityLogRepository;
 import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
@@ -71,6 +73,7 @@ public class CardService {
         Card card = cardRepository.findById(cardId).orElse(null);
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
+
     }
 
     public void deleteCard(AuthUser authUser, Long cardId) {

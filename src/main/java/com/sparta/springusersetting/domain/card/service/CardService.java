@@ -31,7 +31,7 @@ public class CardService {
     private final ListsRepository listsRepository;
     private final MemberManageService memberManageService;
 
-    public void createCard(AuthUser authUser, CardRequestDto requestDto)
+    public String createCard(AuthUser authUser, CardRequestDto requestDto)
     {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
@@ -43,9 +43,14 @@ public class CardService {
         User manager = userService.findUser(requestDto.getManagerId());
         Card card = new Card(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
+        return "카드 생성이 완료되었습니다.";
     }
 
+    @Transactional(readOnly = true)
     public CardResponseDto getCard(AuthUser authUser, Long cardId) {
+        if(authUser == null)
+            throw new BadAccessUserException();
+
         Card card = cardRepository.findById(cardId).orElse(null);
         CardResponseDto cardResponseDto = new CardResponseDto(
                 card.getId(),
@@ -60,7 +65,7 @@ public class CardService {
 
 
     @Transactional
-    public void updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId)
+    public String updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId)
     {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
@@ -75,8 +80,9 @@ public class CardService {
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
 
+        return "카드 수정이 완료되었습니다.";
     }
-
+    @Transactional
     public void deleteCard(AuthUser authUser, Long cardId) {
         User deletedUser = User.fromAuthUser(authUser);
         Card card = cardRepository.findById(cardId).orElse(null);

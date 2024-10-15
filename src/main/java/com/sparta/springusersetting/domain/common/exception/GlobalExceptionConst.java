@@ -16,6 +16,7 @@ public enum GlobalExceptionConst {
 
     // 상태코드 401
     UNAUTHORIZED_PASSWORD(HttpStatus.UNAUTHORIZED, " 비밀번호를 확인해주세요."),
+    UNAUTHORIZED_READONLY(HttpStatus.UNAUTHORIZED, " 읽기 전용 멤버는 보드를 생성할 수 없습니다."),
 
     // 상태코드 403
     NOT_USER_OF_COMMENT(HttpStatus.FORBIDDEN, " 댓글 작성자가 아닙니다."),
@@ -30,6 +31,7 @@ public enum GlobalExceptionConst {
     NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, " 해당 보드는 존재하지 않습니다."),
     NOT_FOUND_LISTS(HttpStatus.NOT_FOUND, " 해당 리스트는 존재하지 않습니다."),
+
 
     // 상태코드 409
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, " 중복된 이메일입니다."),

@@ -35,8 +35,7 @@ public class Board extends Timestamped {
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cards;
+
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lists> lists;

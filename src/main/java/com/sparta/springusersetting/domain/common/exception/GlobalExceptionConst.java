@@ -13,6 +13,7 @@ public enum GlobalExceptionConst {
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, " 새 비밀번호는 8자 이상이어야 하고, 숫자와 대문자를 포함해야 합니다."),
     INVALID_ROLE(HttpStatus.BAD_REQUEST, " 올바른 권한이 아닙니다."),
     ALREADY_ADMIN(HttpStatus.BAD_REQUEST, " 이미 해당 워크스페이스의 관리자 입니다."),
+    WORKSPACE_ID_REQUIRED(HttpStatus.BAD_REQUEST, "워크스페이스 ID가 검색에 필요합니다."),
 
     // 상태코드 401
     UNAUTHORIZED_PASSWORD(HttpStatus.UNAUTHORIZED, " 비밀번호를 확인해주세요."),

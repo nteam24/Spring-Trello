@@ -1,7 +1,6 @@
 package com.sparta.springusersetting.domain.card.entity;
 
 
-import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
@@ -9,7 +8,6 @@ import com.sparta.springusersetting.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,6 +41,13 @@ public class Card extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lists_id", nullable = false)
     private Lists lists;
+
+    @OneToMany(mappedBy = "activityLog")
+    private List<ActivityLog> activityLogs;
+
+    @OneToMany(mappedBy = "comment")
+    private List<Comment> comments;
+
 
     @ManyToOne
     @JoinColumn(name = "board_id", nullable = false)

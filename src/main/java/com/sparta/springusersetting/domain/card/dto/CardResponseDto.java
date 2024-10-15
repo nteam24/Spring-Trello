@@ -1,5 +1,6 @@
 package com.sparta.springusersetting.domain.card.dto;
 
+import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.comment.dto.response.CommentResponseDto;
 import com.sparta.springusersetting.domain.comment.entity.Comment;
 import lombok.Getter;
@@ -33,7 +34,4 @@ public class CardResponseDto {
                 .map(CommentResponseDto::new)
                 .toList();
     }
-
-
-
 }

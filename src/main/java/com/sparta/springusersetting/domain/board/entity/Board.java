@@ -4,10 +4,6 @@ import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.sql.Timestamp;
-
-
 @Entity
 @Getter
 public class Board extends Timestamped {

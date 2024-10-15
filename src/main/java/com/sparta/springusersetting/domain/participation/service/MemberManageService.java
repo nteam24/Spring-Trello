@@ -67,12 +67,13 @@ public class MemberManageService {
         if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();
         }
+
         // 워크 스페이스와 유저 존재 체크
         Workspace workspace = workspaceService.findWorkspace(workspaceId);
         User newUser = userService.findUser(userId);
 
         // 워크 스페이스에 초대
-        Participation participation = new Participation(user, workspace);
+        Participation participation = new Participation(newUser, workspace);
         participationRepository.save(participation);
 
         return "초대 성공";
@@ -108,6 +109,7 @@ public class MemberManageService {
         return participation.getMemberRole();
     }
     // 멤버 권한 변경
+    @Transactional
     public String changeMemberRole(User user, Long workspaceId, Long userId, String memberRole) {
         if (checkMemberRole(user.getId(), workspaceId) != MemberRole.ROLE_WORKSPACE_ADMIN) {
             throw new BadAccessUserException();

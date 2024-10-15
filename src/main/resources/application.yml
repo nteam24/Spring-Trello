@@ -13,10 +13,10 @@ spring:
   application:
     name: spring-trello
   datasource:
-    url: jdbc:mysql://localhost:3306/trello
-    username: root
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: 1234
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -33,6 +33,6 @@ file:
 
 jwt:
   secret:
-    key: "fb8e84eb4aab4827836f3199efc34499f4bf6c5374cc404c8851fd5de54de518de53"
+    key: ${JWT_SECRET_KEY}
 
 

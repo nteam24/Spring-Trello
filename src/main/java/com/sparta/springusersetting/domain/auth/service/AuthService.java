@@ -11,6 +11,7 @@ import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
+import com.sparta.springusersetting.domain.webhook.service.WebhookService;
 import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final WebhookService webhookService;
 
     @Transactional
     public SignupResponse signup(SignupRequestDto signupRequestDto) {
@@ -40,16 +42,19 @@ public class AuthService {
         User newUser = new User(
                 signupRequestDto.getEmail(),
                 encodedPassword,
+                signupRequestDto.getUserName(),
                 userRole
         );
         User savedUser = userRepository.save(newUser);
 
         String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
 
+        webhookService.sendDiscordNotification("%s 님이 새로운 회원이 되셨어요 !", newUser.getUserName());
+
         return new SignupResponse(bearerToken);
     }
 
-    public SigninResponse signin(SigninRequestDto signinRequestDto) throws AuthException {
+    public SigninResponse signin(SigninRequestDto signinRequestDto) {
         User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(
                 NotFoundUserException::new);
 

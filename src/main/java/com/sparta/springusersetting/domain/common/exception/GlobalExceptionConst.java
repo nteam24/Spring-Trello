@@ -17,6 +17,7 @@ public enum GlobalExceptionConst {
 
     // 상태코드 401
     UNAUTHORIZED_PASSWORD(HttpStatus.UNAUTHORIZED, " 비밀번호를 확인해주세요."),
+    UNAUTHORIZED_READONLY(HttpStatus.UNAUTHORIZED, " 읽기 전용 멤버는 보드를 생성할 수 없습니다."),
 
     // 상태코드 404
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, " 회원이 존재하지 않습니다."),
@@ -24,6 +25,7 @@ public enum GlobalExceptionConst {
     NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, " 존재하지 않는 댓글입니다."),
     NOT_FOUND_WORKSPACE(HttpStatus.NOT_FOUND, " 워크스페이스가 존재하지 않습니다."),
     NOT_FOUND_USER_WORKSPACE(HttpStatus.NOT_FOUND, " 해당 유저는 해당 워크스페이스 소속이 아닙니다."),
+    NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, "해당 보드를 찾을 수 없습니다."),
 
 
     // 상태코드 409

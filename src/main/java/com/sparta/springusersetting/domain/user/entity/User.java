@@ -23,6 +23,7 @@ public class User extends Timestamped {
     @Column(unique = true)
     private String email;
     private String password;
+    private String userName;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
     @Enumerated(EnumType.STRING)
@@ -32,9 +33,10 @@ public class User extends Timestamped {
     private List<Participation> participationList;
 
 
-    public User(String email, String password, UserRole userRole) {
+    public User(String email, String password, String userName, UserRole userRole) {
         this.email = email;
         this.password = password;
+        this.userName = userName;
         this.userRole = userRole;
         this.userStatus = UserStatus.ACTIVE;
     }

@@ -55,7 +55,7 @@ public class BoardController {
             @RequestParam Long userId,
             @RequestParam Long workspaceId
             ){
-        BoardResponseDto board =boardService.deleteBoard(boardId, userId, workspaceId);
+        BoardResponseDto board = boardService.deleteBoard(boardId, userId, workspaceId);
         return ResponseEntity.ok(board);
     }
 }

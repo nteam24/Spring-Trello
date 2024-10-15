@@ -36,7 +36,7 @@ jwt:
     key: ${jwt.secret.key}
 
 system:
-  slackToken: xoxb-7880078409587-7877498475125-iGOu4iBv1hcRWcwilsG8fAv2
-  slackChannelId: D07SK4F2RPA
+  slackToken: ${slack_token}
+  slackChannelId:  ${slack_channel_id}
   errorFlag: false
 

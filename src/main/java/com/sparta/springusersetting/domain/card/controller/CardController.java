@@ -7,6 +7,7 @@ import com.sparta.springusersetting.domain.card.service.CardService;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class CardController {
     private final CardService cardService;
 
     @PostMapping
-    private void createCard(AuthUser authUser, @Valid @RequestBody CardRequestDto card)
+    private void createCard(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody CardRequestDto card)
     {
         cardService.createCard(authUser,card);
     }

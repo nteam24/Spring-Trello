@@ -41,7 +41,7 @@ public class CardService {
         }
 
         User manager = userService.findUser(requestDto.getManagerId());
-        Card card = new Card(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
+        Card card = new Card(manager, lists, requestDto.getTitle(), requestDto.getContents(), requestDto.getDeadline());
         cardRepository.save(card);
     }
 

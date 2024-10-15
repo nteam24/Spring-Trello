@@ -59,4 +59,5 @@ public class Lists extends Timestamped {
     public void updatePosition(Integer pos) {
         this.pos = pos;
     }
+
 }

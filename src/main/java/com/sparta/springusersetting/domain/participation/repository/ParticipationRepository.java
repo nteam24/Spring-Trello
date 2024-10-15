@@ -11,8 +11,9 @@ import java.util.Optional;
 
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
 
-    @Query("SELECT DISTINCT u FROM Participation u WHERE u.user.id = :userId AND u.workspace.id = :workspaceId")
+    @Query("select distinct u from Participation u Where u.user.id=:userId and u.workspace.id = :workspaceId")
     Optional<Participation> findByUserIdAndWorkspaceId(@Param("userId") Long userId, @Param("workspaceId") Long workspaceId);
+
 
     @Query("SELECT DISTINCT u FROM Participation u left join fetch u.workspace w WHERE u.user.id=:userId")
     Page<Participation> findAllByUserId(Pageable pageable,

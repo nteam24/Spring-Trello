@@ -6,8 +6,8 @@ import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.List;
 

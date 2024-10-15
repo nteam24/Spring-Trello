@@ -47,7 +47,6 @@ public class Card extends Timestamped {
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityLog> activityLogs = new ArrayList<>();
 
-
     @ManyToOne
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
@@ -71,11 +70,4 @@ public class Card extends Timestamped {
         this.contents = contents;
         this.deadline = deadline;
     }
-
-
-
-
-
-
-
 }

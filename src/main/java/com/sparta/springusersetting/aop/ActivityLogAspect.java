@@ -45,7 +45,7 @@ public class ActivityLogAspect {
                 : "알 수 없는 사용자";
 
         logger.info("카드 업데이트 로그가 기록되었습니다. ID: {}, 내용: {}, 이메일: {}", cardId, updatedContent, updatedBy);
-        ActivityLog activityLog = new ActivityLog(cardId, updatedContent, updatedAt, updatedBy);
+        ActivityLog activityLog = new ActivityLog(updateCard, updatedContent, updatedAt, updatedBy);
         activityLogRepository.save(activityLog);
     }
 

@@ -18,7 +18,7 @@ public class ActivityLogResponseDto {
     public ActivityLogResponseDto(ActivityLog activityLog)
     {
         this.id = activityLog.getId();
-        this.cardId = activityLog.getCardId();
+        this.cardId = activityLog.getCard().getId();
         this.contents = activityLog.getContents();
         this.updatedAt = activityLog.getUpdatedAt();
         this.updatedBy = activityLog.getUpdatedBy();

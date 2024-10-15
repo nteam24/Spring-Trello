@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.workspace.service;
 
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
+import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.workspace.dto.request.WorkspaceRequestDto;
@@ -33,6 +34,8 @@ class WorkspaceServiceTest {
     @InjectMocks
     private WorkspaceService workspaceService;
 
+    @Mock
+    private MemberManageService memberManageService;
     @Mock
     private  WorkspaceRepository workspaceRepository;
 

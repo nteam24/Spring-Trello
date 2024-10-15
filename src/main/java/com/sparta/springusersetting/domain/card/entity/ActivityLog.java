@@ -16,16 +16,16 @@ public class ActivityLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", nullable = false)
-    private Card card;
-
     private String contents;
     private LocalDateTime updatedAt;
     private String updatedBy;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "card_id", nullable = false)
+    private Card card;
 
-    public ActivityLog(Card card, String contents, LocalDateTime updatedAt, String updatedBy)
+
+    public ActivityLog(Card card,String contents, LocalDateTime updatedAt, String updatedBy)
     {
         this.card = card;
         this.contents = contents;
@@ -33,4 +33,3 @@ public class ActivityLog {
         this.updatedBy = updatedBy;
     }
 }
-

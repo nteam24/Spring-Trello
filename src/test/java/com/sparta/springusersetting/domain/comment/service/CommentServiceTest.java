@@ -10,6 +10,7 @@ import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,6 +35,7 @@ class CommentServiceTest {
     private CommentRepository commentRepository;
     @InjectMocks
     private CommentService commentService;
+
 
     @Test
     void Comment_수정_성공() {

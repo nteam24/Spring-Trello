@@ -3,12 +3,13 @@ package com.sparta.springusersetting.domain.board.service;
 import com.sparta.springusersetting.domain.board.dto.request.BoardRequestDto;
 import com.sparta.springusersetting.domain.board.dto.response.BoardResponseDto;
 import com.sparta.springusersetting.domain.board.entity.Board;
+import com.sparta.springusersetting.domain.board.exception.NotFoundBoardException;
+import com.sparta.springusersetting.domain.board.exception.UnauthorizedActionException;
 import com.sparta.springusersetting.domain.board.repository.BoardRepository;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.userWorkspace.entity.UserWorkspace;
 import com.sparta.springusersetting.domain.userWorkspace.repository.UserWorkspaceRepository;
-import com.sparta.springusersetting.domain.workspace.entity.Workspace;
-import com.sparta.springusersetting.domain.workspace.repository.WorkspaceRepository;
+import com.sparta.springusersetting.domain.workspace.exception.NotFoundWorkspaceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,6 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final WorkspaceRepository workspaceRepository;
     private final UserWorkspaceRepository userWorkspaceRepository;
 
     // 보드 등록
@@ -54,8 +54,8 @@ public class BoardService {
 
     // 보드 조회 (단건)
     @Transactional(readOnly = true)
-    public BoardResponseDto getBoard(Long id) {
-        Board board = boardRepository.findById(id)
+    public BoardResponseDto getBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("보드를 찾을 수 없습니다."));
         return new BoardResponseDto(board);
     }
@@ -81,9 +81,9 @@ public class BoardService {
     // 보드 생성 검증 로직
     private UserWorkspace validateCreateBoard(Long userId, Long workspaceId) {
         UserWorkspace userWorkspace = userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
-                .orElseThrow(() -> new IllegalArgumentException("워크스페이스에서 해당 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundWorkspaceException());
         if (userWorkspace.getMemberRole() == MemberRole.ROLE_READ_USER) {
-            throw new UnauthorizedActionException("읽기 전용 멤버는 보드를 생성할 수 없습니다.");
+            throw new UnauthorizedActionException();
         }
         return userWorkspace;
     }
@@ -91,25 +91,25 @@ public class BoardService {
     // 보드 수정 검증 로직
     private Board validateUpdateBoard(Long boardId, Long userId, Long workspaceId) {
         UserWorkspace userWorkspace = userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
-                .orElseThrow(() -> new IllegalArgumentException("워크스페이스에서 해당 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundWorkspaceException());
         if (userWorkspace.getMemberRole() == MemberRole.ROLE_READ_USER) {
-            throw new UnauthorizedActionException("읽기 전용 멤버는 보드를 수정할 수 없습니다.");
+            throw new UnauthorizedActionException();
         }
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 보드를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundBoardException());
         return board;
     }
 
     // 보드 삭제 검증 로직
     private Board validateDeleteBoard(Long boardId, Long userId, Long workspaceId) {
         UserWorkspace userWorkspace = userWorkspaceRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
-                .orElseThrow(() -> new IllegalArgumentException("워크스페이스에서 해당 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundWorkspaceException());
         if (userWorkspace.getMemberRole() == MemberRole.ROLE_READ_USER) {
-            throw new UnauthorizedActionException("읽기 전용 멤버는 보드를 삭제할 수 없습니다.");
+            throw new UnauthorizedActionException();
         }
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 보드를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundBoardException());
         return board;
     }
 }
-}
+

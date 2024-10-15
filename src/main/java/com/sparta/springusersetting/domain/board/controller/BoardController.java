@@ -36,11 +36,9 @@ public class BoardController {
 
     @GetMapping("/{boardId}")
     public ResponseEntity<BoardResponseDto> getBoard(
-            @PathVariable Long boardId,
-            @RequestParam Long userId,
-            @RequestParam Long workspaceId
+            @PathVariable Long boardId
     ) {
-        BoardResponseDto board = boardService.getBoard(boardId, userId, workspaceId);
+        BoardResponseDto board = boardService.getBoard(boardId);
         return ResponseEntity.ok(board);
     }
 
@@ -55,7 +53,7 @@ public class BoardController {
             @RequestParam Long userId,
             @RequestParam Long workspaceId
             ){
-        BoardResponseDto board = boardService.deleteBoard(boardId, userId, workspaceId);
-        return ResponseEntity.ok(board);
+        boardService.deleteBoard(boardId, userId, workspaceId);
+        return ResponseEntity.noContent().build();
     }
 }

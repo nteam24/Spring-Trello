@@ -1,5 +1,6 @@
 package com.sparta.springusersetting.domain.lists.entity;
 
+import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,4 +20,8 @@ public class Lists extends Timestamped {
     private String createdBy;
 
     private String modifiedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
 }

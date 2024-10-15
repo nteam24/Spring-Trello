@@ -4,6 +4,7 @@ package com.sparta.springusersetting.domain.card.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,12 @@ public class ActivityLog {
     private Long id;
 
     private String contents;
+
+    @LastModifiedDate
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
+
     private String updatedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)

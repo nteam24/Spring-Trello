@@ -25,6 +25,7 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<String>> createCard(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody CardRequestDto card)
+
     {
         return ResponseEntity.ok(ApiResponse.success(cardService.createCard(authUser,card)));
     }

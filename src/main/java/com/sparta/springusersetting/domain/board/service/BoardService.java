@@ -56,7 +56,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardResponseDto getBoard(Long boardId) {
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("보드를 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundBoardException());
         return new BoardResponseDto(board);
     }
 

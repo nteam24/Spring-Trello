@@ -50,6 +50,7 @@ public class Card extends Timestamped {
 
 
 
+
     public Card(User manager, Lists lists, String title, String contents, LocalDate deadline)
     {
         this.manager = manager;

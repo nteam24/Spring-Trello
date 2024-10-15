@@ -3,7 +3,6 @@ package com.sparta.springusersetting.domain.lists.service;
 import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.board.exception.NotFoundBoardException;
 import com.sparta.springusersetting.domain.board.repository.BoardRepository;
-import com.sparta.springusersetting.domain.common.exception.GlobalExceptionConst;
 import com.sparta.springusersetting.domain.lists.dto.request.ListsRequestDto;
 import com.sparta.springusersetting.domain.lists.dto.response.GetListsResponseDto;
 import com.sparta.springusersetting.domain.lists.dto.response.ListsCreateResponseDto;
@@ -12,9 +11,7 @@ import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.lists.exception.BadAccessListsException;
 import com.sparta.springusersetting.domain.lists.exception.NotFoundListsException;
 import com.sparta.springusersetting.domain.lists.repository.ListsRepository;
-import com.sparta.springusersetting.domain.participation.entity.Participation;
-import com.sparta.springusersetting.domain.participation.exception.NotFoundParticipationException;
-import com.sparta.springusersetting.domain.participation.repository.ParticipationRepository;
+import com.sparta.springusersetting.domain.participation.service.WorkspaceManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.service.UserService;
@@ -30,19 +27,18 @@ public class ListsService {
     private final ListsRepository listsRepository;
     private final BoardRepository boardRepository;
     private final UserService userService;
-    private final ParticipationRepository participationRepository;
+    private final WorkspaceManageService workspaceManageService;
+
     @Transactional
     public ListsCreateResponseDto createLists(Long boardId, ListsRequestDto request, long userId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException());
         User user = userService.findUser(userId);
-        
-        // 사용자의 워크스페이스의 참여 정보 가져오기
-        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, board.getWorkspace().getId())
-                .orElseThrow(() -> new NotFoundParticipationException());
-        
+
         // 사용자 권한 확인
-        if (participation.getMemberRole() == MemberRole.ROLE_READ_USER){
+        MemberRole memberRole = workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+
+        if (memberRole == MemberRole.ROLE_READ_USER){
             throw new BadAccessListsException();
         }
         
@@ -68,12 +64,10 @@ public class ListsService {
 
         User user = userService.findUser(userId);
 
-        // 사용자의 워크스페이스의 참여 정보 가져오기
-        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, board.getWorkspace().getId())
-                .orElseThrow(() -> new NotFoundParticipationException());
-
         // 사용자 권한 확인
-        if (participation.getMemberRole() == MemberRole.ROLE_READ_USER){
+        MemberRole memberRole = workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+
+        if (memberRole == MemberRole.ROLE_READ_USER){
             throw new BadAccessListsException();
         }
 
@@ -94,12 +88,10 @@ public class ListsService {
 
         User user = userService.findUser(userId);
 
-        // 사용자의 워크스페이스의 참여 정보 가져오기
-        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, board.getWorkspace().getId())
-                .orElseThrow(() -> new NotFoundParticipationException());
-
         // 사용자 권한 확인
-        if (participation.getMemberRole() == MemberRole.ROLE_READ_USER){
+        MemberRole memberRole = workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+
+        if (memberRole == MemberRole.ROLE_READ_USER){
             throw new BadAccessListsException();
         }
 
@@ -122,9 +114,8 @@ public class ListsService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException());
 
-        // 사용자의 워크스페이스의 참여 정보 가져오기
-        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, board.getWorkspace().getId())
-                .orElseThrow(() -> new NotFoundParticipationException());
+        // 사용자 권한 확인
+        workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
 
         Lists lists = listsRepository.findByIdAndBoardId(listsId, boardId)
                 .orElseThrow(() -> new NotFoundListsException());
@@ -137,12 +128,10 @@ public class ListsService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundBoardException());
 
-        // 사용자의 워크스페이스의 참여 정보 가져오기
-        Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, board.getWorkspace().getId())
-                .orElseThrow(() -> new NotFoundParticipationException());
-
         // 사용자 권한 확인
-        if (participation.getMemberRole() == MemberRole.ROLE_READ_USER){
+        MemberRole memberRole = workspaceManageService.checkMemberRole(userId, board.getWorkspace().getId());
+
+        if (memberRole == MemberRole.ROLE_READ_USER){
             throw new BadAccessListsException();
         }
 

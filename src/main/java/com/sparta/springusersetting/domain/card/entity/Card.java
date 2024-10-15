@@ -71,11 +71,4 @@ public class Card extends Timestamped {
         this.contents = contents;
         this.deadline = deadline;
     }
-
-
-
-
-
-
-
 }

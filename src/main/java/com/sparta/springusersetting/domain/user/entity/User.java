@@ -2,11 +2,16 @@ package com.sparta.springusersetting.domain.user.entity;
 
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
+import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.enums.UserStatus;
+import com.sparta.springusersetting.domain.userWorkspace.entity.UserWorkspace;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -14,7 +19,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 public class User extends Timestamped {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
     private String email;
@@ -23,6 +29,9 @@ public class User extends Timestamped {
     private UserRole userRole;
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserWorkspace> userWorkspaceList;
 
 
     public User(String email, String password, UserRole userRole) {
@@ -40,8 +49,7 @@ public class User extends Timestamped {
 
     public static User fromAuthUser(AuthUser authUser) {
         String roleName = authUser.getAuthorities().iterator().next().getAuthority();
-        long userId = Long.parseLong(authUser.getUserId());
-        return new User(userId, authUser.getEmail(), UserRole.of(roleName));
+        return new User(authUser.getUserId(), authUser.getEmail(), UserRole.of(roleName));
     }
 
     public void changePassword(String password) {

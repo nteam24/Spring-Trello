@@ -53,13 +53,14 @@ public class Card extends Timestamped {
     private Board board;
 
 
-    public Card(String title, String contents, LocalDate deadline, User manager, Lists lists)
+    public Card(User manager, Lists lists, String title, String contents, LocalDate deadline)
     {
+        this.manager = manager;
+        this.lists = lists;
         this.title = title;
         this.contents = contents;
         this.deadline = deadline;
-        this.manager = manager;
-        this.lists = lists;
+
     }
 
 

@@ -1,8 +1,10 @@
 package com.sparta.springusersetting.domain.board.controller;
 
+import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.board.dto.request.BoardRequestDto;
 import com.sparta.springusersetting.domain.board.dto.response.BoardResponseDto;
 import com.sparta.springusersetting.domain.board.service.BoardService;
+import com.sparta.springusersetting.domain.lists.entity.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,43 +19,51 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    // 보드 등록
     @PostMapping
-    public ResponseEntity<BoardResponseDto> createBoard(
+    public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
             @RequestBody BoardRequestDto boardRequestDto,
             @RequestParam Long userId,
-            @RequestParam Long wordspaceId) {
-        return ResponseEntity.ok(boardService.createBoard(boardRequestDto, userId, wordspaceId));
+            @RequestParam Long workspaceId) {
+        BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto, userId, workspaceId);
+        return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }
 
+    // 보드 수정
     @PutMapping("/{boardId}")
-    public ResponseEntity<BoardResponseDto> updateBoard(
+    public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
             @PathVariable Long boardId,
             @RequestBody BoardRequestDto boardRequestDto,
             @RequestParam Long userId,
             @RequestParam Long workspaceId) {
-        return ResponseEntity.ok(boardService.updateBoard(boardId, boardRequestDto, userId, workspaceId));
+        BoardResponseDto boardResponseDto = boardService.updateBoard(boardId, boardRequestDto, userId, workspaceId);
+        return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }
 
+    // 보드 단건 조회
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardResponseDto> getBoard(
+    public ResponseEntity<ApiResponse<BoardResponseDto>> getBoard(
             @PathVariable Long boardId
     ) {
         BoardResponseDto board = boardService.getBoard(boardId);
-        return ResponseEntity.ok(board);
+        return ResponseEntity.ok(ApiResponse.success(board));
     }
 
+    // 보드 리스트 조회
     @GetMapping("/workspace/{workspaceId}")
-    public ResponseEntity<List<BoardResponseDto>> getBoardByWorkspace(@PathVariable Long workspaceId) {
-        return ResponseEntity.ok(boardService.getBoardsByWorkspace(workspaceId));
+    public ResponseEntity<ApiResponse<List<BoardResponseDto>>> getBoardByWorkspace(@PathVariable Long workspaceId) {
+        List<BoardResponseDto> boardResponseDto = boardService.getBoardsByWorkspace(workspaceId);
+        return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }
 
+    // 보드 삭제
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<String> deleteBoard(
+    public ResponseEntity<ApiResponse> deleteBoard(
             @PathVariable Long boardId,
             @RequestParam Long userId,
             @RequestParam Long workspaceId
             ){
         boardService.deleteBoard(boardId, userId, workspaceId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 }

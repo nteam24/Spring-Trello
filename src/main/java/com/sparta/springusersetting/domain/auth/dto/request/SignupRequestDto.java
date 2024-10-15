@@ -22,5 +22,8 @@ public class SignupRequestDto {
     private String password;
 
     @NotBlank
+    private String userName;
+
+    @NotBlank
     private String userRole;
 }

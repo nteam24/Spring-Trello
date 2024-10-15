@@ -26,7 +26,7 @@ public class CommentController {
     }
 
     // 댓글 수정
-    @PutMapping("card/{cardId}/comment/{commentId}")
+    @PutMapping("comment/{commentId}")
     public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long commentId,
@@ -35,7 +35,7 @@ public class CommentController {
     }
 
     // 댓글 삭제
-    @DeleteMapping("card/{cardId}/comment/{commentId}")
+    @DeleteMapping("comment/{commentId}")
     public ResponseEntity<ApiResponse<String>> deleteComment(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long commentId) {

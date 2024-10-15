@@ -42,13 +42,14 @@ public class AuthService {
         User newUser = new User(
                 signupRequestDto.getEmail(),
                 encodedPassword,
+                signupRequestDto.getUserName(),
                 userRole
         );
         User savedUser = userRepository.save(newUser);
 
         String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
 
-        webhookService.sendDiscordNotification("%s 님이 새로운 회원이 되셨어요 !", newUser.getEmail());
+        webhookService.sendDiscordNotification("%s 님이 새로운 회원이 되셨어요 !", newUser.getUserName());
 
         return new SignupResponse(bearerToken);
     }

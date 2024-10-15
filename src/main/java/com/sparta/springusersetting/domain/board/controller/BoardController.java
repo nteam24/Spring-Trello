@@ -7,6 +7,7 @@ import com.sparta.springusersetting.domain.board.service.BoardService;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,22 +21,22 @@ public class BoardController {
     private final BoardService boardService;
 
     // 보드 등록
-    @PostMapping
+    @PostMapping("/user/{userId}/workspace/{workspaceId}")
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
             @RequestBody BoardRequestDto boardRequestDto,
-            @RequestParam Long userId,
-            @RequestParam Long workspaceId) {
+            @PathVariable Long userId,
+            @PathVariable Long workspaceId) {
         BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto, userId, workspaceId);
         return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }
 
     // 보드 수정
-    @PutMapping("/{boardId}")
+    @PutMapping("/{boardId}/user/{userId}/workspace/{workspaceId}")
     public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
             @PathVariable Long boardId,
             @RequestBody BoardRequestDto boardRequestDto,
-            @RequestParam Long userId,
-            @RequestParam Long workspaceId) {
+            @PathVariable Long userId,
+            @PathVariable Long workspaceId) {
         BoardResponseDto boardResponseDto = boardService.updateBoard(boardId, boardRequestDto, userId, workspaceId);
         return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }
@@ -57,11 +58,11 @@ public class BoardController {
     }
 
     // 보드 삭제
-    @DeleteMapping("/{boardId}")
+    @DeleteMapping("/{boardId}/user/{userId}/workspace/{workspaceId}")
     public ResponseEntity<ApiResponse> deleteBoard(
             @PathVariable Long boardId,
-            @RequestParam Long userId,
-            @RequestParam Long workspaceId
+            @PathVariable Long userId,
+            @PathVariable Long workspaceId
             ){
         boardService.deleteBoard(boardId, userId, workspaceId);
         return ResponseEntity.ok(ApiResponse.successWithNoContent());

@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.card.service;
 
 
+import com.sparta.springusersetting.domain.card.dto.ActivityLogResponseDto;
 import com.sparta.springusersetting.domain.card.dto.CardRequestDto;
 import com.sparta.springusersetting.domain.card.dto.CardResponseDto;
 import com.sparta.springusersetting.domain.card.entity.Card;
@@ -49,7 +50,7 @@ public class CardService {
                 card.getContents(),
                 card.getDeadline(),
                 card.getManager().getEmail(),
-                card.getActivityLogs().toString(),
+                card.getActivityLogs().stream().map(ActivityLogResponseDto::new).toList(),
                 card.getComments());
         return cardResponseDto;
     }
@@ -77,4 +78,5 @@ public class CardService {
         return card;
 
     }
+
 }

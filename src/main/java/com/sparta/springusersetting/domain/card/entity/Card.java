@@ -48,9 +48,7 @@ public class Card extends Timestamped {
     private List<ActivityLog> activityLogs = new ArrayList<>();
 
 
-//    @ManyToOne
-//    @JoinColumn(name = "board_id", nullable = false)
-//    private Board board;
+
 
 
     public Card(User manager, Lists lists, String title, String contents, LocalDate deadline)
@@ -71,4 +69,11 @@ public class Card extends Timestamped {
         this.contents = contents;
         this.deadline = deadline;
     }
+
+
+
+
+
+
+
 }

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
@@ -22,7 +24,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long cardId,
-            @RequestBody CommentRequestDto requestDto) {
+            @RequestBody CommentRequestDto requestDto) throws IOException {
         return ResponseEntity.ok(ApiResponse.success(commentService.createComment(authUser.getUserId(), cardId, requestDto)));
     }
 

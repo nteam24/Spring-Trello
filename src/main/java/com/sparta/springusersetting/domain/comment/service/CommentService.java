@@ -9,14 +9,16 @@ import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.comment.exception.NotFoundCommentException;
 import com.sparta.springusersetting.domain.comment.exception.UnauthorizedCommentAccessException;
 import com.sparta.springusersetting.domain.comment.repository.CommentRepository;
+import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.service.UserService;
-import com.sparta.springusersetting.domain.webhook.service.WebhookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +28,11 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CardService cardService;
     private final UserService userService;
-    private final WebhookService webhookService;
     private final MemberManageService memberManageService;
+    private final NotificationUtil notificationUtil;
 
     // 댓글 등록
-    public CommentResponseDto createComment(long userId, Long cardId, CommentRequestDto requestDto) {
+    public CommentResponseDto createComment(long userId, Long cardId, CommentRequestDto requestDto) throws IOException {
         // 유저 조회
         User user = userService.findUser(userId);
         // 카드 조회
@@ -48,14 +50,8 @@ public class CommentService {
         //DB 저장
         commentRepository.save(comment);
 
-        // 디스코드 알림 전송
-        webhookService.sendDiscordNotification(
-                "%s 님이 <%s> 카드에 댓글을 달았어요 ! [ %s (%s) ]",
-                user.getUserName(),
-                card.getTitle(),
-                requestDto.getContent(),
-                requestDto.getCommentEmoji()
-        );
+        // 댓글 등록 알림
+        notificationUtil.PostCommentNotification(user, card, comment);
 
         return new CommentResponseDto(comment);
     }

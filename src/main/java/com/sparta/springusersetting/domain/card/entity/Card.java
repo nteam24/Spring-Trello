@@ -17,7 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "cards")
+@Table(name = "cards", indexes = {
+        @Index(name = "idx_card_title_contents", columnList = "title, contents"),
+@Index(name = "idx_card_deadline", columnList = "deadline"),
+@Index(name = "idx_card_manager", columnList = "user_id")
+})
 @NoArgsConstructor
 @Getter
 public class Card extends Timestamped {

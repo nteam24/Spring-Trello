@@ -7,6 +7,8 @@ import com.sparta.springusersetting.domain.auth.dto.response.SigninResponse;
 import com.sparta.springusersetting.domain.auth.dto.response.SignupResponse;
 import com.sparta.springusersetting.domain.auth.exception.DuplicateEmailException;
 import com.sparta.springusersetting.domain.auth.exception.UnauthorizedPasswordException;
+import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
+import com.sparta.springusersetting.domain.notification.slack.SlackChatUtil;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
@@ -18,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,6 +31,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final WebhookService webhookService;
+    private final NotificationUtil notificationUtil;
 
     @Transactional
     public SignupResponse signup(SignupRequestDto signupRequestDto) {
@@ -54,7 +59,7 @@ public class AuthService {
         return new SignupResponse(bearerToken);
     }
 
-    public SigninResponse signin(SigninRequestDto signinRequestDto) {
+    public SigninResponse signin(SigninRequestDto signinRequestDto) throws IOException {
         User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(
                 NotFoundUserException::new);
 
@@ -64,6 +69,8 @@ public class AuthService {
         }
 
         String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
+
+        notificationUtil.LoginNotification(user);
 
         return new SigninResponse(bearerToken);
     }

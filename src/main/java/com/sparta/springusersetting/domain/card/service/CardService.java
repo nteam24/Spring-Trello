@@ -1,30 +1,33 @@
 package com.sparta.springusersetting.domain.card.service;
 
 
-import com.sparta.springusersetting.domain.card.dto.*;
+import com.sparta.springusersetting.attachment.service.AttachmentService;
+import com.sparta.springusersetting.domain.card.dto.CardRequestDto;
+import com.sparta.springusersetting.domain.card.dto.CardSearchRequestDto;
+import com.sparta.springusersetting.domain.card.dto.CardSearchResponseDto;
+import com.sparta.springusersetting.domain.card.dto.CardWithViewCountResponseDto;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.card.exception.BadAccessCardException;
 import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.lists.repository.ListsRepository;
+import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.exception.BadAccessUserException;
 import com.sparta.springusersetting.domain.user.service.UserService;
-import com.sparta.springusersetting.domain.webhook.service.WebhookService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Duration;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -34,16 +37,18 @@ public class CardService {
 
     private static final Logger log = LoggerFactory.getLogger(CardService.class);
     private final CardRepository cardRepository;
-    private final UserService userService;
     private final ListsRepository listsRepository;
+    private final UserService userService;
     private final MemberManageService memberManageService;
-    private final WebhookService webhookService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final NotificationUtil notificationUtil;
+    private final AttachmentService attachmentService;
 
     private static final String RANKING_KEY = "cardRanking";
 
+
     @Transactional
-    public String createCard(AuthUser authUser, CardRequestDto requestDto)
+    public String createCard(AuthUser authUser, CardRequestDto requestDto, MultipartFile file)
     {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
@@ -55,7 +60,14 @@ public class CardService {
         User manager = userService.findUser(requestDto.getManagerId());
         Card card = new Card(manager, lists, requestDto.getTitle(), requestDto.getContents(), requestDto.getDeadline());
         cardRepository.save(card);
-
+        if(file != null && !file.isEmpty()) {
+            try {
+                attachmentService.saveFile(authUser, card.getId(), file);
+            } catch (IOException e)
+            {
+                throw new RuntimeException("파일 저장중 오류 발생");
+            }
+        }
         return "카드 생성이 완료되었습니다.";
     }
 
@@ -89,8 +101,7 @@ public class CardService {
 
 
     @Transactional
-    public String updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId)
-    {
+    public String updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId, User user) throws IOException {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
 
@@ -103,6 +114,9 @@ public class CardService {
         Card card = cardRepository.findById(cardId).orElse(null);
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
+
+        // 카드 변경 알림
+        notificationUtil.UpdateCardNotification(user, card);
 
         return "카드 수정이 완료되었습니다.";
     }
@@ -118,27 +132,26 @@ public class CardService {
         cardRepository.delete(card);
         return "카드 삭제가 완료되었습니다.";
     }
+
     @Transactional(readOnly = true)
-    public Page<CardSearchResponseDto> searchCard(long userId, CardSearchRequestDto searchRequest, Pageable pageable) {
+    public Slice<CardSearchResponseDto> searchCard(Long userId, CardSearchRequestDto searchRequest, Long cursorId, int pageSize) {
         User user = userService.findUser(userId);
 
-        if (searchRequest.getWorkspaceId() == null){
+        if (searchRequest.getWorkspaceId() == null) {
             throw new BadAccessCardException();
         }
 
         // 사용자가 해당 워크스페이스에 속해 있는지 확인
         MemberRole memberRole = memberManageService.checkMemberRole(userId, searchRequest.getWorkspaceId());
-        if (memberRole == null){
+        if (memberRole == null) {
             throw new BadAccessCardException();
         }
 
         // QueryDSL을 사용한 검색 수행
-        Page<CardSearchResponseDto> cards = cardRepository.searchCards(searchRequest, pageable);
-
-        return cards;
+        return cardRepository.searchCards(searchRequest, cursorId, pageSize);
     }
-    public Card findCard(Long cardId)
-    {
+
+    public Card findCard(Long cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(null);
         return card;
 

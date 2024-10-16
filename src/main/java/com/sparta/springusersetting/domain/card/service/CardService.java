@@ -69,7 +69,7 @@ public class CardService {
                 attachmentService.saveFile(authUser, card.getId(), file);
             } catch (IOException e)
             {
-                    throw new FileSaveException();
+                throw new FileSaveException();
             }
         }
         return "카드 생성이 완료되었습니다.";

@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.card.controller;
 
 
+import com.sparta.springusersetting.attachment.service.AttachmentService;
 import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.card.dto.CardRequestDto;
 import com.sparta.springusersetting.domain.card.dto.CardResponseDto;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,10 +26,13 @@ public class CardController {
     private final CardService cardService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<String>> createCard(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody CardRequestDto card)
+    public ResponseEntity<ApiResponse<String>> createCard(@AuthenticationPrincipal AuthUser authUser,
+                                                          @Valid @RequestBody CardRequestDto card,
+                                                          @RequestPart(name = "file", required = false) MultipartFile file)
 
     {
-        return ResponseEntity.ok(ApiResponse.success(cardService.createCard(authUser,card)));
+
+        return ResponseEntity.ok(ApiResponse.success(cardService.createCard(authUser,card,file)));
     }
 
     @GetMapping("/{cardId}")

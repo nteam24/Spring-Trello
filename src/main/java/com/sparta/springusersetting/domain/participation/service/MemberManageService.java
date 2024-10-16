@@ -1,6 +1,5 @@
 package com.sparta.springusersetting.domain.participation.service;
 
-import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
 import com.sparta.springusersetting.domain.participation.entity.Participation;
 import com.sparta.springusersetting.domain.participation.exception.BadAccessParticipationException;
 import com.sparta.springusersetting.domain.participation.exception.NotFoundParticipationException;
@@ -15,8 +14,6 @@ import com.sparta.springusersetting.domain.workspace.service.WorkspaceService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-
 import static com.sparta.springusersetting.domain.user.enums.MemberRole.ROLE_WORKSPACE_ADMIN;
 import static com.sparta.springusersetting.domain.user.enums.UserRole.ROLE_ADMIN;
 
@@ -28,13 +25,10 @@ public class MemberManageService {
 
     private final ParticipationRepository participationRepository;
 
-    private final NotificationUtil notificationUtil;
-
-    public MemberManageService(WorkspaceService workspaceService, UserService userService, ParticipationRepository participationRepository, NotificationUtil notificationUtil) {
+    public MemberManageService(WorkspaceService workspaceService, UserService userService, ParticipationRepository participationRepository) {
         this.workspaceService = workspaceService;
         this.userService = userService;
         this.participationRepository = participationRepository;
-        this.notificationUtil = notificationUtil;
     }
 
     // 관리자 등록
@@ -87,22 +81,19 @@ public class MemberManageService {
 
     // 수락하기
     @Transactional
-    public String callYes(User user, Long workspaceId, Workspace workspace) throws IOException {
+    public String callYes(User user, Long workspaceId) {
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 
         // activation을 true로 전환
         participation.UserBeActive();
 
-        // 맴버 추가 알림
-        notificationUtil.AddMemberNotification(user, workspace);
-
         return "초대 수락 완료";
     }
 
     // 거절하기
     @Transactional
-    public String callNo(User user, Long workspaceId)  {
+    public String callNo(User user, Long workspaceId) {
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 

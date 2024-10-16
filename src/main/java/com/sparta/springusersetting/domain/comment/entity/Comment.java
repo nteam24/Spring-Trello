@@ -22,7 +22,6 @@ public class Comment extends Timestamped {
     private String content;
     @Enumerated(EnumType.STRING)
     private CommentEmoji commentEmoji;
-    private Long commentViewCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -1,8 +1,6 @@
 package com.sparta.springusersetting.domain.user.service;
 
 import com.sparta.springusersetting.domain.auth.exception.InvalidPasswordFormatException;
-import com.sparta.springusersetting.domain.card.entity.Card;
-import com.sparta.springusersetting.domain.card.service.CardService;
 import com.sparta.springusersetting.domain.user.dto.request.UserChangePasswordRequestDto;
 import com.sparta.springusersetting.domain.user.dto.request.UserCheckPasswordRequestDto;
 import com.sparta.springusersetting.domain.user.dto.response.UserResponseDto;
@@ -82,7 +80,7 @@ public class UserService {
     }
 
     // 유저 조회 메서드
-    public User findUser(long userId) {
+    public User findUser (long userId) {
         return userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
     }
 }

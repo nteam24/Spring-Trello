@@ -15,9 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "board", indexes = {
-        @Index(name = "idx_board_workspace", columnList = "workspace_id")
-})
+@Table(name = "board")
 public class Board extends Timestamped {
 
     @Id
@@ -36,6 +34,8 @@ public class Board extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
+
+
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lists> lists;

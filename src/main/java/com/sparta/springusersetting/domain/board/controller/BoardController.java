@@ -4,9 +4,11 @@ import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.board.dto.request.BoardRequestDto;
 import com.sparta.springusersetting.domain.board.dto.response.BoardResponseDto;
 import com.sparta.springusersetting.domain.board.service.BoardService;
+import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,23 +23,23 @@ public class BoardController {
     private final BoardService boardService;
 
     // 보드 등록
-    @PostMapping("/user/{userId}/workspace/{workspaceId}")
+    @PostMapping("/workspace/{workspaceId}")
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
             @RequestBody BoardRequestDto boardRequestDto,
-            @PathVariable Long userId,
+            @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long workspaceId) {
-        BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto, userId, workspaceId);
+        BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto,authUser.getUserId(), workspaceId);
         return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }
 
     // 보드 수정
-    @PutMapping("/{boardId}/user/{userId}/workspace/{workspaceId}")
+    @PutMapping("/{boardId}/workspace/{workspaceId}")
     public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
             @PathVariable Long boardId,
             @RequestBody BoardRequestDto boardRequestDto,
-            @PathVariable Long userId,
+            @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long workspaceId) {
-        BoardResponseDto boardResponseDto = boardService.updateBoard(boardId, boardRequestDto, userId, workspaceId);
+        BoardResponseDto boardResponseDto = boardService.updateBoard(boardId, boardRequestDto, authUser.getUserId(), workspaceId);
         return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }
 
@@ -58,13 +60,13 @@ public class BoardController {
     }
 
     // 보드 삭제
-    @DeleteMapping("/{boardId}/user/{userId}/workspace/{workspaceId}")
+    @DeleteMapping("/{boardId}/workspace/{workspaceId}")
     public ResponseEntity<ApiResponse> deleteBoard(
             @PathVariable Long boardId,
-            @PathVariable Long userId,
+            @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long workspaceId
             ){
-        boardService.deleteBoard(boardId, userId, workspaceId);
+        boardService.deleteBoard(boardId, authUser.getUserId(), workspaceId);
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 }

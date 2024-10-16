@@ -1,7 +1,6 @@
 package com.sparta.springusersetting.domain.card.service;
 
 
-import com.sparta.springusersetting.domain.attachment.exception.FileSaveException;
 import com.sparta.springusersetting.domain.attachment.service.AttachmentService;
 import com.sparta.springusersetting.domain.card.dto.CardRequestDto;
 import com.sparta.springusersetting.domain.card.dto.CardSearchRequestDto;
@@ -9,12 +8,9 @@ import com.sparta.springusersetting.domain.card.dto.CardSearchResponseDto;
 import com.sparta.springusersetting.domain.card.dto.CardWithViewCountResponseDto;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.card.exception.BadAccessCardException;
-import com.sparta.springusersetting.domain.card.exception.NotFoundCardException;
 import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
-import com.sparta.springusersetting.domain.common.exception.GlobalException;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
-import com.sparta.springusersetting.domain.lists.exception.NotFoundListsException;
 import com.sparta.springusersetting.domain.lists.repository.ListsRepository;
 import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
@@ -54,7 +50,7 @@ public class CardService {
     @Transactional
     public String createCard(AuthUser authUser, CardRequestDto requestDto, MultipartFile file)
     {
-        Lists lists = listsRepository.findById(requestDto.getListId()).orElseThrow(NotFoundListsException::new);
+        Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
         if(memberManageService.checkMemberRole(createUser.getId(),lists.getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
         {
@@ -69,7 +65,7 @@ public class CardService {
                 attachmentService.saveFile(authUser, card.getId(), file);
             } catch (IOException e)
             {
-                throw new FileSaveException();
+                throw new RuntimeException("파일 저장중 오류 발생");
             }
         }
         return "카드 생성이 완료되었습니다.";
@@ -106,7 +102,7 @@ public class CardService {
 
     @Transactional
     public String updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId, User user) throws IOException {
-        Lists lists = listsRepository.findById(requestDto.getListId()).orElseThrow(NotFoundListsException::new);
+        Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
 
         if(memberManageService.checkMemberRole(createUser.getId(),lists.getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
@@ -115,7 +111,7 @@ public class CardService {
         }
 
         User manager = userService.findUser(requestDto.getManagerId());
-        Card card = findCard(cardId);
+        Card card = cardRepository.findById(cardId).orElse(null);
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
 
@@ -127,7 +123,7 @@ public class CardService {
     @Transactional
     public String deleteCard(AuthUser authUser, Long cardId) {
         User deletedUser = User.fromAuthUser(authUser);
-        Card card = findCard(cardId);
+        Card card = cardRepository.findById(cardId).orElse(null);
         if(memberManageService.checkMemberRole(deletedUser.getId(),card.getLists().getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
         {
             throw new BadAccessUserException();
@@ -156,7 +152,7 @@ public class CardService {
     }
 
     public Card findCard(Long cardId) {
-        Card card = cardRepository.findById(cardId).orElseThrow(NotFoundCardException::new);
+        Card card = cardRepository.findById(cardId).orElseThrow(null);
         return card;
 
     }

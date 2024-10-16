@@ -20,6 +20,14 @@ public class AttachmentController {
     private final AttachmentService attachmentService;
 
 
+//    // 첨부파일 추가
+//    @PutMapping
+//    public ResponseEntity<ApiResponse<AttachmentResponse>> saveFiles(@AuthenticationPrincipal AuthUser authUser,
+//                                                                     @PathVariable Long cardId,
+//                                                                     @RequestPart(name = "file") MultipartFile file) throws IOException {
+//        return ResponseEntity.ok(ApiResponse.success(attachmentService.saveFile(authUser, cardId, file)));
+//    }
+
     // 첨부파일 조회
     @GetMapping
     public ResponseEntity<ApiResponse<List<AttachmentResponse>>> getFiles(

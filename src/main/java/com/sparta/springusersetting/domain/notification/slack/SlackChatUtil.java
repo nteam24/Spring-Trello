@@ -16,12 +16,12 @@ public class SlackChatUtil {
     @Autowired
     SystemProperties systemProperties;
 
-    public void sendSlackErr(String errStr) throws IOException {
+    public void sendSlackErr(String errStr, Object...args) throws IOException {
         String token = systemProperties.getSlackToken();
         String channelId = systemProperties.getSlackChannelId();
         boolean isErrorFlag = systemProperties.isErrorFlag();
 
-        String text = "자바 시스템 오류 발생!\n오류내용: " + errStr;
+        String text = String.format(errStr, args);
 
         String urlStr = "https://slack.com/api/chat.postMessage";
         urlStr += "?channel="+channelId;

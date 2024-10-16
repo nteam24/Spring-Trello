@@ -9,6 +9,8 @@ import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.lists.repository.ListsRepository;
+import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
+import com.sparta.springusersetting.domain.notification.slack.SlackChatUtil;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
@@ -24,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class CardService {
@@ -32,8 +36,13 @@ public class CardService {
     private final UserService userService;
     private final ListsRepository listsRepository;
     private final MemberManageService memberManageService;
+<<<<<<< HEAD
+    private final SlackChatUtil slackChatUtil;
+    private final NotificationUtil notificationUtil;
+=======
     private final AttachmentService attachmentService;
 
+>>>>>>> dev
 
     @Transactional
     public String createCard(AuthUser authUser, CardRequestDto requestDto, MultipartFile file)
@@ -78,8 +87,7 @@ public class CardService {
 
 
     @Transactional
-    public String updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId)
-    {
+    public String updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId, User user) throws IOException {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
 
@@ -92,6 +100,9 @@ public class CardService {
         Card card = cardRepository.findById(cardId).orElse(null);
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
+
+        // 카드 변경 알림
+        notificationUtil.UpdateCardNotification(user, card);
 
         return "카드 수정이 완료되었습니다.";
     }
@@ -107,6 +118,7 @@ public class CardService {
         cardRepository.delete(card);
         return "카드 삭제가 완료되었습니다.";
     }
+
     @Transactional(readOnly = true)
     public Slice<CardSearchResponseDto> searchCard(Long userId, CardSearchRequestDto searchRequest, Long cursorId, int pageSize) {
         User user = userService.findUser(userId);

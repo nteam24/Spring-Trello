@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 @RestController
 @RequiredArgsConstructor
 
@@ -31,7 +29,7 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/auth/signin")
-    public ResponseEntity<ApiResponse<SigninResponse>> signin(@Valid @RequestBody SigninRequestDto signinRequestDto) throws AuthException, IOException{
+    public ResponseEntity<ApiResponse<SigninResponse>> signin(@Valid @RequestBody SigninRequestDto signinRequestDto) throws AuthException {
         return ResponseEntity.ok(ApiResponse.success(authService.signin(signinRequestDto)));
     }
 }

@@ -1,6 +1,5 @@
 package com.sparta.springusersetting.domain.lists.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
@@ -15,9 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "lists", indexes = {
-        @Index(name = "idx_lists_board", columnList = "board_id")
-})
+@Table(name = "lists")
 public class Lists extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

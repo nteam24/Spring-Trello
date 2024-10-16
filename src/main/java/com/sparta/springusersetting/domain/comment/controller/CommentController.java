@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
-    private final RedisTemplate<String, Object> redisTemplate;
 
     // 댓글 등록
     @PostMapping("card/{cardId}/comment")
@@ -32,7 +31,6 @@ public class CommentController {
     public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long commentId) {
-
         return ResponseEntity.ok(ApiResponse.success(commentService.getComment(authUser.getUserId(), commentId)));
     }
 
@@ -52,4 +50,6 @@ public class CommentController {
             @PathVariable Long commentId) {
         return ResponseEntity.ok(ApiResponse.success(commentService.deleteComment(authUser.getUserId(), commentId)));
     }
+
+
 }

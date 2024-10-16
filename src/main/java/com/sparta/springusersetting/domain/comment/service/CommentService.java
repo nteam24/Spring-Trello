@@ -13,8 +13,11 @@ import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.service.UserService;
 import com.sparta.springusersetting.domain.webhook.service.WebhookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class CommentService {
     private final CardService cardService;
     private final UserService userService;
     private final WebhookService webhookService;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     // 댓글 등록
     public CommentResponseDto createComment(long userId, Long cardId, CommentRequestDto requestDto) {
@@ -61,7 +65,13 @@ public class CommentService {
         // 댓글 조회
         Comment comment = findComment(commentId);
 
-        return new CommentResponseDto(comment);
+        // Redis 에 조회 수 증가
+        incrementCommentViewCount(commentId);
+
+        // Redis 조회 수
+        Long commentViewCount = getCommentViewCount(commentId);
+
+        return new CommentResponseDto(comment, commentViewCount);
     }
 
     // 댓글 수정
@@ -111,6 +121,25 @@ public class CommentService {
         if (signinUserId != commentUserId) {
             throw new UnauthorizedCommentAccessException();
         }
+    }
+
+    // Redis 에서 조회 수 증가 메서드
+    private void incrementCommentViewCount(Long commentId) {
+        String commentViewCount = "commentViewCount:" + commentId;
+        redisTemplate.opsForValue().increment(commentViewCount);
+        // 조회 수 30일 후 만료
+        redisTemplate.expire(commentViewCount, Duration.ofDays(30));
+    }
+
+    // Redis 에서 조회 수 가져오기
+    private Long getCommentViewCount(Long commentId) {
+        String commentViewCount = "commentViewCount:" + commentId;
+        Object viewCount = redisTemplate.opsForValue().get(commentViewCount);
+        if (viewCount == null) {
+            redisTemplate.opsForValue().set(commentViewCount, 0L);  // 캐시 초기화
+            return 0L;
+        }
+        return ((Number) viewCount).longValue();
     }
 }
 

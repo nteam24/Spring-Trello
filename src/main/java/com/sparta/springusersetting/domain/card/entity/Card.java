@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.card.entity;
 
 
+import com.sparta.springusersetting.attachment.entity.Attachment;
 import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
@@ -47,7 +48,8 @@ public class Card extends Timestamped {
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityLog> activityLogs = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attachment> files = new ArrayList<>();
 
 
 

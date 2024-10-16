@@ -2,10 +2,7 @@ package com.sparta.springusersetting.domain.card.controller;
 
 
 import com.sparta.springusersetting.config.ApiResponse;
-import com.sparta.springusersetting.domain.card.dto.CardRequestDto;
-import com.sparta.springusersetting.domain.card.dto.CardResponseDto;
-import com.sparta.springusersetting.domain.card.dto.CardSearchRequestDto;
-import com.sparta.springusersetting.domain.card.dto.CardSearchResponseDto;
+import com.sparta.springusersetting.domain.card.dto.*;
 import com.sparta.springusersetting.domain.card.service.CardService;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import jakarta.validation.Valid;
@@ -25,13 +22,12 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<String>> createCard(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody CardRequestDto card)
-
     {
         return ResponseEntity.ok(ApiResponse.success(cardService.createCard(authUser,card)));
     }
 
     @GetMapping("/{cardId}")
-    public ResponseEntity<ApiResponse<CardResponseDto>> getCard(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long cardId)
+    public ResponseEntity<ApiResponse<CardWithViewCountResponseDto>> getCard(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long cardId)
     {
         return ResponseEntity.ok(ApiResponse.success(cardService.getCard(authUser,cardId)));
     }

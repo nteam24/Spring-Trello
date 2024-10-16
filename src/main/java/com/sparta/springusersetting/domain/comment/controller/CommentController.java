@@ -26,14 +26,6 @@ public class CommentController {
         return ResponseEntity.ok(ApiResponse.success(commentService.createComment(authUser.getUserId(), cardId, requestDto)));
     }
 
-    // 댓글 단건 조회 ( Redis Test 용 )
-    @GetMapping("comment/{commentId}")
-    public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(
-            @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long commentId) {
-        return ResponseEntity.ok(ApiResponse.success(commentService.getComment(authUser.getUserId(), commentId)));
-    }
-
     // 댓글 수정
     @PutMapping("comment/{commentId}")
     public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(

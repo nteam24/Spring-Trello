@@ -1,5 +1,6 @@
 package com.sparta.springusersetting.domain.lists.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;

@@ -10,7 +10,8 @@ import java.time.LocalDate;
 public class CardSearchRequestDto {
     private Long workspaceId;
     private Long boardId;
-    private String keyword;
+    private String title;
+    private String contents;
     private LocalDate deadline;
     private String managerEmail;
 }

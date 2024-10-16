@@ -1,7 +1,7 @@
 package com.sparta.springusersetting.domain.comment.service;
 
-import com.sparta.springusersetting.domain.board.exception.UnauthorizedActionException;
 import com.sparta.springusersetting.domain.card.entity.Card;
+import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.card.service.CardService;
 import com.sparta.springusersetting.domain.comment.dto.request.CommentRequestDto;
 import com.sparta.springusersetting.domain.comment.dto.response.CommentResponseDto;
@@ -9,16 +9,11 @@ import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.comment.exception.NotFoundCommentException;
 import com.sparta.springusersetting.domain.comment.exception.UnauthorizedCommentAccessException;
 import com.sparta.springusersetting.domain.comment.repository.CommentRepository;
-import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
-import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
-import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,30 +23,19 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CardService cardService;
     private final UserService userService;
-    private final MemberManageService memberManageService;
-    private final NotificationUtil notificationUtil;
+    private final CardRepository cardRepository;
 
     // 댓글 등록
-    public CommentResponseDto createComment(long userId, Long cardId, CommentRequestDto requestDto) throws IOException {
+    public CommentResponseDto createComment(long userId, Long cardId, CommentRequestDto requestDto) {
         // 유저 조회
         User user = userService.findUser(userId);
         // 카드 조회
-        Card card = cardService.findCard(cardId);
+        Card card = cardRepository.findById(cardId).orElseThrow();
         
-        // 멤버 역할 확인 ( 읽기 전용 멤버 댓글 등록 제한 )
-        MemberRole memberRole = memberManageService.checkMemberRole(user.getId(), card.getLists().getBoard().getWorkspace().getId());
-        if (memberRole.equals(MemberRole.ROLE_READ_USER)) {
-            throw new UnauthorizedActionException();
-        }
-
+        // 멤버 역할 확인
+        
         // Entity 저장
         Comment comment = new Comment(user, card, requestDto);
-
-        //DB 저장
-        commentRepository.save(comment);
-
-        // 댓글 등록 알림
-        notificationUtil.PostCommentNotification(user, card, comment);
 
         return new CommentResponseDto(comment);
     }
@@ -69,9 +53,6 @@ public class CommentService {
 
         // 댓글 수정
         comment.update(requestDto);
-
-        // DB 저장
-        commentRepository.save(comment);
 
         return new CommentResponseDto(comment);
     }
@@ -93,7 +74,7 @@ public class CommentService {
     }
 
 
-    // 댓글 조회 메서드
+    // 유저 조회 메서드
     public Comment findComment (long commentId) {
         return commentRepository.findById(commentId).orElseThrow(NotFoundCommentException::new);
     }
@@ -105,3 +86,8 @@ public class CommentService {
         }
     }
 }
+
+/*
+    1. cardRepository 로 직접 가져오는 로직 수정
+    2. 멤버역할로 댓글 등록 제한
+ */

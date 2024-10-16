@@ -7,16 +7,18 @@ import com.sparta.springusersetting.domain.auth.dto.response.SigninResponse;
 import com.sparta.springusersetting.domain.auth.dto.response.SignupResponse;
 import com.sparta.springusersetting.domain.auth.exception.DuplicateEmailException;
 import com.sparta.springusersetting.domain.auth.exception.UnauthorizedPasswordException;
+import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
-import com.sparta.springusersetting.domain.webhook.service.WebhookService;
-import jakarta.security.auth.message.AuthException;
+import com.sparta.springusersetting.domain.notification.discordNotification.service.DiscordNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final WebhookService webhookService;
+    private final DiscordNotificationService discordNotificationService;
+    private final NotificationUtil notificationUtil;
 
     @Transactional
     public SignupResponse signup(SignupRequestDto signupRequestDto) {
@@ -49,12 +52,12 @@ public class AuthService {
 
         String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
 
-        webhookService.sendDiscordNotification("%s 님이 새로운 회원이 되셨어요 !", newUser.getUserName());
+        discordNotificationService.sendDiscordNotification("%s 님이 새로운 회원이 되셨어요 !", newUser.getUserName());
 
         return new SignupResponse(bearerToken);
     }
 
-    public SigninResponse signin(SigninRequestDto signinRequestDto) {
+    public SigninResponse signin(SigninRequestDto signinRequestDto) throws IOException {
         User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(
                 NotFoundUserException::new);
 
@@ -64,6 +67,8 @@ public class AuthService {
         }
 
         String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
+
+        notificationUtil.LoginNotification(user);
 
         return new SigninResponse(bearerToken);
     }

@@ -15,8 +15,6 @@ public enum GlobalExceptionConst {
     ALREADY_ADMIN(HttpStatus.BAD_REQUEST, " 이미 해당 워크스페이스의 관리자 입니다."),
     WORKSPACE_ID_REQUIRED(HttpStatus.BAD_REQUEST, "워크스페이스 ID가 검색에 필요합니다."),
     INVALID_BACKGROUND_COLOR_OR_IMAGE(HttpStatus.BAD_REQUEST,"배경색 또는 배경이미지 중 하나는 선택해야 합니다."),
-    INVALID_FILE_FORMAT(HttpStatus.BAD_REQUEST,"파일 형식이 잘못되었습니다."),
-    FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "파일 크기가 잘못되었습니다."),
 
     // 상태코드 401
     UNAUTHORIZED_PASSWORD(HttpStatus.UNAUTHORIZED, " 비밀번호를 확인해주세요."),
@@ -25,7 +23,6 @@ public enum GlobalExceptionConst {
     // 상태코드 403
     NOT_USER_OF_COMMENT(HttpStatus.FORBIDDEN, " 댓글 작성자가 아닙니다."),
     UNAUTHORIZED_LIST_CREATION(HttpStatus.FORBIDDEN, " 리스트를 생성할 권한이 없습니다."),
-    FILE_SAVE_FAILURE(HttpStatus.FORBIDDEN, "파일 저장중 오류가 발생하였습니다."),
 
     // 상태코드 404
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, " 회원이 존재하지 않습니다."),

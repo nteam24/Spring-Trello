@@ -1,4 +1,4 @@
-package com.sparta.springusersetting.domain.notification.slack;
+package com.sparta.springusersetting.domain.notification.slackNotification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

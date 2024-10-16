@@ -1,28 +1,23 @@
-package com.sparta.springusersetting.attachment.service;
+package com.sparta.springusersetting.domain.attachment.service;
 
-import com.sparta.springusersetting.attachment.dto.AttachmentResponse;
-import com.sparta.springusersetting.attachment.entity.Attachment;
-import com.sparta.springusersetting.attachment.repository.AttachmentRepository;
-import com.sparta.springusersetting.config.ApiResponse;
+import com.sparta.springusersetting.domain.attachment.dto.AttachmentResponse;
+import com.sparta.springusersetting.domain.attachment.entity.Attachment;
+import com.sparta.springusersetting.domain.attachment.repository.AttachmentRepository;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.card.exception.NotFoundCardException;
 import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.common.service.S3Service;
-import com.sparta.springusersetting.domain.lists.service.ListsService;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.management.relation.RoleNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;

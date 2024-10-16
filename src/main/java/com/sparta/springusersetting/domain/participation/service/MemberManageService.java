@@ -1,7 +1,6 @@
 package com.sparta.springusersetting.domain.participation.service;
 
-import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
-import com.sparta.springusersetting.domain.notification.slack.SlackChatUtil;
+import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
 import com.sparta.springusersetting.domain.participation.entity.Participation;
 import com.sparta.springusersetting.domain.participation.exception.BadAccessParticipationException;
 import com.sparta.springusersetting.domain.participation.exception.NotFoundParticipationException;
@@ -20,7 +19,6 @@ import java.io.IOException;
 
 import static com.sparta.springusersetting.domain.user.enums.MemberRole.ROLE_WORKSPACE_ADMIN;
 import static com.sparta.springusersetting.domain.user.enums.UserRole.ROLE_ADMIN;
-import static com.sparta.springusersetting.domain.workspace.entity.QWorkspace.workspace;
 
 @Service
 public class MemberManageService {

@@ -1,4 +1,4 @@
-package com.sparta.springusersetting.domain.notification.slack;
+package com.sparta.springusersetting.domain.notification.slackNotification;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

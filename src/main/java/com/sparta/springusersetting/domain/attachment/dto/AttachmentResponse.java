@@ -1,6 +1,6 @@
-package com.sparta.springusersetting.attachment.dto;
+package com.sparta.springusersetting.domain.attachment.dto;
 
-import com.sparta.springusersetting.attachment.entity.Attachment;
+import com.sparta.springusersetting.domain.attachment.entity.Attachment;
 import lombok.Getter;
 
 @Getter

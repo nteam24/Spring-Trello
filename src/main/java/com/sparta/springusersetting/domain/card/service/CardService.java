@@ -1,7 +1,7 @@
 package com.sparta.springusersetting.domain.card.service;
 
 
-import com.sparta.springusersetting.attachment.service.AttachmentService;
+import com.sparta.springusersetting.domain.attachment.service.AttachmentService;
 import com.sparta.springusersetting.domain.card.dto.CardRequestDto;
 import com.sparta.springusersetting.domain.card.dto.CardSearchRequestDto;
 import com.sparta.springusersetting.domain.card.dto.CardSearchResponseDto;
@@ -12,7 +12,7 @@ import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.lists.repository.ListsRepository;
-import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
+import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;

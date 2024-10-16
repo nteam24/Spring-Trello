@@ -1,4 +1,4 @@
-package com.sparta.springusersetting.attachment.entity;
+package com.sparta.springusersetting.domain.attachment.entity;
 
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;

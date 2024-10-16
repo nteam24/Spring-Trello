@@ -1,16 +1,14 @@
-package com.sparta.springusersetting.attachment.controller;
+package com.sparta.springusersetting.domain.attachment.controller;
 
-import com.sparta.springusersetting.attachment.dto.AttachmentResponse;
-import com.sparta.springusersetting.attachment.service.AttachmentService;
+import com.sparta.springusersetting.domain.attachment.dto.AttachmentResponse;
+import com.sparta.springusersetting.domain.attachment.service.AttachmentService;
 import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController

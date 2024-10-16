@@ -1,13 +1,12 @@
-package com.sparta.springusersetting.domain.notification.notificationutil;
+package com.sparta.springusersetting.domain.notification.util;
 
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.comment.entity.Comment;
-import com.sparta.springusersetting.domain.notification.slack.SlackChatUtil;
+import com.sparta.springusersetting.domain.notification.slackNotification.SlackChatUtil;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 
 import java.io.IOException;
 

@@ -1,9 +1,7 @@
 package com.sparta.springusersetting.domain.card.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sparta.springusersetting.attachment.entity.Attachment;
+import com.sparta.springusersetting.domain.attachment.entity.Attachment;
 import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.lists.entity.Lists;

@@ -1,6 +1,6 @@
-package com.sparta.springusersetting.attachment.repository;
+package com.sparta.springusersetting.domain.attachment.repository;
 
-import com.sparta.springusersetting.attachment.entity.Attachment;
+import com.sparta.springusersetting.domain.attachment.entity.Attachment;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

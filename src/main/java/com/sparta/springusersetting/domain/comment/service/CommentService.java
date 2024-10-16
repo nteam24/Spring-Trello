@@ -9,7 +9,7 @@ import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.comment.exception.NotFoundCommentException;
 import com.sparta.springusersetting.domain.comment.exception.UnauthorizedCommentAccessException;
 import com.sparta.springusersetting.domain.comment.repository.CommentRepository;
-import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
+import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;

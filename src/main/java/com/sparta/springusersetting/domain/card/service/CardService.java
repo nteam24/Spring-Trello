@@ -17,6 +17,7 @@ import com.sparta.springusersetting.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -107,26 +108,24 @@ public class CardService {
         return "카드 삭제가 완료되었습니다.";
     }
     @Transactional(readOnly = true)
-    public Page<CardSearchResponseDto> searchCard(long userId, CardSearchRequestDto searchRequest, Pageable pageable) {
+    public Slice<CardSearchResponseDto> searchCard(Long userId, CardSearchRequestDto searchRequest, Long cursorId, int pageSize) {
         User user = userService.findUser(userId);
 
-        if (searchRequest.getWorkspaceId() == null){
+        if (searchRequest.getWorkspaceId() == null) {
             throw new BadAccessCardException();
         }
 
         // 사용자가 해당 워크스페이스에 속해 있는지 확인
         MemberRole memberRole = memberManageService.checkMemberRole(userId, searchRequest.getWorkspaceId());
-        if (memberRole == null){
+        if (memberRole == null) {
             throw new BadAccessCardException();
         }
 
         // QueryDSL을 사용한 검색 수행
-        Page<CardSearchResponseDto> cards = cardRepository.searchCards(searchRequest, pageable);
-
-        return cards;
+        return cardRepository.searchCards(searchRequest, cursorId, pageSize);
     }
-    public Card findCard(Long cardId)
-    {
+
+    public Card findCard(Long cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(null);
         return card;
 

@@ -40,5 +40,5 @@ public class WorkspaceService {
         workspaceRepository.delete(workspace);
     }
 
-    // cicd 테스트용 주석1111111
+    // cicd 테스트용 주석11111111
 }

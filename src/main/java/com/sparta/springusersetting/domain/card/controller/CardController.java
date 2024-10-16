@@ -8,6 +8,7 @@ import com.sparta.springusersetting.domain.card.dto.CardSearchRequestDto;
 import com.sparta.springusersetting.domain.card.dto.CardSearchResponseDto;
 import com.sparta.springusersetting.domain.card.service.CardService;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
+import com.sparta.springusersetting.domain.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,9 +40,8 @@ public class CardController {
     }
 
     @PatchMapping("/{cardId}")
-    public ResponseEntity<ApiResponse<String>> updateCard(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody CardRequestDto card, @PathVariable Long cardId)
-    {
-        return ResponseEntity.ok(ApiResponse.success(cardService.updateCard(authUser,card,cardId)));
+    public ResponseEntity<ApiResponse<String>> updateCard(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody CardRequestDto card, @PathVariable Long cardId, User user) throws IOException {
+        return ResponseEntity.ok(ApiResponse.success(cardService.updateCard(authUser,card,cardId, user)));
     }
 
     @DeleteMapping("/{cardId}")

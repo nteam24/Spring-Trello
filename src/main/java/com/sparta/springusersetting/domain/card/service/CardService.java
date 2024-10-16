@@ -36,13 +36,9 @@ public class CardService {
     private final UserService userService;
     private final ListsRepository listsRepository;
     private final MemberManageService memberManageService;
-<<<<<<< HEAD
-    private final SlackChatUtil slackChatUtil;
     private final NotificationUtil notificationUtil;
-=======
     private final AttachmentService attachmentService;
 
->>>>>>> dev
 
     @Transactional
     public String createCard(AuthUser authUser, CardRequestDto requestDto, MultipartFile file)
@@ -85,7 +81,6 @@ public class CardService {
         return cardResponseDto;
     }
 
-
     @Transactional
     public String updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId, User user) throws IOException {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
@@ -106,6 +101,7 @@ public class CardService {
 
         return "카드 수정이 완료되었습니다.";
     }
+
     @Transactional
     public String deleteCard(AuthUser authUser, Long cardId) {
         User deletedUser = User.fromAuthUser(authUser);

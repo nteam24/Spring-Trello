@@ -1,6 +1,7 @@
 package com.sparta.springusersetting.domain.card.service;
 
 
+import com.sparta.springusersetting.attachment.service.AttachmentService;
 import com.sparta.springusersetting.domain.card.dto.*;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.card.exception.BadAccessCardException;
@@ -18,6 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +31,11 @@ public class CardService {
     private final UserService userService;
     private final ListsRepository listsRepository;
     private final MemberManageService memberManageService;
+    private final AttachmentService attachmentService;
+
 
     @Transactional
-    public String createCard(AuthUser authUser, CardRequestDto requestDto)
+    public String createCard(AuthUser authUser, CardRequestDto requestDto, MultipartFile file)
     {
         Lists lists = listsRepository.findById(requestDto.getListId()).orElse(null);
         User createUser = User.fromAuthUser(authUser);
@@ -40,8 +46,15 @@ public class CardService {
 
         User manager = userService.findUser(requestDto.getManagerId());
         Card card = new Card(manager, lists, requestDto.getTitle(), requestDto.getContents(), requestDto.getDeadline());
+        if(file != null && !file.isEmpty()) {
+            try {
+                attachmentService.saveFile(authUser, card.getId(), file);
+            } catch (IOException e)
+            {
+                throw new RuntimeException("파일 저장중 오류 발생");
+            }
+        }
         cardRepository.save(card);
-
         return "카드 생성이 완료되었습니다.";
     }
 

@@ -9,7 +9,6 @@ public class SystemProperties {
     private String slackChannelId;
     private boolean errorFlag;
 
-    // 실제로는 lombok getter, setter 사용함
     public String getSlackToken() {
         return slackToken;
     }

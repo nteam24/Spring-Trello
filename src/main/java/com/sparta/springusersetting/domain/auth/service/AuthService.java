@@ -7,6 +7,7 @@ import com.sparta.springusersetting.domain.auth.dto.response.SigninResponse;
 import com.sparta.springusersetting.domain.auth.dto.response.SignupResponse;
 import com.sparta.springusersetting.domain.auth.exception.DuplicateEmailException;
 import com.sparta.springusersetting.domain.auth.exception.UnauthorizedPasswordException;
+import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
 import com.sparta.springusersetting.domain.notification.slack.SlackChatUtil;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
@@ -30,7 +31,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final WebhookService webhookService;
-    private final SlackChatUtil slackChatUtil;
+    private final NotificationUtil notificationUtil;
 
     @Transactional
     public SignupResponse signup(SignupRequestDto signupRequestDto) {
@@ -69,7 +70,7 @@ public class AuthService {
 
         String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
 
-        slackChatUtil.sendSlackErr("로그인 성공: " + user.getEmail() + "님이 로그인했습니다.");
+        notificationUtil.LoginNotification(user);
 
         return new SigninResponse(bearerToken);
     }

@@ -1,5 +1,6 @@
 package com.sparta.springusersetting.domain.participation.service;
 
+import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
 import com.sparta.springusersetting.domain.notification.slack.SlackChatUtil;
 import com.sparta.springusersetting.domain.participation.entity.Participation;
 import com.sparta.springusersetting.domain.participation.exception.BadAccessParticipationException;
@@ -19,6 +20,7 @@ import java.io.IOException;
 
 import static com.sparta.springusersetting.domain.user.enums.MemberRole.ROLE_WORKSPACE_ADMIN;
 import static com.sparta.springusersetting.domain.user.enums.UserRole.ROLE_ADMIN;
+import static com.sparta.springusersetting.domain.workspace.entity.QWorkspace.workspace;
 
 @Service
 public class MemberManageService {
@@ -28,13 +30,13 @@ public class MemberManageService {
 
     private final ParticipationRepository participationRepository;
 
-    private final SlackChatUtil slackChatUtil;
+    private final NotificationUtil notificationUtil;
 
-    public MemberManageService(WorkspaceService workspaceService, UserService userService, ParticipationRepository participationRepository, SlackChatUtil slackChatUtil) {
+    public MemberManageService(WorkspaceService workspaceService, UserService userService, ParticipationRepository participationRepository, NotificationUtil notificationUtil) {
         this.workspaceService = workspaceService;
         this.userService = userService;
         this.participationRepository = participationRepository;
-        this.slackChatUtil = slackChatUtil;
+        this.notificationUtil = notificationUtil;
     }
 
     // 관리자 등록
@@ -87,14 +89,15 @@ public class MemberManageService {
 
     // 수락하기
     @Transactional
-    public String callYes(User user, Long workspaceId) throws IOException {
+    public String callYes(User user, Long workspaceId, Workspace workspace) throws IOException {
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 
         // activation을 true로 전환
         participation.UserBeActive();
 
-        slackChatUtil.sendSlackErr("%s 님이 해병대에 자진입대를 하였습니다.");
+        // 맴버 추가 알림
+        notificationUtil.AddMemberNotification(user, workspace);
 
         return "초대 수락 완료";
     }

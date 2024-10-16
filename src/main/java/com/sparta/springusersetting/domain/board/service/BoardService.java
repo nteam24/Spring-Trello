@@ -3,16 +3,17 @@ package com.sparta.springusersetting.domain.board.service;
 import com.sparta.springusersetting.domain.board.dto.request.BoardRequestDto;
 import com.sparta.springusersetting.domain.board.dto.response.BoardResponseDto;
 import com.sparta.springusersetting.domain.board.entity.Board;
+import com.sparta.springusersetting.domain.board.exception.InvalidBackgroundException;
 import com.sparta.springusersetting.domain.board.exception.NotFoundBoardException;
+import com.sparta.springusersetting.domain.board.exception.NotFoundTitleException;
 import com.sparta.springusersetting.domain.board.exception.UnauthorizedActionException;
 import com.sparta.springusersetting.domain.board.repository.BoardRepository;
 import com.sparta.springusersetting.domain.participation.entity.Participation;
 import com.sparta.springusersetting.domain.participation.repository.ParticipationRepository;
-import com.sparta.springusersetting.domain.participation.service.WorkspaceManageService;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
+import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.workspace.exception.NotFoundWorkspaceException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,7 @@ public class BoardService {
     // 보드 등록
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long userId, Long workspaceId) {
-        Participation participation=  validateCreateBoard(userId, workspaceId);
+        Participation participation = validateCreateBoard(boardRequestDto,userId, workspaceId);
 
         Board board = new Board(
                 boardRequestDto.getTitle(),
@@ -50,7 +51,7 @@ public class BoardService {
                 boardRequestDto.getTitle(),
                 boardRequestDto.getBackgroundColor(),
                 boardRequestDto.getBackgroundImageUrl()
-                );
+        );
         return new BoardResponseDto(board);
     }
 
@@ -81,7 +82,24 @@ public class BoardService {
     }
 
     // 보드 생성 검증 로직
-    private Participation validateCreateBoard(Long userId, Long workspaceId) {
+    private Participation validateCreateBoard(BoardRequestDto boardRequestDto,Long userId, Long workspaceId) {
+
+        // 로그인하지 않은 사용자는 보드 생성 불가
+        if (userId == null) {
+            throw new NotFoundUserException();
+        }
+
+        // 제목이 비어있는 경우 예외 처리
+        if (boardRequestDto.getTitle() == null || boardRequestDto.getTitle().trim().isEmpty()) {
+            throw new NotFoundTitleException();
+        }
+
+        // 배경색과 배경이미지 중 하나만 선택 가능하도록 유효성 검사
+        if ((boardRequestDto.getBackgroundColor() == null || boardRequestDto.getBackgroundColor().trim().isEmpty()) &&
+                (boardRequestDto.getBackgroundImageUrl() == null || boardRequestDto.getBackgroundImageUrl().trim().isEmpty())) {
+            throw new InvalidBackgroundException();
+        }
+
         Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
                 .orElseThrow(() -> new NotFoundWorkspaceException());
         if (participation.getMemberRole() == MemberRole.ROLE_READ_USER) {

@@ -2,7 +2,6 @@ package com.sparta.springusersetting.domain.card.entity;
 
 
 import com.sparta.springusersetting.attachment.entity.Attachment;
-import com.sparta.springusersetting.domain.board.entity.Board;
 import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.common.entity.Timestamped;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
@@ -16,7 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "cards")
+@Table(name = "cards", indexes = {
+        @Index(name = "idx_card_title_contents", columnList = "title, contents"),
+@Index(name = "idx_card_deadline", columnList = "deadline"),
+@Index(name = "idx_card_manager", columnList = "user_id")
+})
 @NoArgsConstructor
 @Getter
 public class Card extends Timestamped {

@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -93,14 +92,14 @@ public class MemberInviteTest {
         assertEquals("400 BAD_REQUEST INVALID_ROLE 올바른 권한이 아닙니다.",exception.getMessage());
     }
 
-//    @Test
-//    void 유저_초대_수락하기() throws IOException {
-//        given(participationRepository.findByUserIdAndWorkspaceId(anyLong(), anyLong())).willReturn(Optional.of(participation));
-//
-//        String response = memberManageService.callYes(adminUser, 1L);
-//
-//        assertThat(response).isEqualTo("초대 수락 완료");
-//    }
+    @Test
+    void 유저_초대_수락하기(){
+        given(participationRepository.findByUserIdAndWorkspaceId(anyLong(), anyLong())).willReturn(Optional.of(participation));
+
+        String response = memberManageService.callYes(adminUser, 1L);
+
+        assertThat(response).isEqualTo("초대 수락 완료");
+    }
 
     @Test
     void 유저_초대_거절하기(){

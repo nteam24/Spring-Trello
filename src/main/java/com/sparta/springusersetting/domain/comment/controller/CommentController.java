@@ -6,31 +6,28 @@ import com.sparta.springusersetting.domain.comment.dto.response.CommentResponseD
 import com.sparta.springusersetting.domain.comment.service.CommentService;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentService commentService;
+    private CommentService commentService;
 
     // 댓글 등록
     @PostMapping("card/{cardId}/comment")
     public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long cardId,
-            @RequestBody CommentRequestDto requestDto) throws IOException {
+            @RequestBody CommentRequestDto requestDto) {
         return ResponseEntity.ok(ApiResponse.success(commentService.createComment(authUser.getUserId(), cardId, requestDto)));
     }
 
     // 댓글 수정
     @PutMapping("comment/{commentId}")
-    public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(
+    public ResponseEntity<ApiResponse<CommentResponseDto>> getComment(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long commentId,
             @RequestBody CommentRequestDto requestDto) {
@@ -44,6 +41,4 @@ public class CommentController {
             @PathVariable Long commentId) {
         return ResponseEntity.ok(ApiResponse.success(commentService.deleteComment(authUser.getUserId(), commentId)));
     }
-
-
 }

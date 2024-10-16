@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -28,6 +30,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final WebhookService webhookService;
+    private final SlackChatUtil slackChatUtil;
 
     @Transactional
     public SignupResponse signup(SignupRequestDto signupRequestDto) {
@@ -55,7 +58,7 @@ public class AuthService {
         return new SignupResponse(bearerToken);
     }
 
-    public SigninResponse signin(SigninRequestDto signinRequestDto) {
+    public SigninResponse signin(SigninRequestDto signinRequestDto) throws IOException {
         User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(
                 NotFoundUserException::new);
 
@@ -66,7 +69,7 @@ public class AuthService {
 
         String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
 
-//        slackChatUtil.sendSlackErr("로그인 성공: " + user.getEmail() + "님이 로그인했습니다.");
+        slackChatUtil.sendSlackErr("로그인 성공: " + user.getEmail() + "님이 로그인했습니다.");
 
         return new SigninResponse(bearerToken);
     }

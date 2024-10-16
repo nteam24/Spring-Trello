@@ -31,7 +31,7 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/auth/signin")
-    public ResponseEntity<ApiResponse<SigninResponse>> signin(@Valid @RequestBody SigninRequestDto signinRequestDto) throws AuthException{
+    public ResponseEntity<ApiResponse<SigninResponse>> signin(@Valid @RequestBody SigninRequestDto signinRequestDto) throws AuthException, IOException{
         return ResponseEntity.ok(ApiResponse.success(authService.signin(signinRequestDto)));
     }
 }

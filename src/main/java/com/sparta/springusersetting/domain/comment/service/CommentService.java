@@ -9,11 +9,14 @@ import com.sparta.springusersetting.domain.comment.entity.Comment;
 import com.sparta.springusersetting.domain.comment.exception.NotFoundCommentException;
 import com.sparta.springusersetting.domain.comment.exception.UnauthorizedCommentAccessException;
 import com.sparta.springusersetting.domain.comment.repository.CommentRepository;
+import com.sparta.springusersetting.domain.notification.slack.SlackChatUtil;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +27,10 @@ public class CommentService {
     private final CardService cardService;
     private final UserService userService;
     private final CardRepository cardRepository;
+    private final SlackChatUtil slackChatUtil;
 
     // 댓글 등록
-    public CommentResponseDto createComment(long userId, Long cardId, CommentRequestDto requestDto) {
+    public CommentResponseDto createComment(long userId, Long cardId, CommentRequestDto requestDto) throws IOException {
         // 유저 조회
         User user = userService.findUser(userId);
         // 카드 조회
@@ -36,6 +40,8 @@ public class CommentService {
         
         // Entity 저장
         Comment comment = new Comment(user, card, requestDto);
+
+        slackChatUtil.sendSlackErr("%s 님이 댓글 등록을 하였습니다."+ user.getUserName());
 
         return new CommentResponseDto(comment);
     }

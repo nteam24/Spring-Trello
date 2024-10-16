@@ -15,7 +15,9 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "board")
+@Table(name = "board", indexes = {
+        @Index(name = "idx_board_workspace", columnList = "workspace_id")
+})
 public class Board extends Timestamped {
 
     @Id

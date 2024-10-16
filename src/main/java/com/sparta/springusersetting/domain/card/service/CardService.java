@@ -69,27 +69,15 @@ public class CardService {
 
         // Redis Set의 Key 설정
         String cardViewSetKey = "cardViewSet:" + cardId;
+
         // 유저 ID를 Set에 추가하고, 반환된 값으로 추가 성공 여부 확인
-        Long result = redisTemplate.opsForSet().add(cardViewSetKey, user.getId().toString());
-        // Long 반환값을 Boolean으로 변환
-        boolean isAdded = (result != null && result > 0);
-        if (isAdded) {
-            // Redis 에 조회 수 증가
-            incrementCardViewCount(cardId);
-        } else {
-            System.out.println("조회수 증가 없음: 이미 조회한 유저입니다.");
-        }
+        redisTemplate.opsForSet().add(cardViewSetKey, user.getId().toString());
 
         // 조회수를 Set의 크기로 계산
         Long cardViewCount = redisTemplate.opsForSet().size(cardViewSetKey);
 
-
-
         // 가장 인기 있는 Top3 카드 업데이트
         updateTopCardTitles(cardId);
-
-        // Redis 조회 수
-//        Long cardViewCount = getCardViewCount(cardId);
 
         // 조회 수 Top 3 카드 로그 찍기
         List<String> topCardTitles = getTopCardTitles();
@@ -156,34 +144,14 @@ public class CardService {
 
     }
 
-
-    // Redis 에서 카드 조회 수 증가 메서드
-    private void incrementCardViewCount(Long cardId) {
-        String cardViewCount = "cardViewSet:" + cardId;
-        redisTemplate.opsForValue().increment(cardViewCount);
-    }
-
-    // Redis 에서 카드 조회 수 조회 메서드
-    private Long getCardViewCount(Long cardId) {
-        String cardViewCount = "cardViewSet:" + cardId;
-        Object viewCount = redisTemplate.opsForValue().get(cardViewCount);
-        // 처음엔 0 으로 설정
-        if (viewCount == null) {
-            redisTemplate.opsForValue().set(cardViewCount, 0L);
-            return 0L;
-        }
-        return ((Number) viewCount).longValue();
-    }
-
     // 가장 인기 있는 Top3 카드 업데이트 메서드
     private void updateTopCardTitles(Long cardId) {
-        String cardViewCountKey = "cardViewSet:" + cardId;
+        // Key : cardViewSet{cardId}
+        String cardViewSetKey = "cardViewSet:" + cardId;
 
         // 현재 카드의 조회수 가져오기
-        Integer viewCount = (Integer) redisTemplate.opsForValue().get(cardViewCountKey);
-        if (viewCount == null) {
-            viewCount = 0; // 조회수가 없으면 0으로 설정
-        }
+        Long viewCount = redisTemplate.opsForSet().size(cardViewSetKey);
+
         // 카드 제목 가져오기 (Redis 사용)
         String cardTitle = getCardTitle(cardId);
 
@@ -203,7 +171,7 @@ public class CardService {
         if (size == null || size <= 3) {
             return;
         }
-        // 상위 3개를 제외한 나머지 카드 제거 (오름차순 기준)
+        // 상위 3개를 제외한 나머지 카드 제거
         redisTemplate.opsForZSet().removeRange(RANKING_KEY, 0, size - 4);
     }
 

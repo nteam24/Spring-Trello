@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 public class MemberManageController {
     private final MemberManageService memberManageService;
@@ -33,7 +35,7 @@ public class MemberManageController {
 
     // 초대 응답
     @PostMapping("/workspaces/{workspaceId}/invitations/accept")
-    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId){
+    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId) throws IOException {
         User user = User.fromAuthUser(authUser);
         return ResponseEntity.ok(ApiResponse.success(memberManageService.callYes(user,workspaceId)));
     }

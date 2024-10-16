@@ -46,6 +46,7 @@ public class CardService {
 
         User manager = userService.findUser(requestDto.getManagerId());
         Card card = new Card(manager, lists, requestDto.getTitle(), requestDto.getContents(), requestDto.getDeadline());
+        cardRepository.save(card);
         if(file != null && !file.isEmpty()) {
             try {
                 attachmentService.saveFile(authUser, card.getId(), file);
@@ -54,7 +55,6 @@ public class CardService {
                 throw new RuntimeException("파일 저장중 오류 발생");
             }
         }
-        cardRepository.save(card);
         return "카드 생성이 완료되었습니다.";
     }
 

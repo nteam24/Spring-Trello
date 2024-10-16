@@ -27,7 +27,7 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<String>> createCard(@AuthenticationPrincipal AuthUser authUser,
-                                                          @Valid @RequestBody CardRequestDto card,
+                                                          @Valid @RequestPart CardRequestDto card,
                                                           @RequestPart(name = "file", required = false) MultipartFile file)
 
     {

@@ -24,6 +24,27 @@
 이 프로젝트는 **Trello와 유사한 애플리케이션**으로, 보드, 리스트, 카드 등을 생성하여 프로젝트 및 작업 관리를 할 수 있는 기능을 제공합니다. 또한, 사용자 인증 및 권한 관리 시스템을 포함하고 있으며, 역할 기반으로 사용자 및 워크스페이스 멤버들의 접근을 제어할 수 있습니다. 사용자는 보드를 관리하고 다른 멤버들과 실시간으로 협업할 수 있으며, 주요 이벤트에 대해 알림 기능도 제공합니다.
 
 ---
+# STACK
+
+Environment
+
+![인텔리제이](   https://img.shields.io/badge/IntelliJ_IDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)
+![](https://img.shields.io/badge/Gradle-02303a?style=for-the-badge&logo=gradle&logoColor=white)
+![](https://img.shields.io/badge/Postman-ff6c37?style=for-the-badge&logo=postman&logoColor=white)
+![깃허브](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
+![깃이그노어](https://img.shields.io/badge/gitignore.io-204ECF?style=for-the-badge&logo=gitignore.io&logoColor=white)
+![깃](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
+
+Development
+
+![스프링부트](https://img.shields.io/badge/SpringBoot-6db33f?style=for-the-badge&logo=springboot&logoColor=white)
+![자바](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+
+Communication
+
+![슬랙](  https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
+![노션](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
+
 
 ## **기능**
 

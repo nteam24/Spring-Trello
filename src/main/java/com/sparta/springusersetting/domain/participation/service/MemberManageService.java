@@ -88,7 +88,9 @@ public class MemberManageService {
 
     // 수락하기
     @Transactional
+
     public String callYes(User user, Long workspaceId) throws IOException {
+
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 

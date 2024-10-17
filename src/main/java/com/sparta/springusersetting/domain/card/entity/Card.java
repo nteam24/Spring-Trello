@@ -39,8 +39,10 @@ public class Card extends Timestamped {
 
     private long totalCardViewCount;
 
+
     @Version
     private Long version;
+
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();

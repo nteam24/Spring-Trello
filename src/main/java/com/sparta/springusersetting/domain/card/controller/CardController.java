@@ -52,6 +52,13 @@ public class CardController {
         return ResponseEntity.ok(ApiResponse.success(cardService.getTopViewCardList()));
     }
 
+    // 인기 카드 목록 조회
+    @GetMapping("/top-view-list")
+    public ResponseEntity<ApiResponse<Map<String, Integer>>> getTopViewCardList(@AuthenticationPrincipal AuthUser authUser)
+    {
+        return ResponseEntity.ok(ApiResponse.success(cardService.getTopViewCardList()));
+    }
+
     @PatchMapping("/{cardId}")
     public ResponseEntity<ApiResponse<String>> updateCard(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody CardRequestDto card, @PathVariable Long cardId, User user) throws IOException {
         return ResponseEntity.ok(ApiResponse.success(cardService.updateCard(authUser,card,cardId, user)));

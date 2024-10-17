@@ -27,7 +27,7 @@ public enum GlobalExceptionConst {
     UNAUTHORIZED_LIST_CREATION(HttpStatus.FORBIDDEN, " 리스트를 생성할 권한이 없습니다."),
     FILE_SAVE_FAILURE(HttpStatus.FORBIDDEN, "파일 저장중 오류가 발생하였습니다."),
 
-    // 상태코드 404
+    // 상태코드 404git
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, " 회원이 존재하지 않습니다."),
     NOT_FOUND_EMAIL(HttpStatus.NOT_FOUND, " 이메일을 확인해주세요."),
     NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, " 존재하지 않는 댓글입니다."),

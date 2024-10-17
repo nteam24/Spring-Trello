@@ -51,7 +51,7 @@ Jenkis
 
 ___
 
-DB
+Database
 
 MySQL, Redis
 

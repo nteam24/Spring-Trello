@@ -54,8 +54,6 @@ public class AuthService {
 
         String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), userRole);
 
-        discordNotificationService.sendDiscordNotification("%s 님이 새로운 회원이 되셨어요 !", newUser.getUserName());
-
         return new SignupResponse(bearerToken);
     }
 

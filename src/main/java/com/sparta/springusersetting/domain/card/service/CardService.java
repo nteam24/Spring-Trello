@@ -23,13 +23,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.sparta.springusersetting.domain.notification.enums.NotificationConst.UPDATE_CARD_NOTIFICATION;
 
@@ -46,7 +49,8 @@ public class CardService {
     private final NotificationUtil notificationUtil;
     private final AttachmentService attachmentService;
 
-    private static final String RANKING_KEY = "cardRanking";
+    private static final String TODAY_RANKING_KEY = "todayCardRanking";
+    private static final String TOTAL_RANKING_KEY = "totalCardRanking";
 
 
     @Transactional
@@ -82,23 +86,30 @@ public class CardService {
         Card card = findCard(cardId);
 
         // Redis Set의 Key 설정
-        String cardViewSetKey = "cardViewSet:" + cardId;
+        String todayCardViewSetKey = "todayCardViewSet:" + cardId;
 
         // 유저 ID를 Set에 추가하고, 반환된 값으로 추가 성공 여부 확인
-        redisTemplate.opsForSet().add(cardViewSetKey, user.getId().toString());
+        redisTemplate.opsForSet().add(todayCardViewSetKey, user.getId().toString());
 
         // 조회수를 Set의 크기로 계산
-        Long cardViewCount = redisTemplate.opsForSet().size(cardViewSetKey);
+        Long todayCardViewCount = redisTemplate.opsForSet().size(todayCardViewSetKey);
 
         // 가장 인기 있는 Top3 카드 업데이트
         updateTopCardTitles(cardId);
 
         // 조회 수 Top 3 카드 로그 찍기
-        List<String> topCardTitles = getTopCardTitles();
+        Map<String, Integer> topCardTitles = getTopCardTitlesWithScores();
         log.info(topCardTitles.toString());
 
         // Dto 반환
-        return new CardWithViewCountResponseDto(card, cardViewCount);
+        return new CardWithViewCountResponseDto(card, todayCardViewCount);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Integer> getTopViewCardList() {
+
+        // 조회 수 Top3 카드 제목, 조회수 출력
+        return getTopCardTitlesWithScores();
     }
 
 
@@ -168,16 +179,16 @@ public class CardService {
     // 가장 인기 있는 Top3 카드 업데이트 메서드
     private void updateTopCardTitles(Long cardId) {
         // Key : cardViewSet{cardId}
-        String cardViewSetKey = "cardViewSet:" + cardId;
+        String todayCardViewSetKey = "todayCardViewSet:" + cardId;
 
         // 현재 카드의 조회수 가져오기
-        Long viewCount = redisTemplate.opsForSet().size(cardViewSetKey);
+        Long viewCount = redisTemplate.opsForSet().size(todayCardViewSetKey);
 
         // 카드 제목 가져오기 (Redis 사용)
         String cardTitle = getCardTitle(cardId);
 
         // 카드 제목과 조회수를 Sorted Set 에 추가
-        redisTemplate.opsForZSet().add(RANKING_KEY, cardTitle, viewCount);
+        redisTemplate.opsForZSet().add(TODAY_RANKING_KEY, cardTitle, viewCount);
 
         // 상위 3개 카드 제목만 유지
         maintainTopCards();
@@ -186,21 +197,34 @@ public class CardService {
     // 상위 3개 카드 제목만 유지 메서드
     private void maintainTopCards() {
         // 전체 카드 수 가져오기
-        Long size = redisTemplate.opsForZSet().zCard(RANKING_KEY);
+        Long size = redisTemplate.opsForZSet().zCard(TODAY_RANKING_KEY);
 
         // 카드가 3개 이하라면 아무것도 지우지 않음
         if (size == null || size <= 3) {
             return;
         }
         // 상위 3개를 제외한 나머지 카드 제거
-        redisTemplate.opsForZSet().removeRange(RANKING_KEY, 0, size - 4);
+        redisTemplate.opsForZSet().removeRange(TODAY_RANKING_KEY, 0, size - 4);
     }
 
     // 조회 수 Top 3 카드 데이터 가져오기
     public List<String> getTopCardTitles() {
-        Set<Object> topCards = redisTemplate.opsForZSet().reverseRange(RANKING_KEY, 0, 2);
+        Set<Object> topCards = redisTemplate.opsForZSet().reverseRange(TODAY_RANKING_KEY, 0, 2);
 
         return topCards.stream().map(Object::toString).toList();
+    }
+
+    // 조회 수 Top 3 카드 타이틀과 조회 수 가져오기
+    public Map<String, Integer> getTopCardTitlesWithScores() {
+        Set<ZSetOperations.TypedTuple<Object>> topCardsWithScores =
+                redisTemplate.opsForZSet().reverseRangeWithScores(TODAY_RANKING_KEY, 0, 2);
+
+        // title 과 score 를 Map 으로 변환
+        return topCardsWithScores.stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.getValue().toString(),  // title
+                        tuple -> tuple.getScore().intValue()    // 조회수(score)
+                ));
     }
 
     // 카드 제목을 Redis 에서 가져오고, 없으면 데이터베이스에서 조회 후 Redis 에 저장
@@ -217,4 +241,5 @@ public class CardService {
 
         return title;
     }
+
 }

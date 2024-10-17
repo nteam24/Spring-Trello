@@ -218,14 +218,14 @@ Communication
 # API 명세서
 ## 회원가입 / 로그인 API
 
-| 메서드 | 기능       | URL         | responseheader                         | requset                                               | response                                                                                         |
+| 메서드 | 기능       | URL         | HEADER                        | REQUEST                                               | RESPONSE                                                                                         |
 |--------|------------|--------------|------------------------------|----------------------------------------------------------|--------------------------------------------------------------------------------------------------|
 | POST   | 회원가입   | /auth/signup  | Content-Type: application/json| ```{ "email": "이메일", "password": "비밀번호", "userRole": "유저 권한" }```                      | ```{ "status": "SUCCESS", "data": { "bearerToken": "Bearer Token" }, "message": "요청 성공" }``` |
 | POST   | 로그인     | /auth/signin  | Content-Type: application/json| ```{ "email": "이메일", "password": "비밀번호" }```                                             | ```{ "status": "SUCCESS", "data": { "bearerToken": "Bearer Token" }, "message": "요청 성공" }``` |
 
 ## 유저 API
 
-| 메서드  | 기능           | 경로                         | 헤더                                  | 요청 BODY 또는 PARAMS                                                                                               | 응답 예시                                                                                                             |
+| 메서드  | 기능           | URL                         | HEADER                                  | REQUEST                                                                                               | RESPONSE                                                                                                             |
 |---------|----------------|------------------------------|---------------------------------------|--------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
 | GET     | 사용자 조회     | /user/{userId}               | Authorization: Bearer <JWT Token>     | -                                                                                                                  | ```{ "status": "SUCCESS", "data": { "id": "유저 아이디", "email": "유저 이메일" }, "message": "요청이 성공적으로 처리되었습니다" }``` |
 | POST    | 비밀번호 변경   | /user                        | Authorization: Bearer <JWT Token>     | ```{ "oldpassword": "이전 비밀번호", "newpassword": "새 비밀번호" }```                                             | ```{ "status": "SUCCESS", "message": "비밀번호가 성공적으로 변경되었습니다" }```                                        |

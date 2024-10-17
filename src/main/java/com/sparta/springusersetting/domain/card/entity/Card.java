@@ -37,7 +37,7 @@ public class Card extends Timestamped {
     @Column(nullable = false)
     private LocalDate deadline;
 
-    private int totalCardViewCount;
+    private long totalCardViewCount;
 
     @Version
     private Long version;
@@ -80,6 +80,9 @@ public class Card extends Timestamped {
         this.deadline = deadline;
     }
 
+    public void updateTotalCardViewCount(long totalCardViewCount) {
+        this.totalCardViewCount = totalCardViewCount;
+    }
 
 
 

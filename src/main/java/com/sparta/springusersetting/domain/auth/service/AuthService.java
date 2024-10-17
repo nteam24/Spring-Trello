@@ -5,11 +5,13 @@ import com.sparta.springusersetting.domain.auth.dto.request.SigninRequestDto;
 import com.sparta.springusersetting.domain.auth.dto.request.SignupRequestDto;
 import com.sparta.springusersetting.domain.auth.dto.response.SigninResponse;
 import com.sparta.springusersetting.domain.auth.dto.response.SignupResponse;
+import com.sparta.springusersetting.domain.auth.exception.DeletedUserException;
 import com.sparta.springusersetting.domain.auth.exception.DuplicateEmailException;
 import com.sparta.springusersetting.domain.auth.exception.UnauthorizedPasswordException;
 import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.UserRole;
+import com.sparta.springusersetting.domain.user.enums.UserStatus;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
 //import com.sparta.springusersetting.domain.notification.discordNotification.service.DiscordNotificationService;
@@ -61,9 +63,14 @@ public class AuthService {
         User user = userRepository.findByEmail(signinRequestDto.getEmail()).orElseThrow(
                 NotFoundUserException::new);
 
-        // 로그인 시 이메일과 비밀번호가 일치하지 않을 경우 401을 반환합니다.
+        // 로그인 시 이메일과 비밀번호가 일치하지 않을 경우 401을 반환
         if (!passwordEncoder.matches(signinRequestDto.getPassword(), user.getPassword())) {
             throw new UnauthorizedPasswordException();
+        }
+
+        // UserStatus 가 DELETED 면 로그인 불가능
+        if (user.getUserStatus().equals(UserStatus.DELETED)) {
+            throw new DeletedUserException();
         }
 
         String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());

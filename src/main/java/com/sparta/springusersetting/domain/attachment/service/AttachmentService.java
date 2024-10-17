@@ -4,6 +4,7 @@ import com.sparta.springusersetting.domain.attachment.dto.AttachmentResponse;
 import com.sparta.springusersetting.domain.attachment.entity.Attachment;
 import com.sparta.springusersetting.domain.attachment.exception.FileFormatException;
 import com.sparta.springusersetting.domain.attachment.exception.FileSizeException;
+import com.sparta.springusersetting.domain.attachment.exception.FileNotFoundException;
 import com.sparta.springusersetting.domain.attachment.repository.AttachmentRepository;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.card.exception.NotFoundCardException;

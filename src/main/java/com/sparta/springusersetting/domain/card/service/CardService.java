@@ -115,8 +115,14 @@ public class CardService {
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
 
-        // 카드 변경 알림
-        notificationUtil.UpdateCardNotification(user, card);
+        // 카드 변경 알림 전송
+        notificationUtil.sendNotification(
+                " %s 님이 카드 수정 및 변경을 하였습니다. 제목:%s, 내용:%s , 마감일:%s",
+                user.getUserName(),
+                card.getTitle(),
+                card.getContents(),
+                card.getDeadline()
+        );
 
         return "카드 수정이 완료되었습니다.";
     }

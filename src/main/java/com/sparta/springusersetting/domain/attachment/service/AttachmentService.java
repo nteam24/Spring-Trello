@@ -96,7 +96,7 @@ public class AttachmentService {
             throw new NotFoundCardException();
         }
         Attachment attachment = attachmentRepository.findById(fileId)
-                .orElseThrow(NotFoundFileException::new);
+                .orElseThrow(FileNotFoundException::new);
 
         attachmentRepository.delete(attachment);
         return null;

@@ -8,7 +8,6 @@ import com.sparta.springusersetting.domain.board.exception.NotFoundBoardExceptio
 import com.sparta.springusersetting.domain.board.exception.NotFoundTitleException;
 import com.sparta.springusersetting.domain.board.exception.UnauthorizedActionException;
 import com.sparta.springusersetting.domain.board.repository.BoardRepository;
-import com.sparta.springusersetting.domain.common.service.S3Service;
 import com.sparta.springusersetting.domain.participation.entity.Participation;
 import com.sparta.springusersetting.domain.participation.repository.ParticipationRepository;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
@@ -17,9 +16,7 @@ import com.sparta.springusersetting.domain.workspace.exception.NotFoundWorkspace
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,19 +26,11 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final ParticipationRepository participationRepository;
-    private final S3Service s3Service;
 
     // 보드 등록
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long userId, Long workspaceId) {
         Participation participation = validateCreateBoard(boardRequestDto,userId, workspaceId);
-
-       String backgroundImageUrl = null; // 이미지 URL 초기화
-
-//        // 이미지가 제공된 경우 S3에 업로드하고 URL을 받아옴
-//        if (backgroundImage != null && !backgroundImage.isEmpty()) {
-//            backgroundImageUrl = s3Service.uploadFile(backgroundImage); // S3에 업로드
-//        }
 
         Board board = new Board(
                 boardRequestDto.getTitle(),

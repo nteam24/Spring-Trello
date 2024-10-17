@@ -1,7 +1,6 @@
 package com.sparta.springusersetting.domain.participation.service;
 
-import com.sparta.springusersetting.domain.notification.notificationutil.NotificationUtil;
-import com.sparta.springusersetting.domain.notification.slack.SlackChatUtil;
+import com.sparta.springusersetting.domain.notification.util.NotificationUtil;
 import com.sparta.springusersetting.domain.participation.entity.Participation;
 import com.sparta.springusersetting.domain.participation.exception.BadAccessParticipationException;
 import com.sparta.springusersetting.domain.participation.exception.NotFoundParticipationException;
@@ -18,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
+import static com.sparta.springusersetting.domain.notification.enums.NotificationConst.ACCEPT_MEMBER_NOTIFICATION;
 import static com.sparta.springusersetting.domain.user.enums.MemberRole.ROLE_WORKSPACE_ADMIN;
 import static com.sparta.springusersetting.domain.user.enums.UserRole.ROLE_ADMIN;
-import static com.sparta.springusersetting.domain.workspace.entity.QWorkspace.workspace;
 
 @Service
 public class MemberManageService {
@@ -93,11 +92,11 @@ public class MemberManageService {
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 
-        // activation을 true로 전환
+        // activation 을 true 로 전환
         participation.UserBeActive();
 
-        // 맴버 추가 알림
-        notificationUtil.AddMemberNotification(user, workspace);
+        // 멤버 등록 알림 전송
+        notificationUtil.sendNotification(ACCEPT_MEMBER_NOTIFICATION.getMessage(), user.getUserName(),workspace.getName());
 
         return "초대 수락 완료";
     }

@@ -1,5 +1,6 @@
-package com.sparta.springusersetting.domain.webhook.service;
+package com.sparta.springusersetting.domain.notification.discordNotification.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -11,10 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class WebhookService {
+public class DiscordNotificationService {
+
+    @Value("${spring.webhook.discord-url}")
+    private String webhookUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String webhookUrl = "https://discord.com/api/webhooks/1295570421009088553/ImMjMp7JOYvrlwTfneqhRCxY6UmY-ST6h9ZQIO0DUFPLKE6WpR6odbm6i78WPXGJnXJr";
 
     public void sendDiscordNotification(String template, Object...args) {
 

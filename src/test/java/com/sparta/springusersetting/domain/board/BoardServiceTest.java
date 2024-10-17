@@ -62,31 +62,31 @@ class BoardServiceTest {
         ReflectionTestUtils.setField(boardService, "participationRepository", participationRepository);
     }
 
-//    @Test
-//    void createBoard_Success() {
-//        when(participationRepository.findByUserIdAndWorkspaceId(anyLong(), anyLong())).thenReturn(Optional.of(participation));
-//
-//        BoardResponseDto response = boardService.createBoard(boardRequestDto, 1L, 1L);
-//
-//        assertNotNull(response);
-//        assertEquals("test board", response.getTitle());
-//        verify(boardRepository, times(1)).save(any(Board.class));
-//    }
-//
-//    @Test
-//    void createBoard_TitleNotFound() {
-//        ReflectionTestUtils.setField(boardRequestDto, "title", null);
-//
-//        assertThrows(NotFoundTitleException.class, () -> boardService.createBoard(boardRequestDto, 1L, 1L));
-//    }
-//
-//    @Test
-//    void createBoard_InvalidBackground() {
-//        ReflectionTestUtils.setField(boardRequestDto, "backgroundColor", null);
-//        ReflectionTestUtils.setField(boardRequestDto, "backgroundImageUrl", null);
-//
-//        assertThrows(InvalidBackgroundException.class, () -> boardService.createBoard(boardRequestDto, 1L, 1L));
-//    }
+    @Test
+    void createBoard_Success() {
+        when(participationRepository.findByUserIdAndWorkspaceId(anyLong(), anyLong())).thenReturn(Optional.of(participation));
+
+        BoardResponseDto response = boardService.createBoard(boardRequestDto, 1L, 1L);
+
+        assertNotNull(response);
+        assertEquals("test board", response.getTitle());
+        verify(boardRepository, times(1)).save(any(Board.class));
+    }
+
+    @Test
+    void createBoard_TitleNotFound() {
+        ReflectionTestUtils.setField(boardRequestDto, "title", null);
+
+        assertThrows(NotFoundTitleException.class, () -> boardService.createBoard(boardRequestDto, 1L, 1L));
+    }
+
+    @Test
+    void createBoard_InvalidBackground() {
+        ReflectionTestUtils.setField(boardRequestDto, "backgroundColor", null);
+        ReflectionTestUtils.setField(boardRequestDto, "backgroundImageUrl", null);
+
+        assertThrows(InvalidBackgroundException.class, () -> boardService.createBoard(boardRequestDto, 1L, 1L));
+    }
 
 //    @Test
 //    void updateBoard_Success() {

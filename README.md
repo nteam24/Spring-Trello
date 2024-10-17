@@ -35,10 +35,18 @@ Environment
 ![깃이그노어](https://img.shields.io/badge/gitignore.io-204ECF?style=for-the-badge&logo=gitignore.io&logoColor=white)
 ![깃](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
 
+- MySQL, Redis
+- AWS (EC2, S3, RDS)
+- Jenkis
+
+---
+
 Development
 
 ![스프링부트](https://img.shields.io/badge/SpringBoot-6db33f?style=for-the-badge&logo=springboot&logoColor=white)
 ![자바](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![JPA](https://img.shields.io/badge/JPA-ED8B00?style=for-the-badge&logo=openjdk&logoColor=yellow)
+
 
 Communication
 
@@ -190,10 +198,4 @@ Communication
 
 ---
 
-## **사용된 기술**
-- Java, Spring Boot, JPA
-- MySQL, Redis
-- AWS (EC2, S3, RDS)
-- Jenkis
 
----

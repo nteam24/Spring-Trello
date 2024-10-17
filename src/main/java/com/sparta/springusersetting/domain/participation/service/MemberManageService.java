@@ -91,11 +91,11 @@ public class MemberManageService {
         // 유저가 중간 테이블에 포함되어 있는지 체크
         Participation participation = isMember(user.getId(), workspaceId);
 
-        // activation을 true로 전환
+        // activation 을 true 로 전환
         participation.UserBeActive();
 
-        // 맴버 추가 알림
-        notificationUtil.AddMemberNotification(user, workspace);
+        // 멤버 등록 알림 전송
+        notificationUtil.sendNotification("%s 님이 %s 워크스페이스에 참여하였습니다.", user.getUserName(),workspace.getName());
 
         return "초대 수락 완료";
     }

@@ -68,7 +68,8 @@ public class AuthService {
 
         String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
 
-        notificationUtil.LoginNotification(user);
+        // 로그인 알림 전송
+        notificationUtil.sendNotification("난 %s핑! 코딩빼곤 다 재밌어! ", user.getUserName());
 
         return new SigninResponse(bearerToken);
     }

@@ -50,8 +50,14 @@ public class CommentService {
         //DB 저장
         commentRepository.save(comment);
 
-        // 댓글 등록 알림
-        notificationUtil.PostCommentNotification(user, card, comment);
+        // 댓글 등록 알림 전송
+        notificationUtil.sendNotification(
+                " %s 님이 %s 님의 카드에 댓글을 남겼습니다. 내용:%s, %s ",
+                user.getUserName(),
+                card.getManager().getUserName(),
+                comment.getContent(),
+                comment.getCommentEmoji()
+        );
 
         return new CommentResponseDto(comment);
     }

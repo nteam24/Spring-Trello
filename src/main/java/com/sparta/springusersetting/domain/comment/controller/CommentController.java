@@ -44,6 +44,4 @@ public class CommentController {
             @PathVariable Long commentId) {
         return ResponseEntity.ok(ApiResponse.success(commentService.deleteComment(authUser.getUserId(), commentId)));
     }
-
-
 }

@@ -197,5 +197,13 @@ Communication
   - 슬렉과 디스코드 동시에 알람이 송출됩니다.
 
 ---
+# API 명세서
 
+# 와이어 프레임
+
+![image (12)](https://github.com/user-attachments/assets/6e0ec47a-dae0-42bd-8c8c-9bacbf536fe7)
+
+# ERD
+
+![화면 캡처 2024-10-17 161405](https://github.com/user-attachments/assets/44e9c5f0-05b3-4215-820b-d965b59ac531)
 

@@ -36,8 +36,9 @@ public enum GlobalExceptionConst {
     NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     NOT_FOUND_BOARD(HttpStatus.NOT_FOUND, " 해당 보드는 존재하지 않습니다."),
     NOT_FOUND_LISTS(HttpStatus.NOT_FOUND, " 해당 리스트는 존재하지 않습니다."),
-    NOT_FOUND_TITLE(HttpStatus.NOT_FOUND, "제목이 없습니다."),
-    NOT_FOUND_FILE(HttpStatus.NOT_FOUND, "파일이 없습니다."),
+    NOT_FOUND_TITLE(HttpStatus.NOT_FOUND, " 제목이 없습니다."),
+    NOT_FOUND_FILE(HttpStatus.NOT_FOUND, " 파일이 없습니다."),
+    DELETED_USER(HttpStatus.NOT_FOUND, " 탈퇴된 회원입니다."),
 
     // 상태코드 409
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, " 중복된 이메일입니다."),

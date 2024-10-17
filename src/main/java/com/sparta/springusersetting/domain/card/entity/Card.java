@@ -37,7 +37,7 @@ public class Card extends Timestamped {
     @Column(nullable = false)
     private LocalDate deadline;
 
-    private int totalCardViewCount;
+    private long totalCardViewCount;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
@@ -77,6 +77,9 @@ public class Card extends Timestamped {
         this.deadline = deadline;
     }
 
+    public void updateTotalCardViewCount(long totalCardViewCount) {
+        this.totalCardViewCount = totalCardViewCount;
+    }
 
 
 

@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import static com.sparta.springusersetting.domain.notification.enums.NotificationConst.UPDATE_CARD_NOTIFICATION;
+
 @Service
 @RequiredArgsConstructor
 public class CardService {
@@ -117,7 +119,7 @@ public class CardService {
 
         // 카드 변경 알림 전송
         notificationUtil.sendNotification(
-                " %s 님이 카드 수정 및 변경을 하였습니다. 제목:%s, 내용:%s , 마감일:%s",
+                UPDATE_CARD_NOTIFICATION.getMessage(),
                 user.getUserName(),
                 card.getTitle(),
                 card.getContents(),

@@ -4,9 +4,12 @@ import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
+import com.sparta.springusersetting.domain.workspace.entity.Workspace;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 public class MemberManageController {
@@ -33,9 +36,9 @@ public class MemberManageController {
 
     // 초대 응답
     @PostMapping("/workspaces/{workspaceId}/invitations/accept")
-    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId){
+    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceId, Workspace workspace) throws IOException {
         User user = User.fromAuthUser(authUser);
-        return ResponseEntity.ok(ApiResponse.success(memberManageService.callYes(user,workspaceId)));
+        return ResponseEntity.ok(ApiResponse.success(memberManageService.callYes(user,workspaceId, workspace)));
     }
     @PostMapping("/workspaces/{workspaceId}/invitations/reject")
     public ResponseEntity<ApiResponse<String>> callNo(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId){

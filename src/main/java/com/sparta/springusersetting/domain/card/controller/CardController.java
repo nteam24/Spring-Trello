@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,14 +33,21 @@ public class CardController {
                                                           @Valid @RequestPart CardRequestDto card,
                                                           @RequestPart(name = "file", required = false) MultipartFile file)
     {
-
         return ResponseEntity.ok(ApiResponse.success(cardService.createCard(authUser,card,file)));
     }
 
+    // 카드 단건 조회
     @GetMapping("/{cardId}")
     public ResponseEntity<ApiResponse<CardWithViewCountResponseDto>> getCard(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long cardId)
     {
         return ResponseEntity.ok(ApiResponse.success(cardService.getCard(authUser,cardId)));
+    }
+
+    // 인기 카드 목록 조회
+    @GetMapping("/top-view-list")
+    public ResponseEntity<ApiResponse<Map<String, Integer>>> getTopViewCardList(@AuthenticationPrincipal AuthUser authUser)
+    {
+        return ResponseEntity.ok(ApiResponse.success(cardService.getTopViewCardList()));
     }
 
     @PatchMapping("/{cardId}")

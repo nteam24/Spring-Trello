@@ -42,7 +42,8 @@ public enum GlobalExceptionConst {
 
     // 상태코드 409
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, " 중복된 이메일입니다."),
-    DUPLICATE_WORKSPACE_NAME(HttpStatus.CONFLICT, " 중복된 워크스페이스명 입니다.");
+    DUPLICATE_WORKSPACE_NAME(HttpStatus.CONFLICT, " 중복된 워크스페이스명 입니다."),
+    CRASH_UPDATE_CARDS(HttpStatus.CONFLICT, "카드 수정 중 충돌이 발생했습니다. 다시 시도해 주세요.");
 
 
 

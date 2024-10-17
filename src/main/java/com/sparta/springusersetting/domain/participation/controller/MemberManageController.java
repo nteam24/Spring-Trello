@@ -34,12 +34,12 @@ public class MemberManageController {
         return ResponseEntity.ok(ApiResponse.success(memberManageService.inviteUserToWorkspace(user,workspaceId,userId)));
     }
 
-    // 초대 응답
-    @PostMapping("/workspaces/{workspaceId}/invitations/accept")
-    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceId)  {
-        User user = User.fromAuthUser(authUser);
-        return ResponseEntity.ok(ApiResponse.success(memberManageService.callYes(user,workspaceId)));
-    }
+//    // 초대 응답
+//    @PostMapping("/workspaces/{workspaceId}/invitations/accept")
+//    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceId)  {
+//        User user = User.fromAuthUser(authUser);
+//        return ResponseEntity.ok(ApiResponse.success(memberManageService.callYes(user,workspaceId)));
+//    }
     @PostMapping("/workspaces/{workspaceId}/invitations/reject")
     public ResponseEntity<ApiResponse<String>> callNo(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId){
         User user = User.fromAuthUser(authUser);

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
+import static com.sparta.springusersetting.domain.notification.enums.NotificationConst.ACCEPT_MEMBER_NOTIFICATION;
 import static com.sparta.springusersetting.domain.user.enums.MemberRole.ROLE_WORKSPACE_ADMIN;
 import static com.sparta.springusersetting.domain.user.enums.UserRole.ROLE_ADMIN;
 
@@ -95,7 +96,7 @@ public class MemberManageService {
         participation.UserBeActive();
 
         // 멤버 등록 알림 전송
-        notificationUtil.sendNotification("%s 님이 %s 워크스페이스에 참여하였습니다.", user.getUserName(),workspace.getName());
+        notificationUtil.sendNotification(ACCEPT_MEMBER_NOTIFICATION.getMessage(), user.getUserName(),workspace.getName());
 
         return "초대 수락 완료";
     }

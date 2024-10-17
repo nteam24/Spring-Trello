@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
+import static com.sparta.springusersetting.domain.notification.enums.NotificationConst.LOGIN_NOTIFICATION;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -69,7 +71,7 @@ public class AuthService {
         String bearerToken = jwtUtil.createToken(user.getId(), user.getEmail(), user.getUserRole());
 
         // 로그인 알림 전송
-        notificationUtil.sendNotification("난 %s핑! 코딩빼곤 다 재밌어! ", user.getUserName());
+        notificationUtil.sendNotification(LOGIN_NOTIFICATION.getMessage(), user.getUserName());
 
         return new SigninResponse(bearerToken);
     }

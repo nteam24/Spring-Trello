@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
+import static com.sparta.springusersetting.domain.notification.enums.NotificationConst.CREATE_COMMENT_NOTIFICATION;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -52,7 +54,7 @@ public class CommentService {
 
         // 댓글 등록 알림 전송
         notificationUtil.sendNotification(
-                " %s 님이 %s 님의 카드에 댓글을 남겼습니다. 내용:%s, %s ",
+                CREATE_COMMENT_NOTIFICATION.getMessage(),
                 user.getUserName(),
                 card.getManager().getUserName(),
                 comment.getContent(),

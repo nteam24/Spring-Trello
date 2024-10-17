@@ -213,7 +213,12 @@ Communication
 
 ---
 # API 명세서
+## 회원가입 / 로그인 API
 
+| 메서드 | 기능       | URL         | responseheader                         | requset                                               | response                                                                                         |
+|--------|------------|--------------|------------------------------|----------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| POST   | 회원가입   | /auth/signup  | Content-Type: application/json| ```{ "email": "이메일", "password": "비밀번호", "userRole": "유저 권한" }```                      | ```{ "status": "SUCCESS", "data": { "bearerToken": "Bearer Token" }, "message": "요청 성공" }``` |
+| POST   | 로그인     | /auth/signin  | Content-Type: application/json| ```{ "email": "이메일", "password": "비밀번호" }```                                             | ```{ "status": "SUCCESS", "data": { "bearerToken": "Bearer Token" }, "message": "요청 성공" }``` |
 # 와이어 프레임
 
 ![image (12)](https://github.com/user-attachments/assets/6e0ec47a-dae0-42bd-8c8c-9bacbf536fe7)

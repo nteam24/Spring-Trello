@@ -6,7 +6,6 @@ import com.sparta.springusersetting.domain.lists.dto.request.ListsRequestDto;
 import com.sparta.springusersetting.domain.lists.dto.response.GetListsResponseDto;
 import com.sparta.springusersetting.domain.lists.dto.response.ListsCreateResponseDto;
 import com.sparta.springusersetting.domain.lists.dto.response.ListsResponseDto;
-import com.sparta.springusersetting.domain.lists.entity.Lists;
 import com.sparta.springusersetting.domain.lists.service.ListsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -99,15 +99,11 @@ public class ListsService {
         // 리스트 찾기
         Lists lists = listsRepository.findByIdAndBoardId(listsId, boardId)
                 .orElseThrow(() -> new NotFoundListsException());
-
-        lists.updatePosition(pos, user.getEmail());
         
         // 다른 리스트들의 위치 조정
-        adjustOtherListsPosition(board, lists, pos);
+        adjustOtherListsPosition(board, lists, pos, user.getEmail());
 
-        Lists updateLists = listsRepository.save(lists);
-
-        return new ListsResponseDto(updateLists);
+        return new ListsResponseDto(lists);
     }
 
     @Transactional(readOnly = true)
@@ -156,23 +152,21 @@ public class ListsService {
         }
     }
 
-    private void adjustOtherListsPosition(Board board, Lists movedList, int pos) {
+    private void adjustOtherListsPosition(Board board, Lists movedList, int pos, String email) {
         List<Lists> allLists = listsRepository.findAllByBoardOrderByPos(board);
 
-        // 이동한 리스트를 제외한 나머지 리스트들의 위치를 조정
         int currentPos = 1;
         for (Lists lists : allLists){
             if (lists.getId().equals(movedList.getId())){
-                continue;
-            }
-            if (currentPos == pos){
+                lists.updatePosition(pos, email);
+            }else {
+                if (currentPos == pos){
+                    currentPos++;
+                }
+                lists.updatePosition(currentPos);
                 currentPos++;
             }
-            if (lists.getPos() != currentPos){
-                lists.updatePosition(currentPos);
-                listsRepository.save(lists);
-            }
-            currentPos++;
+            listsRepository.save(lists);
         }
     }
 

@@ -33,20 +33,20 @@ public class BoardService {
 
     // 보드 등록
     @Transactional
-    public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long userId, Long workspaceId, MultipartFile backgroundImage) throws IOException {
+    public BoardResponseDto createBoard(BoardRequestDto boardRequestDto, Long userId, Long workspaceId) {
         Participation participation = validateCreateBoard(boardRequestDto,userId, workspaceId);
 
-        String backgroundImageUrl = null; // 이미지 URL 초기화
+       String backgroundImageUrl = null; // 이미지 URL 초기화
 
-        // 이미지가 제공된 경우 S3에 업로드하고 URL을 받아옴
-        if (backgroundImage != null && !backgroundImage.isEmpty()) {
-            backgroundImageUrl = s3Service.uploadFile(backgroundImage); // S3에 업로드
-        }
+//        // 이미지가 제공된 경우 S3에 업로드하고 URL을 받아옴
+//        if (backgroundImage != null && !backgroundImage.isEmpty()) {
+//            backgroundImageUrl = s3Service.uploadFile(backgroundImage); // S3에 업로드
+//        }
 
         Board board = new Board(
                 boardRequestDto.getTitle(),
                 boardRequestDto.getBackgroundColor(),
-                backgroundImageUrl,
+                boardRequestDto.getBackgroundImageUrl(),
                 participation.getWorkspace()
         );
         boardRepository.save(board);

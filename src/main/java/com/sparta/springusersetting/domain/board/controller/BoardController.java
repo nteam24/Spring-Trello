@@ -31,11 +31,10 @@ public class BoardController {
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
             @RequestBody BoardRequestDto boardRequestDto,
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long workspaceId,
-            @RequestParam("backgroundImage") MultipartFile backgroundImage
-            ) throws IOException {
+            @PathVariable Long workspaceId
+            ) {
 
-        BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto,authUser.getUserId(), workspaceId, backgroundImage);
+        BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto,authUser.getUserId(), workspaceId);
         return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }
 

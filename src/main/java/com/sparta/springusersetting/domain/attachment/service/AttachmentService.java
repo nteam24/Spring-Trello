@@ -89,14 +89,14 @@ public class AttachmentService {
         Card card = cardRepository.findById(cardId).orElseThrow(NotFoundCardException::new);
         if(memberManageService.checkMemberRole(createUser.getId(),card.getLists().getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
         {
-            throw new RuntimeException();
+            throw new BadAccessUserException();
         }
 
         if (!cardRepository.existsById(cardId)) {
-            throw new IllegalArgumentException("잘못된 cardId 입니다.");
+            throw new NotFoundCardException();
         }
         Attachment attachment = attachmentRepository.findById(fileId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 파일 ID 입니다."));
+                .orElseThrow(NotFoundFileException::new);
 
         attachmentRepository.delete(attachment);
         return null;

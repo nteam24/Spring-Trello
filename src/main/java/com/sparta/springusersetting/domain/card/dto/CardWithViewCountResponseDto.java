@@ -14,17 +14,19 @@ public class CardWithViewCountResponseDto {
     private String contents;
     private LocalDate deadline;
     private String userEmail;
-    private Long cardViewCount;
+    private Long todayCardViewCount;
+    private Long totalCardViewCount;
     private List<ActivityLogResponseDto> activityLogs;
     private List<CommentResponseDto> commentList;
 
-    public CardWithViewCountResponseDto(Card card, Long cardViewCount) {
+    public CardWithViewCountResponseDto(Card card, Long todayCardViewCount) {
         this.id = card.getId();
         this.title = card.getTitle();
         this.contents = card.getContents();
         this.deadline = card.getDeadline();
         this.userEmail = card.getManager().getEmail();
-        this.cardViewCount = cardViewCount;
+        this.todayCardViewCount = todayCardViewCount;
+        this.totalCardViewCount = card.getTotalCardViewCount();
         this.activityLogs = card.getActivityLogs().stream().map(ActivityLogResponseDto::new).toList();
         this.commentList = card.getCommentList().stream()
                 .map(CommentResponseDto::new)

@@ -2,6 +2,8 @@ package com.sparta.springusersetting.domain.attachment.service;
 
 import com.sparta.springusersetting.domain.attachment.dto.AttachmentResponse;
 import com.sparta.springusersetting.domain.attachment.entity.Attachment;
+import com.sparta.springusersetting.domain.attachment.exception.FileFormatException;
+import com.sparta.springusersetting.domain.attachment.exception.FileSizeException;
 import com.sparta.springusersetting.domain.attachment.repository.AttachmentRepository;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.card.exception.NotFoundCardException;
@@ -11,6 +13,7 @@ import com.sparta.springusersetting.domain.common.service.S3Service;
 import com.sparta.springusersetting.domain.participation.service.MemberManageService;
 import com.sparta.springusersetting.domain.user.entity.User;
 import com.sparta.springusersetting.domain.user.enums.MemberRole;
+import com.sparta.springusersetting.domain.user.exception.BadAccessUserException;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,17 +48,17 @@ public class AttachmentService {
         Card card = cardRepository.findById(cardId).orElseThrow(NotFoundCardException::new);
         if(memberManageService.checkMemberRole(createUser.getId(),card.getLists().getBoard().getWorkspace().getId()) == MemberRole.ROLE_READ_USER)
         {
-            throw new RuntimeException();
+            throw new BadAccessUserException();
         }
 
 
         // 파일 형식 및 크기 검사
         if (!SUPPORTED_FILE_TYPES.contains(file.getContentType())) {
-            throw new IOException();
+            throw new FileFormatException();
         }
 
         if (file.getSize() > MAX_FILE_SIZE) {
-            throw new IOException();
+            throw new FileSizeException();
         }
 
         // 파일 저장
@@ -69,7 +72,7 @@ public class AttachmentService {
     // 첨부파일 조회
     public List<AttachmentResponse> getFiles(Long cardId) {
         Card card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 cardId 입니다."));
+                .orElseThrow(NotFoundCardException::new);;
 
         List<Attachment> attachments = attachmentRepository.findAllByCard(card);
         List<AttachmentResponse> response = attachments.stream()

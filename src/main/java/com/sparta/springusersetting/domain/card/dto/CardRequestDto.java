@@ -2,6 +2,7 @@ package com.sparta.springusersetting.domain.card.dto;
 
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 

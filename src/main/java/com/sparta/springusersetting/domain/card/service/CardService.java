@@ -9,6 +9,7 @@ import com.sparta.springusersetting.domain.card.dto.CardSearchResponseDto;
 import com.sparta.springusersetting.domain.card.dto.CardWithViewCountResponseDto;
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.card.exception.BadAccessCardException;
+import com.sparta.springusersetting.domain.card.exception.CrashUpdateCardsException;
 import com.sparta.springusersetting.domain.card.exception.NotFoundCardException;
 import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
@@ -24,6 +25,7 @@ import com.sparta.springusersetting.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -122,6 +124,7 @@ public class CardService {
 
     @Transactional
     public String updateCard(AuthUser authUser, CardRequestDto requestDto, Long cardId, User user) throws IOException {
+
         Lists lists = listsRepository.findById(requestDto.getListId()).orElseThrow(NotFoundListsException::new);
         User createUser = User.fromAuthUser(authUser);
 
@@ -131,9 +134,18 @@ public class CardService {
         }
 
         User manager = userService.findUser(requestDto.getManagerId());
+
         Card card = findCard(cardId);
         card.update(manager,lists,requestDto.getTitle(),requestDto.getContents(),requestDto.getDeadline());
         cardRepository.save(card);
+
+        // 업데이트 전, 현재 버전과 요청된 버전을 체크
+        try {
+            card.update(manager, lists, requestDto.getTitle(), requestDto.getContents(), requestDto.getDeadline());
+            cardRepository.save(card);
+        } catch (OptimisticLockingFailureException e) {
+            throw new CrashUpdateCardsException(); // 사용자에게 보여줄 메시지
+        }
 
         // 카드 변경 알림 전송
         notificationUtil.sendNotification(
@@ -146,6 +158,8 @@ public class CardService {
 
         return "카드 수정이 완료되었습니다.";
     }
+
+
     @Transactional
     public String deleteCard(AuthUser authUser, Long cardId) {
         User deletedUser = User.fromAuthUser(authUser);

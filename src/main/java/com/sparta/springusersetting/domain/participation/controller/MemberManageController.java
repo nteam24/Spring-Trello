@@ -40,6 +40,7 @@ public class MemberManageController {
         User user = User.fromAuthUser(authUser);
         return ResponseEntity.ok(ApiResponse.success(memberManageService.callYes(user,workspaceId)));
     }
+
     @PostMapping("/workspaces/{workspaceId}/invitations/reject")
     public ResponseEntity<ApiResponse<String>> callNo(@AuthenticationPrincipal AuthUser authUser,@PathVariable Long workspaceId){
         User user = User.fromAuthUser(authUser);

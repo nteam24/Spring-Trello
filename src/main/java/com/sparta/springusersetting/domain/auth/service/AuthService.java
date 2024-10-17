@@ -14,7 +14,7 @@ import com.sparta.springusersetting.domain.user.enums.UserRole;
 import com.sparta.springusersetting.domain.user.enums.UserStatus;
 import com.sparta.springusersetting.domain.user.exception.NotFoundUserException;
 import com.sparta.springusersetting.domain.user.repository.UserRepository;
-import com.sparta.springusersetting.domain.notification.discordNotification.service.DiscordNotificationService;
+//import com.sparta.springusersetting.domain.notification.discordNotification.service.DiscordNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final DiscordNotificationService discordNotificationService;
+//    private final DiscordNotificationService discordNotificationService;
     private final NotificationUtil notificationUtil;
 
     @Transactional

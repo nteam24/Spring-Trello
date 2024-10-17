@@ -45,7 +45,7 @@ public class BoardService {
     // 보드 수정
     @Transactional
     public BoardResponseDto updateBoard(Long boardId, BoardRequestDto boardRequestDto, Long userId, Long workspaceId) {
-        Board board = validateUpdateBoard(boardId, userId, workspaceId);
+        Board board = validateUpdateBoard(boardRequestDto,boardId, userId, workspaceId);
 
         board.updateBoard(
                 boardRequestDto.getTitle(),
@@ -109,7 +109,19 @@ public class BoardService {
     }
 
     // 보드 수정 검증 로직
-    private Board validateUpdateBoard(Long boardId, Long userId, Long workspaceId) {
+    private Board validateUpdateBoard(BoardRequestDto boardRequestDto,Long boardId, Long userId, Long workspaceId) {
+
+        // 제목이 비어있는 경우 예외 처리
+        if (boardRequestDto.getTitle() == null || boardRequestDto.getTitle().trim().isEmpty()) {
+            throw new NotFoundTitleException();
+        }
+
+        // 배경색과 배경이미지 중 하나만 선택 가능하도록 유효성 검사
+        if ((boardRequestDto.getBackgroundColor() == null || boardRequestDto.getBackgroundColor().trim().isEmpty()) &&
+                (boardRequestDto.getBackgroundImageUrl() == null || boardRequestDto.getBackgroundImageUrl().trim().isEmpty())) {
+            throw new InvalidBackgroundException();
+        }
+
         Participation participation = participationRepository.findByUserIdAndWorkspaceId(userId, workspaceId)
                 .orElseThrow(() -> new NotFoundWorkspaceException());
         if (participation.getMemberRole() == MemberRole.ROLE_READ_USER) {

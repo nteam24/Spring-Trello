@@ -1,11 +1,12 @@
 package com.sparta.springusersetting.domain.card.controller;
 
 
+import com.sparta.springusersetting.attachment.service.AttachmentService;
 import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.card.dto.CardRequestDto;
+import com.sparta.springusersetting.domain.card.dto.CardResponseDto;
 import com.sparta.springusersetting.domain.card.dto.CardSearchRequestDto;
 import com.sparta.springusersetting.domain.card.dto.CardSearchResponseDto;
-import com.sparta.springusersetting.domain.card.dto.CardWithViewCountResponseDto;
 import com.sparta.springusersetting.domain.card.service.CardService;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.user.entity.User;
@@ -32,15 +33,23 @@ public class CardController {
     public ResponseEntity<ApiResponse<String>> createCard(@AuthenticationPrincipal AuthUser authUser,
                                                           @Valid @RequestPart CardRequestDto card,
                                                           @RequestPart(name = "file", required = false) MultipartFile file)
+
     {
         return ResponseEntity.ok(ApiResponse.success(cardService.createCard(authUser,card,file)));
     }
 
     // 카드 단건 조회
     @GetMapping("/{cardId}")
-    public ResponseEntity<ApiResponse<CardWithViewCountResponseDto>> getCard(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long cardId)
+    public ResponseEntity<ApiResponse<CardResponseDto>> getCard(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long cardId)
     {
-        return ResponseEntity.ok(ApiResponse.success(cardService.getCard(authUser,cardId)));
+        return ResponseEntity.ok(ApiResponse.success(cardService.getCard(authUser, cardId)));
+    }
+
+    // 인기 카드 목록 조회
+    @GetMapping("/top-view-list")
+    public ResponseEntity<ApiResponse<Map<String, Integer>>> getTopViewCardList(@AuthenticationPrincipal AuthUser authUser)
+    {
+        return ResponseEntity.ok(ApiResponse.success(cardService.getTopViewCardList()));
     }
 
     // 인기 카드 목록 조회

@@ -88,60 +88,6 @@ class BoardServiceTest {
         assertThrows(InvalidBackgroundException.class, () -> boardService.createBoard(boardRequestDto, 1L, 1L));
     }
 
-//    @Test
-//    void updateBoard_Success() {
-//        // Mock Board 객체 생성 및 설정
-//        Board board = new Board();
-//        ReflectionTestUtils.setField(board, "id", 1L);
-//        ReflectionTestUtils.setField(board, "title", "기존 보드 제목");
-//        ReflectionTestUtils.setField(board, "backgroundColor", "blue");
-//        ReflectionTestUtils.setField(board, "backgroundImageUrl", null);
-//
-//        // 저장소 동작 모킹
-//        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
-//
-//        // Participation mock 설정
-//        Participation participation = new Participation();
-//        ReflectionTestUtils.setField(participation, "memberRole", MemberRole.ROLE_WORKSPACE_ADMIN);
-//        ReflectionTestUtils.setField(participation, "workspace", new Workspace());
-//
-//        // Participation 저장소 동작 모킹
-//        when(participationRepository.findByUserIdAndWorkspaceId(anyLong(), anyLong()))
-//                .thenReturn(Optional.of(participation));
-//
-//        // 업데이트할 BoardRequestDto 준비
-//        BoardRequestDto boardRequestDto = new BoardRequestDto();
-//        ReflectionTestUtils.setField(boardRequestDto, "title", "테스트 보드");
-//        ReflectionTestUtils.setField(boardRequestDto, "backgroundColor", "green");
-//        ReflectionTestUtils.setField(boardRequestDto, "backgroundImageUrl", "http://example.com/newimage.png");
-//
-//        // 보드 업데이트 메서드 호출
-//        BoardResponseDto response = boardService.updateBoard(1L, boardRequestDto, 1L, 1L);
-//
-//        // 결과 검증
-//        assertNotNull(response);
-//        assertEquals("테스트 보드", response.getTitle()); // 업데이트된 제목 확인
-//        assertEquals("green", response.getBackgroundColor()); // 업데이트된 배경색 확인
-//        assertEquals("http://example.com/newimage.png", response.getBackgroundImageUrl()); // 업데이트된 이미지 URL 확인
-//
-//        // findById 호출 확인
-//        verify(boardRepository, times(1)).findById(1L);
-//        // 업데이트 후 board가 저장되었는지 확인
-//        verify(boardRepository, times(1)).save(board);
-//
-//        // 보드 속성이 예상대로 업데이트되었는지 확인
-//        assertEquals("테스트 보드", board.getTitle()); // 제목이 업데이트되었는지 확인
-//        assertEquals("green", board.getBackgroundColor()); // 배경색이 업데이트되었는지 확인
-//        assertEquals("http://example.com/newimage.png", board.getBackgroundImageUrl()); // 이미지 URL이 업데이트되었는지 확인
-//    }
-//
-//    @Test
-//    void updateBoard_NotFound() {
-//        when(boardRepository.findById(1L)).thenReturn(Optional.empty());
-//
-//        assertThrows(NotFoundBoardException.class, () -> boardService.updateBoard(1L, boardRequestDto, 1L, 1L));
-//    }
-
     @Test
     void deleteBoard_Success() {
         Board board = new Board();
@@ -153,25 +99,6 @@ class BoardServiceTest {
 
         verify(boardRepository, times(1)).delete(board);
     }
-
-//    @Test
-//    void deleteBoard_NotFound() {
-//        when(boardRepository.findById(1L)).thenReturn(Optional.empty());
-//
-//        assertThrows(NotFoundBoardException.class, () -> boardService.deleteBoard(1L, 1L, 1L));
-//    }
-//
-//    @Test
-//    void getBoard_Success() {
-//        Board board = new Board();
-//        ReflectionTestUtils.setField(board, "id", 1L);
-//        when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
-//
-//        BoardResponseDto response = boardService.getBoard(1L);
-//
-//        assertNotNull(response);
-//        assertEquals(1L, response.getId());
-//    }
 
     @Test
     void getBoard_NotFound() {

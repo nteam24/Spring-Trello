@@ -1,17 +1,21 @@
 package com.sparta.springusersetting.domain.board.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.springusersetting.config.ApiResponse;
 import com.sparta.springusersetting.domain.board.dto.request.BoardRequestDto;
 import com.sparta.springusersetting.domain.board.dto.response.BoardResponseDto;
 import com.sparta.springusersetting.domain.board.service.BoardService;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
+import com.sparta.springusersetting.domain.common.service.S3Service;
 import com.sparta.springusersetting.domain.lists.entity.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -27,7 +31,9 @@ public class BoardController {
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
             @RequestBody BoardRequestDto boardRequestDto,
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long workspaceId) {
+            @PathVariable Long workspaceId
+            ) {
+
         BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto,authUser.getUserId(), workspaceId);
         return ResponseEntity.ok(ApiResponse.success(boardResponseDto));
     }

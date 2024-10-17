@@ -42,7 +42,7 @@ public class CardController {
     @GetMapping("/{cardId}")
     public ResponseEntity<ApiResponse<CardResponseDto>> getCard(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long cardId)
     {
-        return ResponseEntity.ok(ApiResponse.success(cardService.getCard(authUser,cardId)));
+        return ResponseEntity.ok(ApiResponse.success(cardService.getCard(authUser, cardId)));
     }
 
     // 인기 카드 목록 조회

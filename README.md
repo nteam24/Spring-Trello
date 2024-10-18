@@ -334,7 +334,7 @@ Communication
 ![image](https://github.com/user-attachments/assets/d5859cf5-c8d6-4146-bebe-d6418ead2de5)
 
 # 성능개선
---
+---
 ## 최적화
 
 ### 개선 대상 쿼리와 해당 쿼리 선택 이유
@@ -363,7 +363,7 @@ CREATE INDEX idx_board_workspace ON board (workspace_id); -- 특정 워크스페
 ![쿼리 최적화 적용 x](https://github.com/user-attachments/assets/dbac3a55-2e35-464c-b039-842a850bbd37)
 ![인덱스 적용 및 쿼리 최적화](https://github.com/user-attachments/assets/83d30863-8194-4e82-9454-acaa19849f33)
 
---
+
 ## 동시성처리
 
 <details>

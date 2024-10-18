@@ -19,6 +19,7 @@
 4. [API 명세서](#API-명세서)
 6. [와이어 프레임](#와이어-프레임)
 7. [ERD](#ERD)
+8. [트러블 슈팅](#트러블-슈팅)
 
 ---
 
@@ -294,5 +295,37 @@ Communication
 # ERD
 
 ![image](https://github.com/user-attachments/assets/d5859cf5-c8d6-4146-bebe-d6418ead2de5)
+
+# 트러블 슈팅
+
+### 깃허브 보안 오류로 인한 dev 브랜치 오류 발생 
+- yml 파일의 커밋으로 인한, Github 보안 오류 발생
+- git filter-branch -f —prune-empty —index-filter”git rm -r —cached —ignore-unmatch **/application.yml” HEAD 명령어로 인한 yml 파일이 포함된 커밋 모두 증발
+- 최신 브랜치인 feature/comment를 dev 브랜치로 설정
+
+### 잦은 디스코드 API 호출로 인해 일시적인 호출 차단
+
+- 서버 부하 테스트를 할때는 외부 API는 주석처리후 실행할 것
+![스크린샷 2024-10-18 오전 11 36 19](https://github.com/user-attachments/assets/9791289c-e9ec-45b0-874f-5c736eae7707)
+
+## 처음 사용하는 Tool들의 설정 문제
+### Jenkins 
+권한 부여, env파일 처리, 젠킨스-도커 연결 등.. -> 구글링으로 해결
+EC2프리티어 사용으로 인한 메모리 부족.. -> 노드 정리 자주해주기
+
+![스크린샷 2024-10-16 오전 11 07 01](https://github.com/user-attachments/assets/1d2dd803-9662-47be-86e1-8f0da2d02cbb)
+
+![스크린샷 2024-10-16 오전 11 17 42](https://github.com/user-attachments/assets/c9a04aa3-881e-40db-9e7a-389b672a59c6)
+
+### Jmeter 
+- Patch cards에서 request값에 맞추었지만 403에러가 발생하였다.
+- 포스트맨처럼 Bearer Token을 받아와야 하지만 토큰 값을 주입 안했기에 발생하였다.
+- config의 HTTP Header Manager에서 Authorization에 토큰값을 적용하니 403에러 문제를 해결하였다.
+
+<img width="1170" alt="스크린샷 2024-10-18 오후 1 42 46" src="https://github.com/user-attachments/assets/b31c56e9-2672-4958-acc7-3267e939af7f">
+
+
+  
+
 
 

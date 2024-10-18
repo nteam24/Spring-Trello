@@ -10,7 +10,6 @@ import com.sparta.springusersetting.domain.card.dto.CardWithViewCountResponseDto
 import com.sparta.springusersetting.domain.card.entity.Card;
 import com.sparta.springusersetting.domain.card.exception.BadAccessCardException;
 import com.sparta.springusersetting.domain.card.exception.CrashUpdateCardsException;
-import com.sparta.springusersetting.domain.card.exception.NotFoundCardException;
 import com.sparta.springusersetting.domain.card.repository.CardRepository;
 import com.sparta.springusersetting.domain.common.dto.AuthUser;
 import com.sparta.springusersetting.domain.lists.entity.Lists;

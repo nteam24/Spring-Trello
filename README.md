@@ -250,7 +250,7 @@ Communication
 
  Slack과 Discord 양방향으로 알림 전송 메서드를 하나의 메서드로 넣고 가변인자를 사용해 메세지를 통일하였습니다.
  
-<img width="547" alt="스크린샷 2024-10-18 오후 7 14 55" src="https://github.com/user-attachments/assets/8195c51c-8f9f-4db2-95c9-c0f3a32861fd">
+ <img width="544" alt="스크린샷 2024-10-18 오후 7 16 06" src="https://github.com/user-attachments/assets/b2bbc19a-a8e0-4056-82ad-4482cfd80678">
 
  <img width="425" alt="스크린샷 2024-10-18 오후 7 15 14" src="https://github.com/user-attachments/assets/b5d105ed-f179-4fca-a387-0752c3b37826">
 

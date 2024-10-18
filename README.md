@@ -337,7 +337,32 @@ Communication
 --
 ## 최적화
 
---
+### 개선 대상 쿼리와 해당 쿼리 선택 이유
+1. 기존 title과 contents를 별도로 검색하여 포괄적인 검색 제공 불가능
+   -> 통합 keyword로 더 직관적이고 필요한 데이터만 정확히 조회하도록 수정
+
+2. 기존 LeftJoin을 사용해서 불필요한 Null 데이터 포함하여 성능 저하
+   가능성 존재 -> InnerJoin으로 변경하여 필요한 데이터만 정확히 조회하도록 수정
+
+3. 데이터 양이 많을 때 오프셋 기반 페이징은 성능 저하 및 중복/누락 
+   데이터가 발생 가능성이 있음 -> 커서 기반 페이징으로 변경하여
+   대용량 데이터에서도 일관된 성능 보장하도록 수정
+
+### 인덱스 설정 DDL 쿼리
+```sql
+CREATE INDEX idx_card_title_contents ON cards (title, contents); -- 카드의 제목과 내용을 함께 검색할 때 성능 향상
+CREATE INDEX idx_card_deadline ON cards (deadline); -- 마감일 기준 검색 및 정렬 성능 개선
+CREATE INDEX idx_card_manager ON cards (user_id); -- 특정 관리자의 카드 검색 성능 향상
+CREATE INDEX idx_lists_board ON lists (board_id); -- 특정 보드의 리스트 검색 성능 개선
+CREATE INDEX idx_board_workspace ON board (workspace_id); -- 특정 워크스페이스의 보드 검색 최적화
+```
+### 쿼리 속도 비교 (before, after)
+- Before: Response Time 360 ms
+- After: Response Time 98 ms
+  
+![쿼리 최적화 적용 x](https://github.com/user-attachments/assets/dbac3a55-2e35-464c-b039-842a850bbd37)
+![인덱스 적용 및 쿼리 최적화](https://github.com/user-attachments/assets/83d30863-8194-4e82-9454-acaa19849f33)
+
 
 ## 동시성처리
 

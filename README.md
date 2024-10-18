@@ -293,5 +293,6 @@ Communication
 
 # ERD
 
-![화면 캡처 2024-10-17 161405](https://github.com/user-attachments/assets/44e9c5f0-05b3-4215-820b-d965b59ac531)
+![image](https://github.com/user-attachments/assets/d5859cf5-c8d6-4146-bebe-d6418ead2de5)
+
 

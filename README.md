@@ -657,7 +657,108 @@ lock.unlock();
    - CI : 테스트, 빌드 -> `sh './gradlew clean build'`
    - CD : 서비서 EC2에서 JAR파일 혹은 도커 이미지를 실행한 상태를 유지
    - 즉, `github checkout` -> `Test` -> `JAR 생성` -> `이미지 build` -> `서비서 EC2에서 해당 이미지 pull` -> `이미지 run`
-  
+
+- 파이프라인
+```
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE_NAME = '~~'
+        DOCKER_CREDENTIALS = credentials('~~')
+        EC2_IP = '~~'
+        EC2_USER = 'ubuntu'
+        CONTAINER_NAME = 'team24'
+    }
+
+    stages {
+    
+        stage('Checkout') {
+            steps {
+                git branch: 'feature/cicd', credentialsId: 'rlackdals981010', url: 'https://github.com/nteam24/Spring-Trello.git'
+            }
+        }
+        
+        stage('secret.yml download') {
+            steps {
+                withCredentials([file(credentialsId: '~~', variable: '~~')]) {
+                    script {
+                        sh """
+                        mkdir -p ./src/main/resources/
+                        cp ${dbConfigFile} ./src/main/resources/application.yml
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Build JAR') {
+            steps {
+                script {
+                    sh 'chmod +x gradlew'
+                    sh 'pwd'
+                    sh 'ls -la'
+                    sh './gradlew clean build'
+                }
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${DOCKER_IMAGE_NAME}")
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    // Docker Hub에 로그인
+                    sh """
+                    echo '${DOCKER_CREDENTIALS_PSW}' | docker login -u '${DOCKER_CREDENTIALS_USR}' --password-stdin
+                    """
+
+                    // Docker 이미지 푸시
+                    sh "docker push ${DOCKER_IMAGE_NAME}:latest"
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                sshagent (credentials: ['team24']) { 
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} << 'EOF'
+                        sudo docker pull ${DOCKER_IMAGE_NAME}:latest
+                        sudo docker stop ${CONTAINER_NAME} || true
+                        sudo docker rm ${CONTAINER_NAME} || true
+                        sudo docker run -d --name ${CONTAINER_NAME} -p 8081:8081 ${DOCKER_IMAGE_NAME}:latest
+                        
+                        # Check and remove dangling images
+                        IMAGES=\$(sudo docker images -f 'dangling=true' -q)
+                        if [ -n "\$IMAGES" ]; then
+                            sudo docker rmi -f \$IMAGES
+                        else
+                            echo "No dangling images to remove."
+                        fi
+EOF
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
+
+
+```
+
 ---
 # 트러블 슈팅
 

@@ -241,6 +241,14 @@ Communication
 
 - **실시간 알림**
   - 멤버 추가, 카드 변경, 댓글 작성 등 주요 이벤트에 대한 알림 제공.
+ 
+  Slack과 Discord 양방향으로 알림 전송 메서드를 하나의 메서드로 넣고 가변인자를 사용해 메세지를 통일하였습니다.
+ 
+ <img width="544" alt="스크린샷 2024-10-18 오후 7 16 06" src="https://github.com/user-attachments/assets/b2bbc19a-a8e0-4056-82ad-4482cfd80678">
+
+ <img width="425" alt="스크린샷 2024-10-18 오후 7 15 14" src="https://github.com/user-attachments/assets/b5d105ed-f179-4fca-a387-0752c3b37826">
+
+<img width="393" alt="스크린샷 2024-10-18 오후 7 15 28" src="https://github.com/user-attachments/assets/6ca9eb5c-ee78-4e54-9682-7c5689ab3465">
 
 ### **검색 기능**
 
@@ -248,13 +256,7 @@ Communication
   - 카드의 제목, 내용, 마감일, 담당자 등을 기준으로 검색할 수 있습니다.
   - 특정 보드에 속한 모든 카드를 검색할 수 있습니다.
 
- Slack과 Discord 양방향으로 알림 전송 메서드를 하나의 메서드로 넣고 가변인자를 사용해 메세지를 통일하였습니다.
  
- <img width="544" alt="스크린샷 2024-10-18 오후 7 16 06" src="https://github.com/user-attachments/assets/b2bbc19a-a8e0-4056-82ad-4482cfd80678">
-
- <img width="425" alt="스크린샷 2024-10-18 오후 7 15 14" src="https://github.com/user-attachments/assets/b5d105ed-f179-4fca-a387-0752c3b37826">
-
-<img width="393" alt="스크린샷 2024-10-18 오후 7 15 28" src="https://github.com/user-attachments/assets/6ca9eb5c-ee78-4e54-9682-7c5689ab3465">
 
  
 ## 비기능

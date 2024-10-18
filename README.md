@@ -73,7 +73,13 @@ Communication
 ![슬랙](  https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 ![노션](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 
+---
 
+Workflow Flatform
+
+![Jmeter](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)
+
+---
 ## **기능**
 
 ### **회원가입/로그인**

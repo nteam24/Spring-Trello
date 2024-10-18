@@ -36,7 +36,7 @@ public class MemberManageController {
 
     // 초대 응답
     @PostMapping("/workspaces/{workspaceId}/invitations/accept")
-    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceId)  {
+    public ResponseEntity<ApiResponse<String>> callYes(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long workspaceId) throws IOException {
         User user = User.fromAuthUser(authUser);
         return ResponseEntity.ok(ApiResponse.success(memberManageService.callYes(user,workspaceId)));
     }

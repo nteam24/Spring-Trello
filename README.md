@@ -110,6 +110,9 @@ Communication
 # **요구사항**
 ## **기능**
 
+<details>
+  <summary> 구현 기능 살펴보기 </summary>
+
 ### **회원가입/로그인**
 - **회원가입**
   - **유저 아이디**: 이메일 형식이어야 합니다.
@@ -267,8 +270,13 @@ Communication
 2. 많은 유저가 동시에 접근이 되면 좋겠어요
 3. 조회수 어뷰징을 막아주세요
 
+</details>
+
 ---
 # API 명세서
+
+<details>
+   <summary> API 명세서 살펴보기 </summary>
 ## 회원가입 / 로그인 API
 
 | 메서드 | 기능       | URL         | HEADER                        | REQUEST                                               | RESPONSE                                                                                         |
@@ -336,7 +344,7 @@ Communication
 | GET     | 댓글 조회         | /comments/{commentId}           | Authorization: Bearer <JWT Token>    | -                                                                                                                       | -                                                                                                                                                                                                      |
 | PATCH   | 댓글 수정         | /comments/{commentId}           | Authorization: Bearer <JWT Token>    | ```{ "content": "{comment_text}", "emoji": "{emoji}" }```                                                                 | ```{ "status": "SUCCESS", "message": "댓글 수정 성공", "data": { "commentId": "{new_comment_id}", "content": "{comment_text}", "emoji": "{emoji}", "userId": "{userId}", "cardId": "{cardId}", "updatedAt": "2024-10-14T12:34:56" } }``` |
 | DELETE  | 댓글 삭제         | /comments/{commentId}           | Authorization: Bearer <JWT Token>    | -                                                                                                                       | -                                                                                                                                                                                                      |
-
+</details>
 
 # 와이어 프레임
 
@@ -452,8 +460,6 @@ CREATE INDEX idx_board_workspace ON board (workspace_id); -- 특정 워크스페
 
 <details>
   <summary>비관적 락</summary>
-  
-  여기에 토글 안에 들어갈 내용을 작성합니다.
 
 - Number of Threads (users) : 1000
 
@@ -647,6 +653,22 @@ lock.unlock();
 ---
 
 ## 캐싱
+
+- 자료구조 Set 을 이용해 동일한 사용자가 같은 날에 조회수를 2번 이상 늘리는 것을 방지
+- Set 의 size 로 조회 수를 가져온다
+- 일일 조회 수 Top 3 를 캐싱해서 가져오기 위해 카드 단건 조회 시 카드의 Title 을 캐시에 저장
+- 사용자들이 주로 사용할 시간대를 예측해서 캐싱되어있는 데이터를 DB 에 갱신시킬 시간을 설정 ( 누적 조회 수 저장 목적 )
+
+
+<img width="970" alt="image" src="https://github.com/user-attachments/assets/b5d4b91f-818d-4773-a6ff-a108b797a61e">
+
+
+- 9시부터 21시까지는 사용자들이 많이 사용하는 시간대라고 예측했기 때문에 매 정각마다 DB 에 데이터를 갱신.
+  - 정각과 정각 사이에 발생한 조회 수 만큼 데이터베이스의 누적 조회수 값에 얹는 느낌으로 snapshot 변수를 만들어 사용, 누적 조회 수에 더한 후 snapshot 변수는 0 으로 초기화.
+- 21시부터 자정까지 발생한 조회수를 마지막으로 자정에 누적 조회 수에 더하고, 자정에는 일일 조회수와 랭킹 데이터를 초기화.
+- 00시부터 9시 까지는 DB 갱신하지 않음. ( DB 접근 최소화 목적 )
+
+
 
 ---
 
